@@ -1,0 +1,23 @@
+# Node modules
+node_modules/
+
+# Arquivos de ambiente (variáveis sensíveis)
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build
+dist/
+build/
+
+# Uploads locais (capas, pdfs)
+uploads/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
