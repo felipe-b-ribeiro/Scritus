@@ -1,0 +1,16 @@
+.btn-icone {
+  display: inline-flex;      
+  align-items: center;       
+  gap: 8px;                  
+}
+
+.btn-icone svg {
+  width: 20px;               
+  height: 20px;
+  transition: 0.4s ease-in-out;
+  flex-shrink: 0;            
+}
+
+.btn-icone:hover svg {
+  fill: #eee;                
+}
