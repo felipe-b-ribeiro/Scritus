@@ -6,7 +6,6 @@ const EstilosGlobais = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Aboreto", system-ui;
     }
 
     body {
@@ -18,6 +17,10 @@ const EstilosGlobais = createGlobalStyle`
     text-decoration: none;
     }
 
+    a:hover {
+        cursor: pointer;
+    }
+
     :root {
         --cor-principal: #cb8446;
         --cor-secundaria: #5b4028;
@@ -25,11 +28,6 @@ const EstilosGlobais = createGlobalStyle`
         --cor-texto: #ffffff;
         --cor-destaque: #1342b0;
         --cor-sair-deletar: #a40f0f;
-    }
-
-    h1 > strong {
-        font-weight: 500 !important;
-        color: var(--cor-principal) !important;
     }
 `;
 

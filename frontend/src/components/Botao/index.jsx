@@ -1,8 +1,8 @@
 import SC_BotaoPrincipal from './styles';
 
-function Botao({ children, className }) {
+function Botao({ children, variant, ...props }) {
   return (
-    <SC_BotaoPrincipal className={className}>
+    <SC_BotaoPrincipal variant={variant} {...props}>
         {children}
     </SC_BotaoPrincipal>
   );
