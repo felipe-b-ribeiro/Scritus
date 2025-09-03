@@ -7,13 +7,12 @@ const variantes = {
     color: #fff;
 
     &:hover {
-      box-shadow: inset 0 0 0.5em #5a3f28ff;
+      box-shadow: inset 0 0 0.7em #755534ff;
     }
   `,
   secondary: css`
     background-color: transparent;
     border: 1px solid var(--cor-secundaria);
-    transition: 0.7s ease-in-out;
 
     svg {
       fill: var(--cor-secundaria);
@@ -21,7 +20,7 @@ const variantes = {
 
     &:hover {
       box-shadow: 0 0 0.2em #ac7d4dff;
-      background-color: #f3f3f3ff;
+      background-color: #f5f4f4ff;
 
       svg {
         fill: #422e1dff !important;
@@ -32,6 +31,12 @@ const variantes = {
   terciary: css`
     background-color: white;
     color: var(--cor-principal) !important;
+    border: 1px solid var(--cor-principal);
+
+    &:hover {
+      box-shadow: 0 0 0.2em #b3743eff;
+      background-color: #f5f4f4ff;
+    }
   `
 };
 
@@ -41,12 +46,12 @@ const Botao = styled.div`
     height: fit-content;
     margin: 20px;
     border-radius: 10px;
-    transition: 0.3s ease-in;
+    transition: 0.7s cubic-bezier(0.24, 1.01, 0.8, 0.71);
     display: block;
     align-items: center;
     font-family: 'Cinzel', serif;
     font-size: 1.1em;
-    ${({ variant }) => variantes[variant || 'primary']};
+    ${({ $variant }) => variantes[$variant || 'primary']};
 
     &:hover {
         transform: scale(1.03);
