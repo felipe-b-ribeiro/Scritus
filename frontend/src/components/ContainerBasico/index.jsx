@@ -1,11 +1,12 @@
-import './styles.js';
+import SC_ContainerBasico from "./styles";
 
-const ContainerBasico = ({ children }) => {
+const ContainerBasico = ({ children, text }) => {
     return (
-        <ContainerBasico>
+        <SC_ContainerBasico>
+            <h1>{text}</h1>
             {children}
-        </ContainerBasico>
+        </SC_ContainerBasico>
     );
 }
 
-export default ContainerBasico
+export default ContainerBasico;

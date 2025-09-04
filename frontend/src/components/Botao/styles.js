@@ -51,7 +51,7 @@ const Botao = styled.div`
     align-items: center;
     font-family: 'Cinzel', serif;
     font-size: 1.1em;
-    ${({ $variant }) => variantes[$variant || 'primary']};
+    ${({ variant }) => variantes[variant || 'primary']};
 
     &:hover {
         transform: scale(1.03);
