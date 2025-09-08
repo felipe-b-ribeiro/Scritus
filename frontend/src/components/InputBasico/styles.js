@@ -28,11 +28,11 @@ const SC_InputBasico = styled.input`
   background-color: var(--cor-fundo);
   font-size: 1rem;
   outline: none;
-  
+
     &:focus {
     border: 1px solid var(--cor-principal);
     }
-
+  
     input ~ label {
     position: absolute;
     top: 10px;

@@ -10,9 +10,9 @@ const SC_ContainerBasico = styled.div`
   padding: 0 6rem;
   border-radius: 30px;
   box-shadow:
-   4px 0 10px rgba(0, 0, 0, 0.2),   /* sombra à direita */
-  -4px 0 10px rgba(0, 0, 0, 0.2),   /* sombra à esquerda */
-  0 4px 10px rgba(0, 0, 0, 0.2);   /* sombra abaixo */;
+   4px 0 10px var(--cor-secundaria),   /* sombra à direita */
+  -4px 0 10px var(--cor-principal),   /* sombra à esquerda */
+  0 4px 10px var(--cor-terciaria);   /* sombra abaixo */;
 
   h1 {
     font-family: 'Cinzel', serif;
@@ -25,6 +25,8 @@ const SC_ContainerBasico = styled.div`
     font-weight: 400;
     font-size: 1.8em;
     margin-bottom: 0.4rem;
+    user-select: none;
+    white-space: nowrap;
   }
 
   form {

@@ -37,7 +37,7 @@ function PaginaLogin() {
          <form>
            <InputBasico text='EMAIL' type="email" placeholder="Digite seu e-mail" required />
            <InputBasico text='SENHA' type="password" placeholder="Digite sua senha" required />
-           <Botao variant="terciary" className="mt-0">
+           <Botao className="mt-0">
             <a>
             <span>Entrar</span>
             </a>
