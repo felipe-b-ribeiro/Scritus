@@ -19,6 +19,14 @@ export function useUserForm() {
         }));
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log('Enviou form');
+        if (camposAtuais.senha !== camposAtuais.confirmarSenha) {
+            return alert('As senhas não coincidem.')
+        }
+    }
+
     // Seleciona tipo de usuário
     const handleTipoUsuario = (tipo) => {
         setTipoUsuario(tipo);
@@ -39,6 +47,7 @@ export function useUserForm() {
         camposAtuais,
         handleChange,
         handleTipoUsuario,
+        handleSubmit,
         cleanState,
     };
 }

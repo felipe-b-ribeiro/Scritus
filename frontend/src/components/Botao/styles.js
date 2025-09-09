@@ -13,6 +13,7 @@ const variantes = {
   secondary: css`
     background-color: transparent;
     border: 1px solid var(--cor-secundaria);
+    color: var(--cor-secundaria);
 
     svg {
       fill: var(--cor-secundaria);
@@ -30,7 +31,7 @@ const variantes = {
   `,
   terciary: css`
     background-color: white;
-    color: var(--cor-principal) !important;
+    color: var(--cor-principal);
     border: 1px solid var(--cor-principal);
 
     &:hover {
@@ -40,11 +41,13 @@ const variantes = {
   `
 };
 
-const Botao = styled.div`
+const Botao = styled.button`
     position: relative;
     width: fit-content;
     height: fit-content;
     margin: 20px;
+    padding: 0.48rem 0.8rem;;
+    border: none;
     border-radius: 10px;
     transition: 0.7s cubic-bezier(0.24, 1.01, 0.8, 0.71);
     display: block;
@@ -58,17 +61,11 @@ const Botao = styled.div`
         cursor: pointer;
     }
 
-    a {
-      display: inline-flex;
-      padding: 0.48rem 0.8rem;
-      box-sizing: border-box;
-      color: inherit;
-
     svg {
       margin-bottom: -3px;
       margin-right: 8px;
     }
 
-  }`;
+    `;
   
 export default Botao;

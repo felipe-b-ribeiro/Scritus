@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import navigate from "../../hooks/useNavigate";
 
 import Logo from '../../components/logoScritus';
 import Linha from '../../components/linhaDegrade';
@@ -15,8 +14,7 @@ import { TIPO_USUARIO, LABELS, TIPOS_INPUT, CAMPOS_POR_TIPO, FORMS_INICIAIS } fr
 
 function PaginaCadastro() {
 
-  const { tipoUsuario, camposAtuais, handleChange, handleTipoUsuario, cleanState } = useUserForm();
-  const navigate = useNavigate();
+  const { tipoUsuario, camposAtuais, handleChange, handleTipoUsuario, handleSubmit, cleanState } = useUserForm();
 
   function voltar() {
     if (!tipoUsuario) {
@@ -69,7 +67,7 @@ function PaginaCadastro() {
 
     return (
       <ContainerBasico text={`CRIAR CONTA DE ${tipoUsuario.toUpperCase()}`}>
-        <form>
+        <form onSubmit={handleSubmit}>
           {renderInputs()}
           <div style={{ display: 'flex', justifyContent: 'space-around' }}>
             <Botao variant={'secondary'} type='button' onClick={cleanState}><a>Cancelar</a></Botao>
