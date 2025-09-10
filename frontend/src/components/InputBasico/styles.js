@@ -28,6 +28,7 @@ const SC_InputBasico = styled.input`
   background-color: var(--cor-fundo);
   font-size: 1rem;
   outline: none;
+  transition: border-color 0.4s var(--transicao-basica);
 
     &:focus {
     border: 1px solid var(--cor-principal);

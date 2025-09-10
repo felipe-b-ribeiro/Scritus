@@ -14,10 +14,10 @@ import { TIPO_USUARIO, LABELS, TIPOS_INPUT, CAMPOS_POR_TIPO } from "../../consta
 function PaginaCadastro() {
 
   const { tipoUsuario, forms, senhaError, handleChange, handleTipoUsuario, handleSubmit, cleanState, goBackIfUserNull } = useUserForm();
+  
+  const CAMPOS_SENHA = ["senha", "confirmarSenha"];
 
-  // const pegarInputsSenha = () => {
-
-  // }
+  const pegarInputsSenha = (campo) => CAMPOS_SENHA.includes(campo);
 
   function renderInputs() {
 
@@ -33,7 +33,7 @@ function PaginaCadastro() {
           text={LABELS[campo]}
           type={TIPOS_INPUT[campo]}
           required={campo !== "pseudonimo" && campo !== "siteOficial"} // campos opcionais
-          className={senhaError  ? "input-error" : ""}
+          className={senhaError && pegarInputsSenha(campo)  ? "input-error" : ""}
         />
 
       )));

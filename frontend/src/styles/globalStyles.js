@@ -23,13 +23,14 @@ const EstilosGlobais = createGlobalStyle`
 
     @keyframes shake {
         0% { box-shadow: 2px 2px 0.7em red; }
-        25% { box-shadow: 3px 3px 0.7em darkred; }
-        75% { box-shadow: 6px 6px 0.7em red; }
-        100% { box-shadow: 2px 2px 0.7em darkred;}
+        25% { box-shadow: 3px 3px 0.7em darkred }
+        75% { box-shadow: 2px 2px 0.5em darkred; }
+        85% { box-shadow: 1px 1px 0.4em red}
+        100% { box-shadow: 0px 0px 0em red;}
         }
 
     .input-error {
-        border: 2px solid red;
+        border: 2px solid red !important;
         animation: shake 3s ease-in-out;
     }
 
