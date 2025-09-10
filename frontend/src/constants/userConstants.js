@@ -42,10 +42,10 @@ const TIPOS_INPUT = {
   siteOficial: "url",
 };
 
-const FORMS_INICIAIS = {
+const FORMS_POR_USUARIO = {
   leitor: Object.fromEntries(CAMPOS_POR_TIPO.leitor.map(c => [c, ""])), // c significa campo
   autor: Object.fromEntries(CAMPOS_POR_TIPO.autor.map(c => [c, ""])),
   editora: Object.fromEntries(CAMPOS_POR_TIPO.editora.map(c => [c, ""]))
 };
 
-export { TIPO_USUARIO, LABELS, TIPOS_INPUT, FORMS_INICIAIS, CAMPOS_POR_TIPO };
+export { TIPO_USUARIO, LABELS, TIPOS_INPUT, FORMS_POR_USUARIO, CAMPOS_POR_TIPO };

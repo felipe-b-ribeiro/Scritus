@@ -8,9 +8,14 @@ const LogoScritus = styled.h1`
   border-radius: 5px;
   margin: 20px;
   user-select: none;
-  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);
+  transition: 0.7s var(--transicao-basica);
 
-  & strong {
+  &:hover {
+    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+  }
+
+  strong {
     font-weight: 500 !important;
     color: var(--cor-principal) !important;
     font-family: 'Cinzel Decorative', serif !important;

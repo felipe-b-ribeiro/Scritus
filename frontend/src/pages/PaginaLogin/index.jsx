@@ -21,11 +21,9 @@ function PaginaLogin() {
     <>
       <Cabecalho>
         <CabecalhoEsquerda>
-          <Botao variant="secondary" className="btn-icone">
-            <a onClick={voltar}>
+          <Botao back variant="secondary" className="btn-icone">
               <ArrowIcon />
               <span>Voltar</span>
-            </a>
           </Botao>
         </CabecalhoEsquerda>
         <CabecalhoCentro>

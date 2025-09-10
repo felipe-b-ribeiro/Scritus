@@ -1,28 +1,35 @@
 import { useState } from "react";
-import { FORMS_INICIAIS } from "../../../constants/userConstants";
+import { useNavigateCustom } from "../../../hooks/useNavigateCustom";
+import { FORMS_POR_USUARIO } from "../../../constants/userConstants";
 
 export function useUserForm() {
     const [tipoUsuario, setTipoUsuario] = useState("");
-    const [forms, setForms] = useState(FORMS_INICIAIS);
-
-    const camposAtuais = forms[tipoUsuario] || {};
+    const [forms, setForms] = useState(FORMS_POR_USUARIO);
+    const [senhaError, setSenhaError] = useState(false);
+    const { goBack } = useNavigateCustom();
 
     // Atualiza o input de acordo com tipoUsuario
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setForms((prev) => ({
-            ...prev,
-            [tipoUsuario]: {
-                ...prev[tipoUsuario],
-                [name]: value,
-            },
+        setForms(prev => ({
+            ...prev, [tipoUsuario]: { ...prev[tipoUsuario], [name]: value }
         }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Enviou form');
-        if (camposAtuais.senha !== camposAtuais.confirmarSenha) {
+        if (forms[tipoUsuario].senha !== forms[tipoUsuario].confirmarSenha) {
+
+            setForms(prev => ({
+                ...prev, [tipoUsuario]: { ...prev[tipoUsuario], senha: "", confirmarSenha: "" }
+            }));
+
+            setSenhaError(true);
+
+            setTimeout(() => {
+                setSenhaError(false); // reseta após 5s
+            }, 7000);
+
             return alert('As senhas não coincidem.')
         }
     }
@@ -32,22 +39,32 @@ export function useUserForm() {
         setTipoUsuario(tipo);
     };
 
-    // Limpa tipo de usuário (ex: cancelar)
+    // Limpa tipo de usuário
     const cleanState = () => {
         if (!tipoUsuario) return;
         setForms(prev => ({
             ...prev,
-            [tipoUsuario]: { ...FORMS_INICIAIS[tipoUsuario] }
+            [tipoUsuario]: { ...FORMS_POR_USUARIO[tipoUsuario] }
         }));
         setTipoUsuario("");
     };
 
+    const goBackIfUserNull = () => {
+        if (!tipoUsuario) {
+            goBack(); // navega pra tela anterior
+        } else {
+            setTipoUsuario(""); // volta pro “menu de escolha” sem perder forms
+        }
+    }
+
     return {
         tipoUsuario,
-        camposAtuais,
+        forms,
+        senhaError,
         handleChange,
         handleTipoUsuario,
         handleSubmit,
         cleanState,
+        goBackIfUserNull
     };
 }

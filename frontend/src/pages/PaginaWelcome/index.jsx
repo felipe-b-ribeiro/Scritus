@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom';
-
 import './styles.js';
+
 import Logo from '../../components/LogoScritus/index.jsx';
 import Linha from '../../components/LinhaDegrade/index.jsx';
 import Botao from '../../components/Botao';
@@ -9,27 +8,26 @@ import GuestIcon from '../../components/icons/guestIcon';
 import SeparadorVertical from '../../components/separadorVertical';
 
 function PaginaWelcome() {
+
   return (
     <>
       <Cabecalho>
         <CabecalhoEsquerda>
-          <Botao variant="secondary" className="btn-icone">
-            <Link to="/sobre-nos">
+          <Botao to='/sobre-nos' variant="secondary" className="btn-icone">
               <GuestIcon />
               <span>SOBRE NÓS</span>
-            </Link>
           </Botao>
         </CabecalhoEsquerda>
         <CabecalhoCentro>
           <Logo />
         </CabecalhoCentro>
         <CabecalhoDireita>
-          <Botao variant="terciary">
-            <Link to="/cadastro">Criar Conta</Link>
+          <Botao to='/cadastro' variant="terciary">
+          <span>CRIAR CONTA</span>
           </Botao>
           <SeparadorVertical />
-          <Botao>
-            <Link to="/login">Fazer Login</Link>
+          <Botao to='/login'>
+            <span>FAZER LOGIN</span>
           </Botao>
         </CabecalhoDireita>
       </Cabecalho>

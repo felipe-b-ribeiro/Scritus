@@ -1,29 +1,23 @@
-import navigate from "../../hooks/useNavigate";
 
-import Logo from '../../components/logoScritus';
-import Linha from '../../components/linhaDegrade';
+import Logo from '../../components/LogoScritus';
+import Linha from '../../components/LinhaDegrade';
 import Botao from '../../components/Botao';
-import { Cabecalho, CabecalhoCentro, CabecalhoDireita, CabecalhoEsquerda } from '../../components/cabecalho';
+import { Cabecalho, CabecalhoCentro, CabecalhoDireita, CabecalhoEsquerda } from '../../components/Cabecalho';
 import ArrowIcon from "../../components/icons/arrowIcon";
 import ContainerBasico from "../../components/ContainerBasico";
 import InputBasico from "../../components/InputBasico";
 import Card from "../../components/CardBasico";
 import { useUserForm } from "./hooks/useUserForm";
-import { TIPO_USUARIO, LABELS, TIPOS_INPUT, CAMPOS_POR_TIPO, FORMS_INICIAIS } from "../../constants/userConstants";
+import { TIPO_USUARIO, LABELS, TIPOS_INPUT, CAMPOS_POR_TIPO } from "../../constants/userConstants";
 
 
 function PaginaCadastro() {
 
-  const { tipoUsuario, camposAtuais, handleChange, handleTipoUsuario, handleSubmit, cleanState } = useUserForm();
+  const { tipoUsuario, forms, senhaError, handleChange, handleTipoUsuario, handleSubmit, cleanState, goBackIfUserNull } = useUserForm();
 
-  function voltar() {
-    if (!tipoUsuario) {
-      navigate(-1);
-    } 
-    else {
-    handleTipoUsuario("");
-    }
-  };
+  // const pegarInputsSenha = () => {
+
+  // }
 
   function renderInputs() {
 
@@ -34,11 +28,12 @@ function PaginaCadastro() {
         <InputBasico
           key={campo}
           name={campo}
-          value={camposAtuais[campo] || ""}
+          value={forms[tipoUsuario][campo] || ""}
           onChange={handleChange}
           text={LABELS[campo]}
           type={TIPOS_INPUT[campo]}
           required={campo !== "pseudonimo" && campo !== "siteOficial"} // campos opcionais
+          className={senhaError  ? "input-error" : ""}
         />
 
       )));
@@ -82,11 +77,9 @@ function PaginaCadastro() {
     <>
       <Cabecalho>
         <CabecalhoEsquerda>
-          <Botao variant="secondary" onClick={voltar} className="btn-icone">
-            <a>
+          <Botao variant="secondary" onClick={goBackIfUserNull}>
               <ArrowIcon aria-label="Voltar" />
               <span>Voltar</span>
-            </a>
           </Botao>
         </CabecalhoEsquerda>
         <CabecalhoCentro>
