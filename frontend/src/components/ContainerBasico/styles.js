@@ -14,6 +14,7 @@ const SC_ContainerBasico = styled.div`
   -4px 0 10px var(--cor-principal),   /* sombra à esquerda */
   0 4px 10px var(--cor-terciaria);   /* sombra abaixo */;
 
+
   h1 {
     font-family: 'Cinzel', serif;
     background-color: var(--cor-principal);
@@ -35,6 +36,15 @@ const SC_ContainerBasico = styled.div`
     align-items: center;
     margin-top: 1.5rem;
     gap: 20px;
+  }
+  
+
+  @media (max-width: 600px) {
+    max-width: 85vw;
+
+    h1 {
+      font-size: 1.45em;
+    }
   }
 `;
 

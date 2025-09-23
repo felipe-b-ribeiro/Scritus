@@ -2,16 +2,16 @@
 
 // Tipos de usuário
 const TIPO_USUARIO = {
-  LEITOR: "leitor",
-  AUTOR: "autor",
-  EDITORA: "editora",
+  LEITOR: "Leitor",
+  AUTOR: "Autor",
+  EDITORA: "Editora",
 };
 
 // Campos por tipo de usuário
 const CAMPOS_POR_TIPO = {
-  leitor: ["nomeUsuario", "email", "senha", "confirmarSenha", "dataNascimento"],
-  autor: ["nomeCompleto", "pseudonimo", "email", "senha", "confirmarSenha", "dataNascimento"],
-  editora: ["nomeFantasia", "email", "senha", "confirmarSenha", "cnpj", "siteOficial"],
+  Leitor: ["nomeUsuario", "email", "senha", "confirmarSenha", "dataNascimento"],
+  Autor: ["nomeCompleto", "pseudonimo", "email", "senha", "confirmarSenha", "dataNascimento"],
+  Editora: ["nomeFantasia", "email", "senha", "confirmarSenha", "cnpj", "siteOficial"],
 };
 
 // Labels para os campos
@@ -38,14 +38,19 @@ const TIPOS_INPUT = {
   senha: "password",
   confirmarSenha: "password",
   dataNascimento: "date",
-  cnpj: "number",
+  cnpj: "text",
   siteOficial: "url",
 };
 
+const criarFormularioUsuario = (campos) =>
+  Object.fromEntries(
+    campos.map(campo => [campo, { valor: '', erro: false, loading: false }])
+  );
+
 const FORMS_POR_USUARIO = {
-  leitor: Object.fromEntries(CAMPOS_POR_TIPO.leitor.map(c => [c, ""])), // c significa campo
-  autor: Object.fromEntries(CAMPOS_POR_TIPO.autor.map(c => [c, ""])),
-  editora: Object.fromEntries(CAMPOS_POR_TIPO.editora.map(c => [c, ""]))
+  Leitor: criarFormularioUsuario(CAMPOS_POR_TIPO.Leitor),
+  Autor: criarFormularioUsuario(CAMPOS_POR_TIPO.Autor),
+  Editora: criarFormularioUsuario(CAMPOS_POR_TIPO.Editora)
 };
 
 export { TIPO_USUARIO, LABELS, TIPOS_INPUT, FORMS_POR_USUARIO, CAMPOS_POR_TIPO };

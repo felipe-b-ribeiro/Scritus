@@ -8,8 +8,8 @@ import ContainerBasico from "../../components/ContainerBasico";
 import InputBasico from "../../components/InputBasico";
 import Card from "../../components/CardBasico";
 import { useUserForm } from "./hooks/useUserForm";
-import { TIPO_USUARIO, LABELS, TIPOS_INPUT, CAMPOS_POR_TIPO } from "../../constants/userConstants";
-
+import { TIPO_USUARIO, LABELS, TIPOS_INPUT, CAMPOS_POR_TIPO } from "../../constants/userConstants.js";
+import { aplicarMascaraCNPJ } from '../../utils/mascaraCNPJ';
 
 function PaginaCadastro() {
 
@@ -23,17 +23,19 @@ function PaginaCadastro() {
 
     if (!tipoUsuario) return null;
 
+
+    console.log(CAMPOS_POR_TIPO[tipoUsuario]);
     return (
       CAMPOS_POR_TIPO[tipoUsuario].map(campo => (
         <InputBasico
           key={campo}
           name={campo}
-          value={forms[tipoUsuario][campo] || ""}
+          value={campo === 'cnpj' ? aplicarMascaraCNPJ(forms[tipoUsuario][campo] || "") : forms[tipoUsuario][campo] || ""}
           onChange={handleChange}
           text={LABELS[campo]}
           type={TIPOS_INPUT[campo]}
           required={campo !== "pseudonimo" && campo !== "siteOficial"} // campos opcionais
-          className={senhaError && pegarInputsSenha(campo)  ? "input-error" : ""}
+          className={(senhaError && pegarInputsSenha(campo)) ? "input-error" : ""}
         />
 
       )));

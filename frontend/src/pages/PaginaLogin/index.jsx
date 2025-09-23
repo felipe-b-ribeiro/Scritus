@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 
-import './styles.css';
 import Logo from '../../components/LogoScritus';
 import Linha from '../../components/LinhaDegrade';
 import Botao from '../../components/Botao';

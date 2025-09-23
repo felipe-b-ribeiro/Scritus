@@ -8,6 +8,7 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
+    "argon2": "^0.44.0",
     "aws-sdk": "^2.1400.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",

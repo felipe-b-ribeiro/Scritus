@@ -1,21 +1,13 @@
-export const createUser = (req, res) => {
+import { criarUsuarioService } from '../services/userService.js'
 
-    res.status(201).json({message: 'Usuário criado com sucesso'});
 
-}
-
-export const getAllUsers = (req, res) => {
-
-    res.status(200).json({message: 'Lista de usuários'});
-
-}
-
-export const deleteUser = (req, res) => {
-
-    res.status(204).json({message: 'Usuário deletado com sucesso'});
-}
-
-export const updateUser = (req, res) => {
-
-    res.status(204).json({message: 'Usuário atualizado com sucesso'});
+export const createUser = async (req, res) => {
+    try {
+        const resposta = await criarUsuarioService(req.body);
+        res.status(201).json(resposta);
+    } 
+    catch (err) {
+        console.error('[CONTROLLER ERROR]: ', err);
+        res.status(400).json({error: err.message});
+    }
 }

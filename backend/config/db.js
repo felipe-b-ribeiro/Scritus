@@ -1,5 +1,13 @@
 import { Pool } from 'pg';
-import 'dotenv/config';
+
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const pool = new Pool({
   host: process.env.BD_HOST,
@@ -9,15 +17,16 @@ const pool = new Pool({
   password: process.env.BD_SENHA,
 });
 
-const connectToDatabase = async () => {
+const conectarBanco = async () => {
   try {
-    const client = await pool.connect();
+    const conexao = await pool.connect();
     console.log('Conexão com o banco de dados estabelecida com sucesso!');
-    return client;
-  } catch (error) {
+    return conexao;
+  } 
+  catch (error) {
     console.error('Erro ao conectar ao banco de dados:', error);
     throw error;
   }
 };
 
-export default connectToDatabase;
+export default conectarBanco;

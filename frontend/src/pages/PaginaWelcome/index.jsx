@@ -1,4 +1,3 @@
-import './styles.js';
 
 import Logo from '../../components/LogoScritus/index.jsx';
 import Linha from '../../components/LinhaDegrade/index.jsx';

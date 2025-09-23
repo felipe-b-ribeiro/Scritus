@@ -14,25 +14,31 @@ const EstilosGlobais = createGlobalStyle`
     }
 
     a {
-    text-decoration: none;
+        text-decoration: none;
+        color: inherit;
     }
 
     a:hover {
         cursor: pointer;
     }
 
-    @keyframes shake {
-        0% { box-shadow: 2px 2px 0.7em red; }
-        25% { box-shadow: 3px 3px 0.7em darkred }
-        75% { box-shadow: 2px 2px 0.5em darkred; }
-        85% { box-shadow: 1px 1px 0.4em red}
-        100% { box-shadow: 0px 0px 0em red;}
-        }
-
     .input-error {
-        border: 2px solid red !important;
-        animation: shake 3s ease-in-out;
+        border: 1px solid red !important;
     }
+
+    /* Chrome / Edge */
+    input:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 1000px white inset; /* cor de fundo */
+        -webkit-text-fill-color: black;               /* cor do texto */
+        transition: background-color 5000s ease-in-out; /* evita piscar */
+    }
+
+    /* Firefox */
+    input:-moz-autofill {
+        box-shadow: 0 0 0px 1000px white inset;
+        -moz-text-fill-color: black;
+    }
+
 
     :root {
         --cor-principal: #cb8446;
