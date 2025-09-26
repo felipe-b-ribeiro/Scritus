@@ -8,39 +8,33 @@ import ContainerBasico from "../../components/ContainerBasico";
 import InputBasico from "../../components/InputBasico";
 import Card from "../../components/CardBasico";
 import { useUserForm } from "./hooks/useUserForm";
-import { TIPO_USUARIO, LABELS, TIPOS_INPUT, CAMPOS_POR_TIPO } from "../../constants/userConstants.js";
+import { TIPO_USUARIO, CAMPOS } from "../../constants/userConstants.js";
 import { aplicarMascaraCNPJ } from '../../utils/mascaraCNPJ';
 
 function PaginaCadastro() {
 
-  const { tipoUsuario, forms, senhaError, handleChange, handleTipoUsuario, handleSubmit, cleanState, goBackIfUserNull } = useUserForm();
-  
-  const CAMPOS_SENHA = ["senha", "confirmarSenha"];
-
-  const pegarInputsSenha = (campo) => CAMPOS_SENHA.includes(campo);
+  const { tipoUsuario, forms, verificarErro, handleChange, handleTipoUsuario, handleSubmit, cleanState, goBackIfUserNull } = useUserForm();
 
   function renderInputs() {
+  if (!tipoUsuario) return null;
 
-    if (!tipoUsuario) return null;
-
-
-    console.log(CAMPOS_POR_TIPO[tipoUsuario]);
-    return (
-      CAMPOS_POR_TIPO[tipoUsuario].map(campo => (
-        <InputBasico
-          key={campo}
-          name={campo}
-          value={campo === 'cnpj' ? aplicarMascaraCNPJ(forms[tipoUsuario][campo] || "") : forms[tipoUsuario][campo] || ""}
-          onChange={handleChange}
-          text={LABELS[campo]}
-          type={TIPOS_INPUT[campo]}
-          required={campo !== "pseudonimo" && campo !== "siteOficial"} // campos opcionais
-          className={(senhaError && pegarInputsSenha(campo)) ? "input-error" : ""}
-        />
-
-      )));
-
-  }
+  return Object.entries(CAMPOS[tipoUsuario]).map(([campo, meta]) => (
+    <InputBasico
+      key={campo}
+      name={campo}
+      value={
+        campo === 'cnpj'
+          ? aplicarMascaraCNPJ(forms[tipoUsuario][campo].valor || "")
+          : forms[tipoUsuario][campo].valor || ""
+      }
+      onChange={handleChange}
+      text={meta.label}
+      type={meta.tipo}
+      required={meta.required} // campos opcionais
+      className={verificarErro(campo) ? "input-error" : ""}
+    />
+  ));
+}
 
   function renderCards() {
     if (!tipoUsuario) {

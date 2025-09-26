@@ -1,9 +1,9 @@
 export function aplicarMascaraCNPJ(valor = "") {
   return valor
-    .replace(/\D/g, "") // tira tudo que não for número
-    .replace(/^(\d{2})(\d)/, "$1.$2") // 00.000...
-    .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3") // 00.000.000...
-    .replace(/\.(\d{3})(\d)/, ".$1/$2") // 00.000.000/0000...
-    .replace(/(\d{4})(\d)/, "$1-$2") // 00.000.000/0000-00
-    .slice(0, 18); // tamanho máximo do CNPJ formatado
+  .replace(/\D/g, "")
+  .replace(/^(\d{2})(\d)/, "$1.$2")
+  .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+  .replace(/\.(\d{3})(\d)/, ".$1/$2")
+  .replace(/(\d{4})(\d)/, "$1-$2")
+  .slice(0, 18);
 }

@@ -1,19 +1,24 @@
 import { useState } from "react";
 import { useNavigateCustom } from "../../../hooks/useNavigateCustom";
-import { FORMS_POR_USUARIO} from "../../../constants/userConstants";
+import { FORMS_POR_USUARIO } from "../../../constants/userConstants";
 
 export function useUserForm() {
     const [tipoUsuario, setTipoUsuario] = useState("");
     const [forms, setForms] = useState(FORMS_POR_USUARIO);
-    const [inputs, setInputs] = useState({
-        "nome_usuario": {'valor': "", 'erro': false, 'loading': false},
-        "email": {'valor': "", 'erro': false, 'loading': false},
-        "senha": {'valor': "", 'erro': false, 'loading': false},
-        "cnpj": {'valor': "", 'erro': false, 'loading': false},
-        "pseudonimo": {'valor': "", 'erro': false, 'loading': false}
-    })
     const [loading, setLoading] = useState(false);
     const { goBack } = useNavigateCustom();
+
+
+    const setarErro = (campo, erro) => {
+        setForms(prev => ({
+                ...prev, [tipoUsuario]: { ...prev[tipoUsuario], [campo]: { ...prev[tipoUsuario][campo], 'erro': erro }
+                                        }
+            }));
+    }
+
+    const verificarErro = (campo) => {
+        return forms[tipoUsuario][campo].erro;
+    }
 
     // Atualiza o input de acordo com tipoUsuario
     const handleChange = (e) => {
@@ -25,17 +30,15 @@ export function useUserForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (forms[tipoUsuario].senha !== forms[tipoUsuario].confirmarSenha) {
+        if (forms[tipoUsuario].senha.valor !== forms[tipoUsuario].confirmarSenha.valor) {
 
-            setForms(prev => ({
-                ...prev, [tipoUsuario]: { ...prev[tipoUsuario], senha: "", confirmarSenha: "" }
-            }));
-
-            setError(true);
+            setarErro('senha', true);
+            setarErro('confirmarSenha', true);
 
             setTimeout(() => {
-                setError(false); // reseta após 7s
-            }, 7000);
+                setarErro('senha', false);
+                setarErro('confirmarSenha', false); // reseta após 7s
+            }, 6000);
 
             return alert('As senhas não coincidem.')
         }
@@ -88,7 +91,7 @@ export function useUserForm() {
     return {
         tipoUsuario,
         forms,
-        error,
+        verificarErro,
         handleChange,
         handleTipoUsuario,
         handleSubmit,

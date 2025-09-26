@@ -7,50 +7,46 @@ const TIPO_USUARIO = {
   EDITORA: "Editora",
 };
 
-// Campos por tipo de usuário
-const CAMPOS_POR_TIPO = {
-  Leitor: ["nomeUsuario", "email", "senha", "confirmarSenha", "dataNascimento"],
-  Autor: ["nomeCompleto", "pseudonimo", "email", "senha", "confirmarSenha", "dataNascimento"],
-  Editora: ["nomeFantasia", "email", "senha", "confirmarSenha", "cnpj", "siteOficial"],
+// Objeto master
+
+const CAMPOS = {
+  Leitor: {
+    "nomeUsuario": { 'label': 'Nome de Usuário', 'tipo': 'text', required: true },
+    "email": { label: 'Email', tipo: 'email', required: true },
+    "senha": { label: 'Senha', tipo: 'password', required: true },
+    "confirmarSenha": { label: 'Confirme a Senha', tipo: 'password', required: true },
+    "dataNascimento": { label: 'Data de Nascimento', tipo: 'date', required: true}
+  },
+  Autor: {
+    "nomeCompleto": { label: 'Nome Completo', tipo: 'text', required: true},
+    "pseudonimo": { label: 'Pseudônimo (Opcional)', tipo: 'text', required: false},
+    "email": { label: 'Email', tipo: 'email', required: true},
+    "senha": { label: 'Senha', tipo: 'password', required: true},
+    "confirmarSenha": { label: 'Confirme a Senha', tipo: 'password', required: true},
+    "dataNascimento": { label: 'Data de Nascimento', tipo: 'date', required: true}
+  },
+  Editora: {
+    nomeFantasia: { label: "Nome Fantasia", tipo: "text", required: true },
+    cnpj: { label: "CNPJ", tipo: "text", required: true },
+    siteOficial: { label: "Site Oficial", tipo: "url", required: false },
+    email: { label: "Email", tipo: "email", required: true},
+    senha: { label: "Senha", tipo: "password", required: true},
+    confirmarSenha: { label: "Confirme a Senha", tipo: "password", required: true}
+  }
 };
 
-// Labels para os campos
-const LABELS = {
-  nomeUsuario: "Nome de Usuário",
-  nomeCompleto: "Nome Completo",
-  nomeFantasia: "Nome Fantasia",
-  pseudonimo: "Pseudônimo (Opcional)",
-  email: "Email",
-  senha: "Senha",
-  confirmarSenha: "Confirme a Senha",
-  dataNascimento: "Data de Nascimento",
-  cnpj: "CNPJ",
-  siteOficial: "Site Oficial (Opcional)",
-};
-
-// Tipos de input
-const TIPOS_INPUT = {
-  nomeUsuario: "text",
-  nomeCompleto: "text",
-  nomeFantasia: "text",
-  pseudonimo: "text",
-  email: "email",
-  senha: "password",
-  confirmarSenha: "password",
-  dataNascimento: "date",
-  cnpj: "text",
-  siteOficial: "url",
-};
-
-const criarFormularioUsuario = (campos) =>
+const criarFormularioUsuario = (camposObj) =>
   Object.fromEntries(
-    campos.map(campo => [campo, { valor: '', erro: false, loading: false }])
+    Object.keys(camposObj).map(campo => [
+      campo,
+      { valor: "", erro: false, loading: false }
+    ])
   );
 
 const FORMS_POR_USUARIO = {
-  Leitor: criarFormularioUsuario(CAMPOS_POR_TIPO.Leitor),
-  Autor: criarFormularioUsuario(CAMPOS_POR_TIPO.Autor),
-  Editora: criarFormularioUsuario(CAMPOS_POR_TIPO.Editora)
+  Leitor: criarFormularioUsuario(CAMPOS.Leitor),
+  Autor: criarFormularioUsuario(CAMPOS.Autor),
+  Editora: criarFormularioUsuario(CAMPOS.Editora)
 };
 
-export { TIPO_USUARIO, LABELS, TIPOS_INPUT, FORMS_POR_USUARIO, CAMPOS_POR_TIPO };
+export { TIPO_USUARIO, FORMS_POR_USUARIO, CAMPOS };
