@@ -1,4 +1,3 @@
-
 import Logo from '../../components/LogoScritus';
 import Linha from '../../components/LinhaDegrade';
 import Botao from '../../components/Botao';
@@ -19,6 +18,7 @@ function PaginaCadastro() {
   if (!tipoUsuario) return null;
 
   return Object.entries(CAMPOS[tipoUsuario]).map(([campo, meta]) => (
+    <>
     <InputBasico
       key={campo}
       name={campo}
@@ -30,9 +30,11 @@ function PaginaCadastro() {
       onChange={handleChange}
       text={meta.label}
       type={meta.tipo}
-      required={meta.required} // campos opcionais
+      required={meta.required}
       className={verificarErro(campo) ? "input-error" : ""}
     />
+    {campo === "senha" || campo === "confirmarSenha" && <EyeIcon />}
+    </>
   ));
 }
 
