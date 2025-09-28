@@ -30,13 +30,23 @@ const variantes = {
 
   `,
   terciary: css`
-    background-color: white;
+    background-color: transparent;
     color: var(--cor-principal);
     border: 1px solid var(--cor-principal);
 
     &:hover {
       box-shadow: 0 0 0.2em #b3743eff;
       background-color: #f5f4f4ff;
+    }
+  `,
+  cancel: css`
+    background-color: transparent;
+    color: var(--cor-sair-deletar);
+    border: 1px solid var(--cor-sair-deletar);
+    
+    &:hover {
+      background-color: #f5f4f4ff;
+      box-shadow: 0 0 0.2em var(--cor-sair-deletar);
     }
   `
 };

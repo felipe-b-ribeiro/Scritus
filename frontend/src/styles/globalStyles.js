@@ -39,7 +39,14 @@ const EstilosGlobais = createGlobalStyle`
         -moz-text-fill-color: black;
     }
 
+    .flx {
+        display: flex;
+    }
 
+    .space-a {
+        justify-content: space-around;
+    }
+    
     :root {
         --cor-principal: #cb8446;
         --cor-secundaria: #5b4028;

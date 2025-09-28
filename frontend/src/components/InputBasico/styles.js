@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 const SC_InputWrapper = styled.div`
   position: relative;
+  display: inline-block;
+  width: max-content;
 
   input ~ label {
     position: absolute;
@@ -13,6 +15,7 @@ const SC_InputWrapper = styled.div`
     padding: 0 3px;
     font-family: 'Aboreto', serif;
     font-size: 0.9em;
+    user-select: none;
   } 
 `;
 
@@ -33,12 +36,6 @@ const SC_InputBasico = styled.input`
     &:focus {
     border: 1px solid var(--cor-principal);
     }
-  
-    input ~ label {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-   }
 `;
 
 export { SC_InputBasico, SC_InputWrapper };

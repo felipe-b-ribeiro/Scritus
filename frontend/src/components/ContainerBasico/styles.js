@@ -5,7 +5,7 @@ const SC_ContainerBasico = styled.div`
   flex-direction: column;
   align-items: center;
   max-width: 47vw;
-  width: fit-content;
+  width: max-content;
   margin: 10vh auto;
   padding: 0 6rem;
   border-radius: 30px;

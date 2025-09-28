@@ -1,42 +1,75 @@
-import Logo from '../../components/LogoScritus';
-import Linha from '../../components/LinhaDegrade';
-import Botao from '../../components/Botao';
-import { Cabecalho, CabecalhoCentro, CabecalhoDireita, CabecalhoEsquerda } from '../../components/Cabecalho';
-import ArrowIcon from "../../components/icons/arrowIcon";
+// 1. Bibliotecas externas
+import { useState } from "react";
+
+// 2. Hooks customizados
+import { useUserForm } from "./hooks/useUserForm";
+
+// 3. Constants
+import { TIPO_USUARIO, CAMPOS } from "../../constants/userConstants.js";
+
+// 4. Utils/helpers
+import { aplicarMascaraCNPJ } from "../../utils/mascaraCNPJ";
+
+// 5. Componentes globais
+import Logo from "../../components/LogoScritus";
+import Linha from "../../components/LinhaDegrade";
+import Botao from "../../components/Botao";
 import ContainerBasico from "../../components/ContainerBasico";
 import InputBasico from "../../components/InputBasico";
 import Card from "../../components/CardBasico";
-import { useUserForm } from "./hooks/useUserForm";
-import { TIPO_USUARIO, CAMPOS } from "../../constants/userConstants.js";
-import { aplicarMascaraCNPJ } from '../../utils/mascaraCNPJ';
+import ErrorHelper from '../../components/ErrorHelper';
+
+// 6. Componentes de layout / específicos
+import { Cabecalho, CabecalhoCentro, CabecalhoDireita, CabecalhoEsquerda } from "../../components/Cabecalho";
+import ArrowIcon from "../../components/icons/arrowIcon";
+import EyeIcon from "../../components/icons/passwordIcon";
+
+
 
 function PaginaCadastro() {
 
-  const { tipoUsuario, forms, verificarErro, handleChange, handleTipoUsuario, handleSubmit, cleanState, goBackIfUserNull } = useUserForm();
+  const { tipoUsuario, forms, errorMsg, verificarErro, handleChange, handleFocus, handleTipoUsuario, handleSubmit, cleanState, goBackIfUserNull } = useUserForm();
+
+  const [senhaVisivel, setSenhaVisivel] = useState({
+    'senha': false,
+    'confirmarSenha': false
+  });
 
   function renderInputs() {
-  if (!tipoUsuario) return null;
 
-  return Object.entries(CAMPOS[tipoUsuario]).map(([campo, meta]) => (
-    <>
-    <InputBasico
-      key={campo}
-      name={campo}
-      value={
-        campo === 'cnpj'
-          ? aplicarMascaraCNPJ(forms[tipoUsuario][campo].valor || "")
-          : forms[tipoUsuario][campo].valor || ""
-      }
-      onChange={handleChange}
-      text={meta.label}
-      type={meta.tipo}
-      required={meta.required}
-      className={verificarErro(campo) ? "input-error" : ""}
-    />
-    {campo === "senha" || campo === "confirmarSenha" && <EyeIcon />}
-    </>
-  ));
-}
+    if (!tipoUsuario) return null;
+
+    const hoje = new Date().toISOString().split('T')[0];
+    
+    return Object.entries(CAMPOS[tipoUsuario]).map(([campo, meta]) => {
+
+    const erroMsg = forms[tipoUsuario][campo].erroMsg;
+
+      return (
+          <InputBasico
+            key={campo}
+            name={campo}
+            value={
+              meta.cnpj
+                ? aplicarMascaraCNPJ(forms[tipoUsuario][campo].valor || "")
+                : forms[tipoUsuario][campo].valor || ""
+            }
+            onChange={handleChange}
+            onFocus={() => handleFocus(campo)}
+            onInvalid={(e) => e.preventDefault()}
+            text={meta.label}
+            type={meta.senha && senhaVisivel[campo] ? 'text' : meta.tipo}
+            required={meta.required}
+            className={verificarErro(campo) ? "input-error" : ""}
+            max={meta.data ? hoje : undefined}
+            minLength={meta.minlength}
+          >
+            {meta.senha && <EyeIcon aberto={!senhaVisivel[campo]} onClick={() => setSenhaVisivel(prev => ({ ...prev, [campo]: !prev[campo] }))} />}
+            {verificarErro(campo) && erroMsg ? <ErrorHelper text={erroMsg}/> : null}
+          </InputBasico>
+      );
+    });
+  }
 
   function renderCards() {
     if (!tipoUsuario) {
@@ -60,10 +93,10 @@ function PaginaCadastro() {
 
     return (
       <ContainerBasico text={`CRIAR CONTA DE ${tipoUsuario.toUpperCase()}`}>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           {renderInputs()}
-          <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-            <Botao variant={'secondary'} type='button' onClick={cleanState}><a>Cancelar</a></Botao>
+          <div className='flx space-a'>
+            <Botao variant={'cancel'} type='button' onClick={cleanState}><a>Cancelar</a></Botao>
             <Botao variant={'primary'} type='submit'><a>Criar Conta</a></Botao>
           </div>
         </form>
@@ -76,8 +109,8 @@ function PaginaCadastro() {
       <Cabecalho>
         <CabecalhoEsquerda>
           <Botao variant="secondary" onClick={goBackIfUserNull}>
-              <ArrowIcon aria-label="Voltar" />
-              <span>Voltar</span>
+            <ArrowIcon aria-label="Voltar" />
+            <span>Voltar</span>
           </Botao>
         </CabecalhoEsquerda>
         <CabecalhoCentro>

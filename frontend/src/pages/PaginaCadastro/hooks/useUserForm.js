@@ -8,12 +8,21 @@ export function useUserForm() {
     const [loading, setLoading] = useState(false);
     const { goBack } = useNavigateCustom();
 
+    const setError = (campo, erro) => {
 
-    const setarErro = (campo, erro) => {
         setForms(prev => ({
-                ...prev, [tipoUsuario]: { ...prev[tipoUsuario], [campo]: { ...prev[tipoUsuario][campo], 'erro': erro }
-                                        }
+            ...prev, [tipoUsuario]: {
+                ...prev[tipoUsuario], [campo]: { ...prev[tipoUsuario][campo], 'erro': true, 'erroMsg': erro }
+            }
+        }));
+
+        setTimeout(() => {
+            setForms(prev => ({
+                ...prev, [tipoUsuario]: {
+                    ...prev[tipoUsuario], [campo]: { ...prev[tipoUsuario][campo], 'erro': false, 'erroMsg': "" }
+                }
             }));
+        }, 6000);
     }
 
     const verificarErro = (campo) => {
@@ -24,38 +33,64 @@ export function useUserForm() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForms(prev => ({
-            ...prev, [tipoUsuario]: { ...prev[tipoUsuario], [name]: { ...prev[tipoUsuario][name], "valor": value} }
+            ...prev, [tipoUsuario]: { ...prev[tipoUsuario], [name]: { ...prev[tipoUsuario][name], "valor": value } }
         }));
     };
 
+    const handleFocus = (campo) => {
+        verificarErro(campo) && setError(campo, "");
+    }
+
     const handleSubmit = async (e) => {
+
         e.preventDefault();
+
+        Object.entries(forms[tipoUsuario]).forEach(([nomeCampo, campo]) => {
+            if (campo.valor == "") {
+                setError(nomeCampo, ""); 
+            }
+        }); 
+
+        const temErro = Object.values(forms[tipoUsuario]).some(campo => campo.erro)
+        
+        if (temErro) { return null; }
+
         if (forms[tipoUsuario].senha.valor !== forms[tipoUsuario].confirmarSenha.valor) {
 
-            setarErro('senha', true);
-            setarErro('confirmarSenha', true);
+            setError("senha", "");
+            setError("confirmarSenha", "As senhas digitadas não são iguais.");
 
-            setTimeout(() => {
-                setarErro('senha', false);
-                setarErro('confirmarSenha', false); // reseta após 7s
-            }, 6000);
+            return null;
+        }
 
-            return alert('As senhas não coincidem.')
+        const dataUsuario = new Date(forms[tipoUsuario].dataNascimento.valor);
+        const hoje = new Date();
+
+        if (dataUsuario > hoje) {
+
+            setError("dataNascimento", "A data de nascimento não pode estar no futuro.");
+
+            return null;
         }
 
         try {
-           const body = {"tipo": tipoUsuario, "dados": { ...forms[tipoUsuario] } };
-           const resposta = await fetch('http://localhost:5000/api/v1/usuarios', {
+
+            const body = { "tipo": tipoUsuario, "dados": { ...forms[tipoUsuario] } };
+            const resposta = await fetch('http://localhost:5000/api/v1/usuarios', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(body),
             });
+
             if (resposta.ok) {
-                return alert('Usuário cadastrado com sucesso!') 
+
+                return alert('Usuário cadastrado com sucesso!')
+
             }
             else {
+
                 return alert('Erro ao cadastrar o usuário!')
             }
         }
@@ -93,6 +128,7 @@ export function useUserForm() {
         forms,
         verificarErro,
         handleChange,
+        handleFocus,
         handleTipoUsuario,
         handleSubmit,
         cleanState,
