@@ -4,6 +4,7 @@ const SC_InputWrapper = styled.div`
   position: relative;
   display: inline-block;
   width: max-content;
+  margin: 10px 0;
 
   input ~ label {
     position: absolute;

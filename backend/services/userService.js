@@ -1,7 +1,7 @@
 import { criarUsuarioRepository } from '../repositories/userRepository.js'
 import argon2 from 'argon2'
 import { validarEmail, validarCNPJ, validarSenhaForte } from '../../common/util/validations.js'
-import { CAMPOS_POR_TIPO } from '../../frontend/src/constants/userConstants.js'
+import { CAMPOS} from '../../frontend/src/constants/userConstants.js'
 
 export const criarUsuarioService = async (dadosFront) => {
     try {
@@ -49,7 +49,7 @@ export const criarUsuarioService = async (dadosFront) => {
         if (senha !== confirmarSenha) throw new Error('As senhas digitadas não são iguais!');
 
         const senhaCriptografada = await argon2.hash(senha);
-        let dadosCriptografados = { ...dadosFront, "dados": {...dadosFront.dados, senha: senhaCriptografada} };
+        let dadosCriptografados = { ...dadosFront, "dados": {...dadosFront.dados, senha: senhaCriptografada } };
 
         if (cnpj) {
             const cnpjSemMascara = cnpj.replace(/\D/g, "");
@@ -58,7 +58,7 @@ export const criarUsuarioService = async (dadosFront) => {
 
         const dadosPraEnviar = {
             "tipo": tipo,
-            "dados": CAMPOS_POR_TIPO[tipo].reduce((acc, campo) => {
+            "dados": CAMPOS[tipo].reduce((acc, campo) => {
             acc[campo] = dadosCriptografados.dados[campo]; 
             return acc;
             }, {})

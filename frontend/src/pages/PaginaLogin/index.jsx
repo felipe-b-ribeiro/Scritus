@@ -10,12 +10,6 @@ import InputBasico from "../../components/InputBasico";
 
 function PaginaLogin() {
 
-  const navigate = useNavigate();
-
-  const voltar = () => {
-    navigate(-1);
-  };
-
   return (
     <>
       <Cabecalho>
@@ -34,11 +28,8 @@ function PaginaLogin() {
          <form>
            <InputBasico text='EMAIL' type="email" placeholder="Digite seu e-mail" required />
            <InputBasico text='SENHA' type="password" placeholder="Digite sua senha" required />
-           <Botao className="mt-0">
-            <a>
-            <span>Entrar</span>
-            </a>
-          </Botao>
+           <a href="">Esqueceu a senha?</a>
+           <Botao>Entrar</Botao>
          </form>
       </ContainerBasico>
     </>

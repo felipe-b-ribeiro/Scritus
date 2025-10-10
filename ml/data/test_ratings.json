@@ -1,0 +1,4 @@
+[
+  {"user_id": 1, "text_id": 101, "like": 1, "comment_size": 50},
+  {"user_id": 2, "text_id": 102, "like": 0, "comment_size": 0}
+]

@@ -4,10 +4,10 @@ const SC_ContainerBasico = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 47vw;
-  width: max-content;
+  max-width: '47vw';
+  width: ${props => props.width || 'max-content'};
   margin: 10vh auto;
-  padding: 0 6rem;
+  padding: 0 6rem 10px 6rem;
   border-radius: 30px;
   box-shadow:
    4px 0 10px var(--cor-secundaria),   /* sombra à direita */
@@ -34,8 +34,8 @@ const SC_ContainerBasico = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 1.5rem;
-    gap: 20px;
+    margin-top: 1em;
+    justify-content: space-between;
   }
   
 
