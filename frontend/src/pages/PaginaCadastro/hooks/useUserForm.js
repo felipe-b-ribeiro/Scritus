@@ -25,8 +25,18 @@ export function useUserForm() {
         }, 6000);
     }
 
+    const setSucess = (campo) => {
+        setForms(prev => ({
+            ...prev, [tipoUsuario]: {
+                ...prev[tipoUsuario], [campo]: { ...prev[tipoUsuario][campo], 'validado': true,}
+            }
+        }));
+    }
+
     const verificarErro = (campo) => {
-        return forms[tipoUsuario][campo].erro;
+        if (forms[tipoUsuario][campo].erro) return "Erro";
+        if (forms[tipoUsuario][campo].validado) return "Sucesso";
+        return null;
     }
 
     // Atualiza o input de acordo com tipoUsuario
@@ -41,6 +51,39 @@ export function useUserForm() {
         verificarErro(campo) && setError(campo, "");
     }
 
+    let timeout;
+
+    const handleBlur = (nomeCampo, valorCampo) => {
+        clearTimeout(timeout);
+
+        const timeout = setTimeout(() => {
+            if (valorCampo.trim() === "") return;
+            setLoading(true);
+
+            fetch('http://localhost:5000/api/v1/usuarios/verificar-disponibilidade', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ [nomeCampo]: valorCampo }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    setLoading(false);
+                    if (data.disponivel) {
+                        setSucess(nomeCampo);
+                    } else {
+                        setError(nomeCampo, "já em uso.");
+                    }
+                })
+                .catch(error => {
+                    setLoading(false);
+                    console.error('Erro ao verificar disponibilidade:', error);
+                });
+        }, 600);
+
+    }
+
     const handleSubmit = async (e) => {
 
         e.preventDefault();
@@ -53,13 +96,14 @@ export function useUserForm() {
 
         const temErro = Object.values(forms[tipoUsuario]).some(campo => campo.erro)
         
-        if (temErro) { return null; }
+        if (temErro) return null;
+
+
+        // validações on-submit
 
         if (forms[tipoUsuario].senha.valor !== forms[tipoUsuario].confirmarSenha.valor) {
-
             setError("senha", "");
             setError("confirmarSenha", "As senhas digitadas não são iguais.");
-
             return null;
         }
 
@@ -67,9 +111,7 @@ export function useUserForm() {
         const hoje = new Date();
 
         if (dataUsuario > hoje) {
-
             setError("dataNascimento", "A data de nascimento não pode estar no futuro.");
-
             return null;
         }
 
@@ -85,12 +127,9 @@ export function useUserForm() {
             });
 
             if (resposta.ok) {
-
                 return alert('Usuário cadastrado com sucesso!')
-
             }
             else {
-
                 return alert('Erro ao cadastrar o usuário!')
             }
         }
@@ -129,6 +168,7 @@ export function useUserForm() {
         verificarErro,
         handleChange,
         handleFocus,
+        handleBlur,
         handleTipoUsuario,
         handleSubmit,
         cleanState,

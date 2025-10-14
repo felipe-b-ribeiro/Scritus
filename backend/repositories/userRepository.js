@@ -64,3 +64,42 @@ export const criarUsuarioRepository = async (usuario) => {
     }
 }
 
+export const encontrarUsuarioPorInfoRepository = async (info) => {
+    try {
+        const client = await db();
+
+        const { campo, valor } = info;
+
+        let tabela, campoBanco;
+
+        switch (campo) {
+            case 'email':
+                tabela = 'usuarios';
+                campoBanco = 'email';
+                break;
+
+            case 'cnpj':
+                tabela = 'usuarios';
+                campoBanco = 'cnpj';
+                break;
+
+            case 'nomeUsuario':
+                tabela = 'perfilLeitor';
+                campoBanco = 'nome_usuario';
+                break;
+
+            default:
+                throw new Error(`Campo '${campo}' não é válido para verificação.`);
+        }
+
+        const query = `SELECT 1 FROM ${tabela} WHERE ${campoBanco} = $1 LIMIT 1`;
+        const resposta = await client.query(query, [valor]);
+
+        return resposta.rows.length > 0; // true se já existe, false se está livre
+    }
+    
+    catch (err) {
+        console.error('[REPOSITORY ERROR]:', err);
+        throw err;
+    }
+}

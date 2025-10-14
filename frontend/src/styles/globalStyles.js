@@ -26,6 +26,10 @@ const EstilosGlobais = createGlobalStyle`
         border: 1px solid red !important;
     }
 
+    .input-success {
+        border: 1px solid green !important;
+    }
+
     /* Chrome / Edge */
     input:-webkit-autofill {
         -webkit-box-shadow: 0 0 0px 1000px white inset; /* cor de fundo */

@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
 import Logo from '../../components/LogoScritus';
 import Linha from '../../components/LinhaDegrade';
 import Botao from '../../components/Botao';
@@ -7,6 +5,7 @@ import { Cabecalho, CabecalhoCentro, CabecalhoEsquerda } from '../../components/
 import ArrowIcon from "../../components/icons/arrowIcon";
 import ContainerBasico from "../../components/ContainerBasico";
 import InputBasico from "../../components/InputBasico";
+import LinkSimples from '../../components/LinkSimples';
 
 function PaginaLogin() {
 
@@ -24,11 +23,11 @@ function PaginaLogin() {
         </CabecalhoCentro>
       </Cabecalho>
       <Linha />
-      <ContainerBasico text={"FAZER LOGIN"}>
+      <ContainerBasico text="Fazer Login">
          <form>
            <InputBasico text='EMAIL' type="email" placeholder="Digite seu e-mail" required />
            <InputBasico text='SENHA' type="password" placeholder="Digite sua senha" required />
-           <a href="">Esqueceu a senha?</a>
+           <LinkSimples to='/cadastro'>Não possui conta? Cadastre-se</LinkSimples>
            <Botao>Entrar</Botao>
          </form>
       </ContainerBasico>

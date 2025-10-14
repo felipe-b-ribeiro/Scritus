@@ -28,7 +28,7 @@ import EyeIcon from "../../components/icons/passwordIcon";
 
 function PaginaCadastro() {
 
-  const { tipoUsuario, forms, errorMsg, verificarErro, handleChange, handleFocus, handleTipoUsuario, handleSubmit, cleanState, goBackIfUserNull } = useUserForm();
+  const { tipoUsuario, forms, errorMsg, verificarErro, handleChange, handleFocus, handleBlur, handleTipoUsuario, handleSubmit, cleanState, goBackIfUserNull } = useUserForm();
 
   const [senhaVisivel, setSenhaVisivel] = useState({
     'senha': false,
@@ -56,11 +56,12 @@ function PaginaCadastro() {
             }
             onChange={handleChange}
             onFocus={() => handleFocus(campo)}
+            onBlur={campo === 'email' || campo === 'nomeUsuario' || campo === 'cnpj' ? (e) => handleBlur(campo, e.target.value) : undefined}
             onInvalid={(e) => e.preventDefault()}
             text={meta.label}
             type={meta.senha && senhaVisivel[campo] ? 'text' : meta.tipo}
             required={meta.required}
-            className={verificarErro(campo) ? "input-error" : ""}
+            className={verificarErro(campo) === "Erro" ? "input-error" : verificarErro(campo) === "Sucesso" ? "input-success" : ""}
             max={meta.data ? hoje : undefined}
             minLength={meta.minlength}
           >
@@ -74,7 +75,7 @@ function PaginaCadastro() {
   function renderCards() {
     if (!tipoUsuario) {
       return (
-        <ContainerBasico text="O QUE VOCÊ BUSCA NO SCRITUS?">
+        <ContainerBasico text="O que você busca no Scritus?">
           <Card variant='primary' onClick={() => handleTipoUsuario(TIPO_USUARIO.LEITOR)} role='button' tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') handleState(TIPO_USUARIO.LEITOR); }}>
             <h2>Sou leitor</h2>
             <h5>e quero ler livros profundos e impactantes.</h5>
@@ -92,7 +93,7 @@ function PaginaCadastro() {
     }
 
     return (
-      <ContainerBasico text={`CRIAR CONTA DE ${tipoUsuario.toUpperCase()}`}>
+      <ContainerBasico text={`Criar conta de ${tipoUsuario}`}>
         <form onSubmit={handleSubmit} noValidate>
           {renderInputs()}
           <div className='flx space-a'>
