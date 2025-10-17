@@ -34,9 +34,9 @@ const SC_InputBasico = styled.input`
   outline: none;
   transition: border-color 0.4s var(--transicao-basica);
 
-    &:focus {
-    border: 1px solid var(--cor-principal);
-    }
+  &:focus {
+  border: 1px solid var(--cor-principal);
+  }
 `;
 
 export { SC_InputBasico, SC_InputWrapper };

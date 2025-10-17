@@ -28,7 +28,7 @@ import EyeIcon from "../../components/icons/passwordIcon";
 
 function PaginaCadastro() {
 
-  const { tipoUsuario, forms, errorMsg, verificarErro, handleChange, handleFocus, handleBlur, handleTipoUsuario, handleSubmit, cleanState, goBackIfUserNull } = useUserForm();
+  const { tipoUsuario, forms, verificarErro, handleChange, handleFocus, handleBlur, handleTipoUsuario, handleSubmit, cleanState, goBackIfUserNull } = useUserForm();
 
   const [senhaVisivel, setSenhaVisivel] = useState({
     'senha': false,
@@ -55,7 +55,7 @@ function PaginaCadastro() {
                 : forms[tipoUsuario][campo].valor || ""
             }
             onChange={handleChange}
-            onFocus={() => handleFocus(campo)}
+            // onFocus={() => handleFocus(campo)}
             onBlur={campo === 'email' || campo === 'nomeUsuario' || campo === 'cnpj' ? (e) => handleBlur(campo, e.target.value) : undefined}
             onInvalid={(e) => e.preventDefault()}
             text={meta.label}
@@ -76,15 +76,15 @@ function PaginaCadastro() {
     if (!tipoUsuario) {
       return (
         <ContainerBasico text="O que você busca no Scritus?">
-          <Card variant='primary' onClick={() => handleTipoUsuario(TIPO_USUARIO.LEITOR)} role='button' tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') handleState(TIPO_USUARIO.LEITOR); }}>
+          <Card variant='primary' onClick={() => handleTipoUsuario(TIPO_USUARIO.LEITOR)} role='button' tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') handleTipoUsuario(TIPO_USUARIO.LEITOR); }}>
             <h2>Sou leitor</h2>
             <h5>e quero ler livros profundos e impactantes.</h5>
           </Card>
-          <Card variant='secondary' onClick={() => handleTipoUsuario(TIPO_USUARIO.AUTOR)} role='button' tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') handleState(TIPO_USUARIO.AUTOR); }}>
+          <Card variant='secondary' onClick={() => handleTipoUsuario(TIPO_USUARIO.AUTOR)} role='button' tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') handleTipoUsuario(TIPO_USUARIO.AUTOR); }}>
             <h2>Sou autor</h2>
             <h5>e quero mostrar meus livros profissionalmente.</h5>
           </Card>
-          <Card variant='terciary' onClick={() => handleTipoUsuario(TIPO_USUARIO.EDITORA)} role='button' tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') handleState(TIPO_USUARIO.EDITORA); }}>
+          <Card variant='terciary' onClick={() => handleTipoUsuario(TIPO_USUARIO.EDITORA)} role='button' tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') handleTipoUsuario(TIPO_USUARIO.EDITORA); }}>
             <h2>Sou editora</h2>
             <h5>e quero garimpar verdadeiras obras-primas.</h5>
           </Card>
@@ -97,7 +97,7 @@ function PaginaCadastro() {
         <form onSubmit={handleSubmit} noValidate>
           {renderInputs()}
           <div className='flx space-a'>
-            <Botao variant={'cancel'} type='button' onClick={cleanState}><a>Cancelar</a></Botao>
+            <Botao variant={'cancel'} type='reset' onClick={cleanState}><a>Cancelar</a></Botao>
             <Botao variant={'primary'} type='submit'><a>Criar Conta</a></Botao>
           </div>
         </form>

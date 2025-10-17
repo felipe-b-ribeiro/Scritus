@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigateCustom } from "../../../hooks/useNavigateCustom";
 import { FORMS_POR_USUARIO } from "../../../constants/userConstants";
+import { verificarDisponibilidade } from "../../../../../common/util/validations";
 
 export function useUserForm() {
     const [tipoUsuario, setTipoUsuario] = useState("");
     const [forms, setForms] = useState(FORMS_POR_USUARIO);
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
     const { goBack } = useNavigateCustom();
 
     const setError = (campo, erro) => {
@@ -47,39 +48,23 @@ export function useUserForm() {
         }));
     };
 
-    const handleFocus = (campo) => {
-        verificarErro(campo) && setError(campo, "");
-    }
+    /*const handleFocus = (campo) => {
+        verificarErro(campo) === 'Erro' && setError(campo, "");
+    } */
 
     let timeout;
 
     const handleBlur = (nomeCampo, valorCampo) => {
+
+        if (valorCampo === "") return;
         clearTimeout(timeout);
 
-        const timeout = setTimeout(() => {
-            if (valorCampo.trim() === "") return;
-            setLoading(true);
-
-            fetch('http://localhost:5000/api/v1/usuarios/verificar-disponibilidade', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ [nomeCampo]: valorCampo }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    setLoading(false);
-                    if (data.disponivel) {
-                        setSucess(nomeCampo);
-                    } else {
-                        setError(nomeCampo, "já em uso.");
-                    }
-                })
-                .catch(error => {
-                    setLoading(false);
-                    console.error('Erro ao verificar disponibilidade:', error);
-                });
+        timeout = setTimeout(() => {
+            //setLoading(true);
+            const verificacao = verificarDisponibilidade(nomeCampo, valorCampo);
+            console.log(verificacao);
+            verificacao ? setSucess(nomeCampo) : setError(nomeCampo, "Já em uso.");
+            //setLoading(false);
         }, 600);
 
     }
@@ -167,7 +152,7 @@ export function useUserForm() {
         forms,
         verificarErro,
         handleChange,
-        handleFocus,
+        //handleFocus,
         handleBlur,
         handleTipoUsuario,
         handleSubmit,

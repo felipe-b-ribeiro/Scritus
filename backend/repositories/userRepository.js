@@ -68,7 +68,8 @@ export const encontrarUsuarioPorInfoRepository = async (info) => {
     try {
         const client = await db();
 
-        const { campo, valor } = info;
+        const campo = Object.keys(info)[0];
+        const valor = Object.values(info)[0];
 
         let tabela, campoBanco;
 
@@ -84,8 +85,8 @@ export const encontrarUsuarioPorInfoRepository = async (info) => {
                 break;
 
             case 'nomeUsuario':
-                tabela = 'perfilLeitor';
-                campoBanco = 'nome_usuario';
+                tabela = 'perfil_leitor';
+                campoBanco = 'apelido';
                 break;
 
             default:
@@ -95,7 +96,9 @@ export const encontrarUsuarioPorInfoRepository = async (info) => {
         const query = `SELECT 1 FROM ${tabela} WHERE ${campoBanco} = $1 LIMIT 1`;
         const resposta = await client.query(query, [valor]);
 
-        return resposta.rows.length > 0; // true se já existe, false se está livre
+
+
+        return !(resposta.rows.length > 0); // true se já existe, false se está livre
     }
     
     catch (err) {

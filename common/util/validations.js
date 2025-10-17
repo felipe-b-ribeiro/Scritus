@@ -49,3 +49,21 @@ export const validarSenhaForte = (senha) => {
   const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,30}$/;
   return regex.test(senha);
 };
+
+export const verificarDisponibilidade = async (nomeCampo, valorCampo) => { 
+  try {
+    const res = await fetch('http://localhost:5000/api/v1/usuarios/verificar-disponibilidade', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ [nomeCampo]: valorCampo }),
+                  });
+    const data = await res.json()
+    console.log(data.disponivel);
+    return data.disponivel;
+  } catch (err) {
+      console.error(err);
+  }
+   
+}
