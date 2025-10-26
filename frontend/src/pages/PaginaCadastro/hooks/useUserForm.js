@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { useNavigateCustom } from "../../../hooks/useNavigateCustom";
+import useNavigateCustom from "../../../hooks/useNavigateCustom";
 import { FORMS_POR_USUARIO } from "../../../constants/userConstants";
 import { verificarDisponibilidade } from "../../../../../common/util/validations";
 
-export function useUserForm() {
+export const useUserForm = () => {
+
     const [tipoUsuario, setTipoUsuario] = useState("");
     const [forms, setForms] = useState(FORMS_POR_USUARIO);
     // const [loading, setLoading] = useState(false);
@@ -48,10 +49,6 @@ export function useUserForm() {
         }));
     };
 
-    /*const handleFocus = (campo) => {
-        verificarErro(campo) === 'Erro' && setError(campo, "");
-    } */
-
     let timeout;
 
     const handleBlur = (nomeCampo, valorCampo) => {
@@ -92,13 +89,15 @@ export function useUserForm() {
             return null;
         }
 
-        const dataUsuario = new Date(forms[tipoUsuario].dataNascimento.valor);
-        const hoje = new Date();
-
-        if (dataUsuario > hoje) {
-            setError("dataNascimento", "A data de nascimento não pode estar no futuro.");
-            return null;
+        if (forms[tipoUsuario].dataNascimento) {
+            const dataUsuario = new Date(forms[tipoUsuario].dataNascimento.valor);
+            const hoje = new Date();
+            if (dataUsuario > hoje) {
+                setError("dataNascimento", "A data de nascimento não pode estar no futuro.");
+                return null;
+            }
         }
+
 
         try {
 
@@ -152,7 +151,6 @@ export function useUserForm() {
         forms,
         verificarErro,
         handleChange,
-        //handleFocus,
         handleBlur,
         handleTipoUsuario,
         handleSubmit,

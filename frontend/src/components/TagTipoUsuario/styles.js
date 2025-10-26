@@ -15,4 +15,5 @@ export const SC_Tag = styled.div`
     border-radius: 15px;
     color: white;
     font-family: 'Aboreto', serif;
+    user-select: none;
 `

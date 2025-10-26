@@ -1,13 +1,23 @@
+import { useLoginHook } from './hooks/useLoginHook';
+import { useState } from 'react';
+
 import Logo from '../../components/LogoScritus';
 import Linha from '../../components/LinhaDegrade';
 import Botao from '../../components/Botao';
 import { Cabecalho, CabecalhoCentro, CabecalhoEsquerda } from '../../components/Cabecalho';
 import ArrowIcon from "../../components/icons/arrowIcon";
+import EyeIcon from '../../components/icons/passwordIcon';
 import ContainerBasico from "../../components/ContainerBasico";
 import InputBasico from "../../components/InputBasico";
 import LinkSimples from '../../components/LinkSimples';
+import ErrorHelper from '../../components/ErrorHelper';
 
-function PaginaLogin() {
+
+const PaginaLogin = () => {
+
+  const [senhaVisivel, setSenhaVisivel] = useState(false);
+
+  const { handleChange, handleSubmit, verificarErro, campos } = useLoginHook();
 
   return (
     <>
@@ -24,11 +34,33 @@ function PaginaLogin() {
       </Cabecalho>
       <Linha />
       <ContainerBasico text="Fazer Login">
-         <form>
-           <InputBasico text='EMAIL' type="email" placeholder="Digite seu e-mail" required />
-           <InputBasico text='SENHA' type="password" placeholder="Digite sua senha" required />
-           <LinkSimples to='/cadastro'>Não possui conta? Cadastre-se</LinkSimples>
-           <Botao>Entrar</Botao>
+         <form onSubmit={handleSubmit} noValidate>
+           <InputBasico 
+            text='EMAIL'
+            name='email'
+            type="email"
+            placeholder="Digite seu e-mail"
+            onChange={handleChange}
+            className={verificarErro('email') && 'input-error' || undefined}
+            required 
+           >
+           { verificarErro('email') && campos.email.erroMsg != "" ? <ErrorHelper text={campos.email.erroMsg}/> : null }
+           </InputBasico>
+           <InputBasico
+            text='SENHA'
+            name='senha'
+            type={senhaVisivel ? "text" : "password"}
+            placeholder="Digite sua senha"
+            onChange={handleChange}
+            className={verificarErro('senha') && 'input-error' || undefined}
+            required
+           >
+            <EyeIcon aberto={!senhaVisivel} onClick={() => setSenhaVisivel(!senhaVisivel)} />
+            { verificarErro('senha') && campos.senha.erroMsg != "" ? <ErrorHelper text={campos.senha.erroMsg}/> : null } 
+           </InputBasico>
+           
+           <LinkSimples to='/cadastro'><strong>Não possui conta?</strong> Cadastre-se</LinkSimples>
+           <Botao type='submit'>Entrar</Botao>
          </form>
       </ContainerBasico>
     </>

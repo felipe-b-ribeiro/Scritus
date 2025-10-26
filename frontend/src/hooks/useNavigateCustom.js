@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-export const useNavigateCustom = () => {
+const useNavigateCustom = () => {
     const navigate = useNavigate();
 
     const goTo =  (path) => {
@@ -13,3 +13,5 @@ export const useNavigateCustom = () => {
     
     return { goTo, goBack }
 }
+
+export default useNavigateCustom;

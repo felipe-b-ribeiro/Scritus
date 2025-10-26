@@ -18,6 +18,7 @@ import ContainerBasico from "../../components/ContainerBasico";
 import InputBasico from "../../components/InputBasico";
 import Card from "../../components/CardBasico";
 import ErrorHelper from '../../components/ErrorHelper';
+import LinkSimples from "../../components/LinkSimples/index.jsx";
 
 // 6. Componentes de layout / específicos
 import { Cabecalho, CabecalhoCentro, CabecalhoDireita, CabecalhoEsquerda } from "../../components/Cabecalho";
@@ -26,9 +27,9 @@ import EyeIcon from "../../components/icons/passwordIcon";
 
 
 
-function PaginaCadastro() {
+const PaginaCadastro = () => {
 
-  const { tipoUsuario, forms, verificarErro, handleChange, handleFocus, handleBlur, handleTipoUsuario, handleSubmit, cleanState, goBackIfUserNull } = useUserForm();
+  const { tipoUsuario, forms, verificarErro, handleChange, handleBlur, handleTipoUsuario, handleSubmit, cleanState, goBackIfUserNull } = useUserForm();
 
   const [senhaVisivel, setSenhaVisivel] = useState({
     'senha': false,
@@ -96,6 +97,7 @@ function PaginaCadastro() {
       <ContainerBasico text={`Criar conta de ${tipoUsuario}`}>
         <form onSubmit={handleSubmit} noValidate>
           {renderInputs()}
+          <LinkSimples to='/login'><strong>Já tem uma conta?</strong> Entrar</LinkSimples>
           <div className='flx space-a'>
             <Botao variant={'cancel'} type='reset' onClick={cleanState}><a>Cancelar</a></Botao>
             <Botao variant={'primary'} type='submit'><a>Criar Conta</a></Botao>

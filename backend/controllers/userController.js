@@ -7,7 +7,7 @@ export const createUser = async (req, res) => {
         res.status(201).json(resposta);
     } 
     catch (err) {
-        console.error('[CONTROLLER ERROR]: ', err);
+        console.error('[USER CONTROLLER ERROR]: ', err);
         res.status(400).json({error: err.message});
     }
 }
@@ -28,12 +28,10 @@ export const findUserbyInfo = async (req, res) => {
 
         const resposta = await encontrarUsuarioPorInfoService(info);
         
-        console.log(resposta);
-        
         return res.status(200).json({ "campo": Object.keys(info)[0], "valor": Object.values(info)[0], "disponivel": resposta }); 
 
     } catch (err) {
-        console.error('[CONTROLLER ERROR]:', err);
+        console.error('[USER CONTROLLER ERROR]:', err);
         res.status(400).json({ error: err.message });
     }
 };

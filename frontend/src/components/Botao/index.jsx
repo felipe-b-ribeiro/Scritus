@@ -1,5 +1,5 @@
 import SC_BotaoPrincipal from './styles';
-import { useNavigateCustom } from '../../hooks/useNavigateCustom.js';
+import useNavigateCustom from '../../hooks/useNavigateCustom.js';
 
 function Botao({ children, variant, to, back, ...props }) {
 

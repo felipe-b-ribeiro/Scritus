@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ProtectedRoute from './protectedRoute.jsx';
 
 // Importa páginas
-import PaginaWelcome from "../pages/PaginaWelcome";
-import PaginaCadastro from "../pages/PaginaCadastro";
-import PaginaLogin from "../pages/PaginaLogin";
-import PaginaSobreNos from "../pages/PaginaSobreNos";
-import PaginaHome from "../pages/PaginaHome";
+import PaginaWelcome from "../pages/PaginaWelcome/index.jsx";
+import PaginaCadastro from "../pages/PaginaCadastro/index.jsx";
+import PaginaLogin from "../pages/PaginaLogin/index.jsx";
+import PaginaSobreNos from "../pages/PaginaSobreNos/index.jsx";
+import PaginaHome from "../pages/PaginaHome/index.jsx";
 
 function AppRoutes() {
   return (
@@ -15,7 +16,7 @@ function AppRoutes() {
         <Route path="/cadastro" element={<PaginaCadastro />} />
         <Route path="/login" element={<PaginaLogin />} />
         <Route path="/sobre-nos" element={<PaginaSobreNos />} />
-        <Route path="/home" element={<PaginaHome />}/>
+        <Route path="/home" element={<ProtectedRoute><PaginaHome /></ProtectedRoute>}/>
       </Routes>
     </BrowserRouter>
   );

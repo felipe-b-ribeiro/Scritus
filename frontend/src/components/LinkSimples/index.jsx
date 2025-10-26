@@ -1,5 +1,5 @@
 import { SC_LinkSimples } from './styles';
-import { useNavigateCustom } from '../../hooks/useNavigateCustom.js';
+import useNavigateCustom from '../../hooks/useNavigateCustom.js';
 
 const LinkSimples = ({children, to, ...props}) => {
 

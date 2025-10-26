@@ -17,16 +17,4 @@ const pool = new Pool({
   password: process.env.BD_SENHA,
 });
 
-const conectarBanco = async () => {
-  try {
-    const conexao = await pool.connect();
-    console.log('Conexão com o banco de dados estabelecida com sucesso!');
-    return conexao;
-  } 
-  catch (error) {
-    console.error('Erro ao conectar ao banco de dados:', error);
-    throw error;
-  }
-};
-
-export default conectarBanco;
+export default pool;

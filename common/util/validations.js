@@ -1,13 +1,13 @@
 // Validação de Email
 export const validarEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-} 
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+};
 
 // Validação de CNPJ
 export const validarCNPJ = (cnpj) => {
   // Remove tudo que não é número
-  cnpj = cnpj.replace(/[^\d]+/g, '');
+  cnpj = cnpj.replace(/[^\d]+/g, "");
 
   if (cnpj.length !== 14) return false;
 
@@ -46,24 +46,27 @@ export const validarCNPJ = (cnpj) => {
 };
 
 export const validarSenhaForte = (senha) => {
-  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,30}$/;
+  const regex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,30}$/;
   return regex.test(senha);
 };
 
-export const verificarDisponibilidade = async (nomeCampo, valorCampo) => { 
+export const verificarDisponibilidade = async (nomeCampo, valorCampo) => {
   try {
-    const res = await fetch('http://localhost:5000/api/v1/usuarios/verificar-disponibilidade', {
-                      method: 'POST',
-                      headers: {
-                          'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({ [nomeCampo]: valorCampo }),
-                  });
-    const data = await res.json()
+    const res = await fetch(
+      "http://localhost:5000/api/v1/usuarios/verificar-disponibilidade",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ [nomeCampo]: valorCampo }),
+      }
+    );
+    const data = await res.json();
     console.log(data.disponivel);
     return data.disponivel;
   } catch (err) {
-      console.error(err);
+    console.error(err);
   }
-   
-}
+};

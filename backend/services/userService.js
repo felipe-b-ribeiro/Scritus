@@ -86,7 +86,7 @@ export const criarUsuarioService = async (dadosFront) => {
         return usuarioCriado;
     }
     catch (err) {
-        console.error('[SERVICE ERROR]: ', err);
+        console.error('[USER SERVICE ERROR]: ', err);
         throw err;
     }
 }
