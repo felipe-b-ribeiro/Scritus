@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import Logo from '../../components/LogoScritus';
 import Linha from '../../components/LinhaDegrade';
-import Botao from '../../components/Botao';
+import BotaoSimples from '../../components/BotaoSimples';
 import { Cabecalho, CabecalhoCentro, CabecalhoEsquerda } from '../../components/Cabecalho';
 import ArrowIcon from "../../components/icons/arrowIcon";
 import EyeIcon from '../../components/icons/passwordIcon';
@@ -23,10 +23,10 @@ const PaginaLogin = () => {
     <>
       <Cabecalho>
         <CabecalhoEsquerda>
-          <Botao back variant="secondary" className="btn-icone">
+          <BotaoSimples back variant="secondary" className="btn-icone">
               <ArrowIcon />
               <span>Voltar</span>
-          </Botao>
+          </BotaoSimples>
         </CabecalhoEsquerda>
         <CabecalhoCentro>
           <Logo />
@@ -60,7 +60,7 @@ const PaginaLogin = () => {
            </InputBasico>
            
            <LinkSimples to='/cadastro'><strong>Não possui conta?</strong> Cadastre-se</LinkSimples>
-           <Botao type='submit'>Entrar</Botao>
+           <BotaoSimples type='submit'>Entrar</BotaoSimples>
          </form>
       </ContainerBasico>
     </>

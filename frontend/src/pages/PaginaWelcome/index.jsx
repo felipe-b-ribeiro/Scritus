@@ -1,7 +1,7 @@
 
 import Logo from '../../components/LogoScritus/index.jsx';
 import Linha from '../../components/LinhaDegrade/index.jsx';
-import Botao from '../../components/Botao';
+import BotaoSimples from '../../components/BotaoSimples';
 import { Cabecalho, CabecalhoCentro, CabecalhoDireita, CabecalhoEsquerda } from '../../components/Cabecalho/index.jsx';
 import GuestIcon from '../../components/icons/guestIcon';
 import SeparadorVertical from '../../components/separadorVertical';
@@ -12,22 +12,22 @@ function PaginaWelcome() {
     <>
       <Cabecalho>
         <CabecalhoEsquerda>
-          <Botao to='/sobre-nos' variant="secondary" className="btn-icone">
+          <BotaoSimples to='/sobre-nos' variant="secondary" className="btn-icone">
               <GuestIcon />
               <span>SOBRE NÓS</span>
-          </Botao>
+          </BotaoSimples>
         </CabecalhoEsquerda>
         <CabecalhoCentro>
           <Logo />
         </CabecalhoCentro>
         <CabecalhoDireita>
-          <Botao to='/cadastro' variant="terciary">
+          <BotaoSimples to='/cadastro' variant="terciary">
           <span>CRIAR CONTA</span>
-          </Botao>
+          </BotaoSimples>
           <SeparadorVertical />
-          <Botao to='/login'>
+          <BotaoSimples to='/login'>
             <span>FAZER LOGIN</span>
-          </Botao>
+          </BotaoSimples>
         </CabecalhoDireita>
       </Cabecalho>
       <Linha />

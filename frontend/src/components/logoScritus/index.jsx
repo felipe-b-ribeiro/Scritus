@@ -1,9 +1,9 @@
 import LogoScritus from './styles';
 import { Link } from 'react-router-dom';
 
-function Logo() {
+function Logo({goTo}) {
   return (
-    <LogoScritus><Link to="/">{'ScRi'}<strong>{'tUS'}</strong></Link></LogoScritus>
+    <LogoScritus><Link to={ goTo || '/'}>ScRi<strong>tUS</strong></Link></LogoScritus>
   );
 }
 

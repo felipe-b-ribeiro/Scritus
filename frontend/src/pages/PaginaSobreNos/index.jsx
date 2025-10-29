@@ -1,7 +1,7 @@
 
 import Logo from '../../components/LogoScritus';
 import Linha from '../../components/LinhaDegrade';
-import Botao from '../../components/Botao';
+import BotaoSimples from '../../components/BotaoSimples';
 import { Cabecalho, CabecalhoCentro, CabecalhoDireita, CabecalhoEsquerda } from '../../components/Cabecalho';
 import ArrowIcon from "../../components/icons/arrowIcon";
 import ContainerPrincipal from '../../components/ContainerBasico';
@@ -14,22 +14,22 @@ function PaginaSobreNos() {
     <>
       <Cabecalho>
         <CabecalhoEsquerda>
-          <Botao back variant="secondary" className="btn-icone">
+          <BotaoSimples back variant="secondary" className="btn-icone">
               <ArrowIcon />
               <span>Voltar</span>
-          </Botao>
+          </BotaoSimples>
         </CabecalhoEsquerda>
         <CabecalhoCentro>
           <Logo />
         </CabecalhoCentro>
         <CabecalhoDireita>
-          <Botao to='/cadastro' variant="terciary">
+          <BotaoSimples to='/cadastro' variant="terciary">
           <span>CRIAR CONTA</span>
-          </Botao>
+          </BotaoSimples>
           <SeparadorVertical />
-          <Botao to='/login'>
+          <BotaoSimples to='/login'>
             <span>FAZER LOGIN</span>
-          </Botao>
+          </BotaoSimples>
         </CabecalhoDireita>
       </Cabecalho>
       <Linha />
@@ -43,7 +43,7 @@ function PaginaSobreNos() {
         <ParagrafoSimples>
            O <em>Scritus</em> não é só mais um espaço genérico para ler ou comprar livros digitais. Aqui, você encontra conteúdo dinâmico e inovador para todos os públicos sem pagar nada. Com o <em>Scritus</em>,  sua sede por conteúdo específico encontra <strong>correspondência</strong> e o algoritmo te serve com aquilo que você gosta.
         </ParagrafoSimples>
-        <Botao to='/cadastro' variant='secondary'>Se imerja no ecossistema literário</Botao>
+        <BotaoSimples to='/cadastro' variant='secondary'>Se imerja no ecossistema literário</BotaoSimples>
       </ContainerPrincipal>
     </>
   );

@@ -48,7 +48,18 @@ const variantes = {
       background-color: #f5f4f4ff;
       box-shadow: 0 0 0.2em var(--cor-sair-deletar);
     }
-  `
+  `,
+  cancel2: css`
+    background-color: red;
+    color: white;
+    border: none;
+    font-weight: bold;
+
+    &:hover {
+      background-color: rgba(197, 2, 2, 1);
+      box-shadow: 0 0 0.2em var(--cor-sair-deletar);
+    }
+    `
 };
 
 const Botao = styled.button`

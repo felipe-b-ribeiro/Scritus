@@ -13,7 +13,7 @@ import { aplicarMascaraCNPJ } from "../../utils/mascaraCNPJ";
 // 5. Componentes globais
 import Logo from "../../components/LogoScritus";
 import Linha from "../../components/LinhaDegrade";
-import Botao from "../../components/Botao";
+import BotaoSimples from "../../components/BotaoSimples";
 import ContainerBasico from "../../components/ContainerBasico";
 import InputBasico from "../../components/InputBasico";
 import Card from "../../components/CardBasico";
@@ -99,8 +99,8 @@ const PaginaCadastro = () => {
           {renderInputs()}
           <LinkSimples to='/login'><strong>Já tem uma conta?</strong> Entrar</LinkSimples>
           <div className='flx space-a'>
-            <Botao variant={'cancel'} type='reset' onClick={cleanState}><a>Cancelar</a></Botao>
-            <Botao variant={'primary'} type='submit'><a>Criar Conta</a></Botao>
+            <BotaoSimples variant={'cancel'} type='reset' onClick={cleanState}><a>Cancelar</a></BotaoSimples>
+            <BotaoSimples variant={'primary'} type='submit'><a>Criar Conta</a></BotaoSimples>
           </div>
         </form>
       </ContainerBasico>
@@ -111,10 +111,10 @@ const PaginaCadastro = () => {
     <>
       <Cabecalho>
         <CabecalhoEsquerda>
-          <Botao variant="secondary" onClick={goBackIfUserNull}>
+          <BotaoSimples variant="secondary" onClick={goBackIfUserNull}>
             <ArrowIcon aria-label="Voltar" />
             <span>Voltar</span>
-          </Botao>
+          </BotaoSimples>
         </CabecalhoEsquerda>
         <CabecalhoCentro>
           <Logo />
