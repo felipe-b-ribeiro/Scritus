@@ -1,4 +1,4 @@
-import { criarUsuarioService, encontrarUsuarioPorInfoService } from '../services/userService.js'
+import { criarUsuarioService, encontrarUsuarioPorInfoService, pullDataUserService } from '../services/userService.js'
 
 
 export const createUser = async (req, res) => {
@@ -16,9 +16,7 @@ export const findUserbyInfo = async (req, res) => {
     try {
         const { email, nomeUsuario, cnpj } = req.body;
 
-        if (!email && !nomeUsuario && !cnpj) {
-            throw new Error('Nenhuma informação foi enviada para verificação!');
-        }
+        if (!email && !nomeUsuario && !cnpj) throw new Error('Nenhuma informação foi enviada para verificação!');
 
         let info = {};
 
@@ -35,3 +33,25 @@ export const findUserbyInfo = async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 };
+
+export const pullDataUser = async (req, res) => {
+    try {
+        
+        const { tipoUsuario, email } = req.body;
+
+        if (!email || !tipoUsuario) throw new Error('Nenhuma informação foi enviada para verificação!');
+
+        let info = {}
+
+        if (email) info.email = email;
+        if (tipoUsuario) info.tipoUsuario = tipoUsuario;
+
+        const usuario = await pullDataUserService(info);
+
+        return res.status(200).json({usuario});
+
+    } catch (err) {
+        console.error('[PULL DATA USER CONTROLLER ERROR]:', err);
+        req.status(400).json({ error: err.message });
+    }
+}

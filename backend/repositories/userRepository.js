@@ -124,3 +124,33 @@ export const encontrarUsuarioPorInfoRepository = async (info) => {
     client.release();
   }
 };
+
+export const pullDataUserRepository = async (info) => {
+  const client = await db.connect();
+
+  try {
+    
+    const email = info.email;
+    const tipoUsuario = info.tipoUsuario;
+
+    let tabela, campos;
+
+    switch(tipoUsuario) {
+      case "Leitor":
+        tabela = "perfil_leitor pl";
+        campos = " u.email, pl.apelido, pl.data_nascimento"
+      case "Editora":
+        tabela = "perfil_editora pe";
+      case "Autor":
+        tabela = "perfil_autor pa";
+    }
+
+    const query = "SELECT * from usuarios u JOIN perfis p ON u.id_usuario = p.id_usuario JOIN "
+
+  } catch (err) {
+    console.error("[PULL USER DATA REPOSITORY ERROR]: ", err);
+    throw err;
+  } finally {
+    client.release();
+  }
+}

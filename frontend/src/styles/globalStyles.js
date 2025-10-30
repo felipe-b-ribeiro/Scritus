@@ -62,7 +62,7 @@ const EstilosGlobais = createGlobalStyle`
         --cor-texto: #ffffff;
         --cor-destaque: #1342b0;
         --cor-sair-deletar: #a40f0f;
-        --cor-splash: #eee1d9ff;
+        --cor-splash: #ffffff;
         --transicao-basica: cubic-bezier(0.24, 1.01, 0.8, 0.71);
     }
 `;

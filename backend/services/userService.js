@@ -1,4 +1,4 @@
-import { criarUsuarioRepository, encontrarUsuarioPorInfoRepository  } from '../repositories/userRepository.js'
+import { criarUsuarioRepository, encontrarUsuarioPorInfoRepository, pullDataUserRepository  } from '../repositories/userRepository.js'
 import argon2 from 'argon2'
 import { validarEmail, validarCNPJ, validarSenhaForte } from '../../common/util/validations.js'
 import { CAMPOS } from '../../frontend/src/constants/userConstants.js'
@@ -104,7 +104,22 @@ export const encontrarUsuarioPorInfoService = async (info) => {
         return validacao;
     }
     catch (err) {
-        console.error('[SERVICE ERROR]: ', err);
+        console.error('[FIND USER BY INFO SERVICE ERROR]: ', err);
+        throw err;
+    }
+}
+
+export const pullDataUserService = async (info) => {
+    try {
+        
+        if (!info.tipoUsuario || info.email) throw new Error('Campos inválidos para pegar os dados.')
+        
+        const usuario = await pullDataUserRepository(info);
+
+        return usuario
+
+    } catch (err) {
+        console.error('[PULL DATA USER SERVICE ERROR]: ', err);
         throw err;
     }
 }

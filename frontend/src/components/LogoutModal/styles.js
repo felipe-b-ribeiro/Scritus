@@ -19,7 +19,7 @@ export const SC_Container = styled.div`
         content: "";
         position: absolute;
         z-index: 2;
-        top: -20px;
+        top: -17px;
         left: 20px;     
         border-width: 10px;
         border-style: solid;

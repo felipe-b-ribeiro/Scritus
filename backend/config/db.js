@@ -17,4 +17,11 @@ const pool = new Pool({
   password: process.env.BD_SENHA,
 });
 
+try {
+  pool.connect()
+  console.log('Conectado ao banco de dados com sucesso!')
+} catch(err) {
+  console.error(err);
+}
+
 export default pool;

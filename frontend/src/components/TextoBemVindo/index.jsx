@@ -4,7 +4,9 @@ import ImgPadrao from '../../assets/foto_perfil_padrao.png';
 const TextoBemVindo = ({src, usuario}) => {
     return (
         <SC_Wrapper>
-            <SC_Img src={ImgPadrao || src} role='button'/>
+            <a href="/perfil">
+                <SC_Img src={ImgPadrao || src} role='button'/>
+            </a>
             <SC_Texto>
                 Bem vindo, <strong>{usuario}</strong>
             </SC_Texto>

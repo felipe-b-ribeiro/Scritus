@@ -7,7 +7,7 @@ import PaginaCadastro from "../pages/PaginaCadastro/index.jsx";
 import PaginaLogin from "../pages/PaginaLogin/index.jsx";
 import PaginaSobreNos from "../pages/PaginaSobreNos/index.jsx";
 import PaginaHome from "../pages/PaginaHome/index.jsx";
-import PaginaSplash from "../pages/PaginaSplash/index.jsx";
+import PaginaPerfil from "../pages/PaginaPerfil/index.jsx";
 
 function AppRoutes() {
   return (
@@ -18,6 +18,7 @@ function AppRoutes() {
         <Route path="/login" element={<PaginaLogin />} />
         <Route path="/sobre-nos" element={<PaginaSobreNos />}/>
         <Route path="/home" element={<ProtectedRoute><PaginaHome /></ProtectedRoute>}/>
+        <Route path="/perfil" element={<ProtectedRoute><PaginaPerfil /></ProtectedRoute>}/>
       </Routes>
     </BrowserRouter>
   );
