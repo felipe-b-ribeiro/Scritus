@@ -1,3 +1,48 @@
 {
-    "type": "module"
+  "name": "recommendation-system",
+  "version": "1.0.0",
+  "description": "Sistema de recomendação de obras usando KNN e TensorFlow.js",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "recommend:single": "node scripts/runSingleProfile.js",
+    "recommend:batch": "node scripts/runBatch.js",
+    "migrate": "node scripts/migrate.js",
+    "test": "jest",
+    "test:unit": "jest tests/unit",
+    "test:integration": "jest tests/integration",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "recommendation",
+    "knn",
+    "tensorflow",
+    "collaborative-filtering"
+  ],
+  "author": "Filipe",
+  "license": "MIT",
+  "dependencies": {
+    "pg": "^8.11.3",
+    "@tensorflow/tfjs-node": "^4.15.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }

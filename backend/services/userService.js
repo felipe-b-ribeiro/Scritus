@@ -116,7 +116,7 @@ export const pullDataUserService = async (info) => {
         
         const usuario = await pullDataUserRepository(info);
 
-        return usuario
+        return usuario;
 
     } catch (err) {
         console.error('[PULL DATA USER SERVICE ERROR]: ', err);
