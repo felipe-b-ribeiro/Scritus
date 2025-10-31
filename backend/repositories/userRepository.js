@@ -139,21 +139,21 @@ export const pullDataUserRepository = async (info) => {
       case "Leitor":
         tabela = "perfil_leitor pl";
         sigla = "pl";
-        campos = "pl.apelido, pl.data_nascimento, pl.foto_perfil_url, pl.bio";
+        campos = "u.tipo_usuario, pl.apelido, pl.data_nascimento, pl.foto_perfil_url, pl.bio";
       case "Editora":
         tabela = "perfil_editora"
         sigla = "pe";
-        campos = "pe.nome_fantasia, pe.site_oficial, pe.foto_perfil_url, pe.bio";
+        campos = "u.tipo_usuario, pe.nome_fantasia, pe.site_oficial, pe.foto_perfil_url, pe.bio";
       case "Autor":
         tabela = "perfil_autor";
         sigla = "pa";
-        campos = "pa.nome_autor, pa.pseudonimo, pa.data_nascimento, pa.foto_perfil_url, pa.bio";
+        campos = "u.tipo_usuario, pa.nome_autor, pa.pseudonimo, pa.data_nascimento, pa.foto_perfil_url, pa.bio";
     }
     
     const query = "SELECT " + campos + " from usuarios u JOIN perfis p ON u.id_usuario = p.id_usuario JOIN " + tabela + " " + sigla + " ON p.id_perfil = " + sigla + ".id_perfil WHERE email = $1";
-    const resposta = client.query(query, [email]);
+    const resposta = await client.query(query, [email]);
 
-    return resposta;
+    return resposta.rows[0];
 
   } catch (err) {
     console.error("[PULL USER DATA REPOSITORY ERROR]: ", err);
