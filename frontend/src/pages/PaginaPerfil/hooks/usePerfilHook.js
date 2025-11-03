@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { FORMS_POR_USUARIO_EDIT } from "../../../constants/userConstants";
 
-const usePerfilHook = async () => {
+const usePerfilHook = () => {
 
     const [tipoUsuario, setTipoUsuario] = useState("");
-    const [dados, setDados] = useState(FORMS_POR_USUARIO_EDIT[tipoUsuario]);
+    const [dados, setDados] = useState({});
 
     const verificarErro = (campo) => {
         if (dados[campo].erro) return "Erro";
@@ -12,14 +12,14 @@ const usePerfilHook = async () => {
         return null;
     }
 
-    const puxarDados = (email, tipoUsuario) => {
+    const puxarDados = async (email, tipoUsuarioParam) => {
         try {
-            setTipoUsuario(tipoUsuario)
+            setTipoUsuario(tipoUsuarioParam)
             const body = {
-                "tipoUsuario": tipoUsuarioFront,
+                "tipoUsuario": tipoUsuarioParam,
                 "email": email
             }
-            const usuario = fetch('http://localhost:5000/api/v1/usuarios/puxardados', {
+            const usuario = await fetch('http://localhost:5000/api/v1/usuarios/puxardados', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -27,9 +27,26 @@ const usePerfilHook = async () => {
                 body: JSON.stringify(body)
             }
             );
-            if (usuario.ok) {
-                setDados(usuario.json());
+            if (!usuario.ok) {
+                throw new Error("Erro ao puxar dados do servidor!");
             }
+            const resposta = await usuario.json();
+
+            const camposBase = FORMS_POR_USUARIO_EDIT[tipoUsuarioParam];
+            const dadosComValores = {};
+
+            for (const campo in camposBase) {
+                dadosComValores[campo] = {
+                ...camposBase[campo],
+                valor: resposta[campo] || "",
+                erro: false,
+                validado: false,
+                erroMsg: "",
+                };
+            }
+
+            setDados(dadosComValores);
+
             }
         catch (err) {
             console.error('Erro ao puxar dados:', err);
