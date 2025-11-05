@@ -111,7 +111,7 @@ export const encontrarUsuarioPorInfoService = async (info) => {
 
 export const pullDataUserService = async (info) => {
     try {
-        
+
         if (!info.tipoUsuario || !info.email) throw new Error('Campos inválidos para pegar os dados.')
         
         const usuario = await pullDataUserRepository(info);

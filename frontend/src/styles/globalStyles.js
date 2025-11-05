@@ -22,6 +22,10 @@ const EstilosGlobais = createGlobalStyle`
         cursor: pointer;
     }
 
+    textarea { 
+        resize: none;
+    }
+
     .input-error {
         border: 1px solid red !important;
     }

@@ -38,18 +38,18 @@ const CAMPOS = {
 const CAMPOS_EDIT = {
   Leitor: {
     apelido: { label: 'Nome de Usuário', tipo: 'text', required: true, minlength: 6 },
-    bio: {label: 'Biografia', tipo: 'text', required: false, maxlength: 400},
+    bio: {label: 'Biografia', tipo: 'textarea', required: false, maxlength: 400},
     data_nascimento: { label: 'Data de Nascimento', tipo: 'date', required: true, data: true},
   },
   Autor: {
     nome_autor: { label: 'Nome Completo', tipo: 'text', required: true, minlength: 10},
     pseudonimo: { label: 'Pseudônimo (Opcional)', tipo: 'text', required: false, minlength: 4},
-    bio: { label: 'Biografia', tipo: 'text', required: false, maxlength: 400},
+    bio: { label: 'Biografia', tipo: 'textarea', required: false, maxlength: 400},
     data_nascimento: { label: 'Data de Nascimento', tipo: 'date', required: true, data: true}
   },
   Editora: {
     nome_fantasia: { label: "Nome Fantasia", tipo: "text", required: true, minlength: 8 },
-    bio: { label: 'Biografia', tipo: 'text', required: false, maxlength: 400},
+    bio: { label: 'Biografia', tipo: 'textarea', required: false, maxlength: 400},
     site_oficial: { label: "Site Oficial", tipo: "url", required: false, minlength: 5 }
   }
 }
