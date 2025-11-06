@@ -5,7 +5,7 @@ const TextoBemVindo = ({src, usuario}) => {
     return (
         <SC_Wrapper>
             <a href="/perfil">
-                <SC_Img src={ImgPadrao || src} role='button'/>
+                <SC_Img src={src || ImgPadrao} role='button'/>
             </a>
             <SC_Texto>
                 Bem vindo, <strong>{usuario}</strong>

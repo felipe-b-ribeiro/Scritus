@@ -170,7 +170,7 @@ export const updateUserRepository = async (info) => {
   const client = await db.connect();
 
   try {
-
+    
     const tipoUsuario = info.tipo_usuario;
     const email = info.email;
 
@@ -191,20 +191,30 @@ export const updateUserRepository = async (info) => {
     const sigla = siglas[tipoUsuario];
 
     const campos = {
-      'Leitor': 'apelido = $1, data_nascimento = $2, foto_perfil_url = $3, bio = $4',
-      'Autor': 'nome_autor = $1, data_nascimento = $2, foto_perfil_url = $3, bio = $4, pseudonimo = $5',
-      'Editora': 'nome_fantasia = $1, foto_perfil_url = $2, bio = $3, site_oficial = $4'
+      'Leitor': 'apelido = $1, data_nascimento = $2, bio = $3, foto_perfil_url = $4',
+      'Autor': 'nome_autor = $1, data_nascimento = $2, bio = $3, pseudonimo = $4, foto_perfil_url = $5',
+      'Editora': 'nome_fantasia = $1, bio = $2, site_oficial = $3, foto_perfil_url = $4'
     }
-
-    const campo = campos[tipoUsuario];
 
     const valores = {
-      'Leitor': [info.nome_usuario, info.data_nascimento, info.foto_perfil, info.bio],
-      'Autor': [info.nome_autor, info.data_nascimento, info.foto_perfil, info.bio, info.pseudonimo],
-      'Editora': [info.nome_fantasia, info.foto_perfil, info.bio, info.site_oficial]
+      'Leitor': [info.nome_usuario, info.data_nascimento, info.bio, info.foto_perfil],
+      'Autor': [info.nome_autor, info.data_nascimento, info.bio, info.pseudonimo, info.foto_perfil],
+      'Editora': [info.nome_fantasia, info.bio, info.site_oficial,  info.foto_perfil]
     }
 
-    const valor = valores[tipoUsuario];
+    let campo, valor;
+
+    if (info.foto_perfil === null) {
+      // Remove apenas o trecho da foto no campo atual (string SQL)
+      campo = campos[tipoUsuario].replace(/,\s*foto_perfil_url\s*=\s*\$\d+/, '');
+
+      // Remove o último valor da array de valores
+      valor = valores[tipoUsuario].slice(0, -1);
+    } else {
+      campo = campos[tipoUsuario];
+      valor = valores[tipoUsuario];
+    }
+
 
     const query = `UPDATE ${tabela} AS ${sigla} SET ${campo} FROM  perfis p JOIN usuarios u ON p.id_usuario = u.id_usuario WHERE ${sigla}.id_perfil = p.id_perfil AND u.email = '${email}'`;
     const { rows } = await client.query(query, valor);

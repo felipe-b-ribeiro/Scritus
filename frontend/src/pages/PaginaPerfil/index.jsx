@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import usePerfilHook from "./hooks/usePerfilHook";
+import puxarDadosHook from "../../hooks/puxarDadosHook";
 import decodificarJWT from "../../utils/decodificarJWT";
 
 import { Cabecalho, CabecalhoCentro, CabecalhoDireita, CabecalhoEsquerda } from "../../components/Cabecalho";
@@ -11,7 +11,7 @@ import InputBasico from "../../components/InputBasico";
 import ArrowIcon from "../../components/icons/arrowIcon";
 import TagTipoUsuario from "../../components/TagTipoUsuario";
 import Spinner from "../../components/Spinner";
-import FotoPadrao from "../../assets/foto_perfil_padrao.png";
+import FotoPadrao from '../../assets/foto_perfil_padrao.png';
 
 import { CAMPOS_EDIT, FORMS_POR_USUARIO_EDIT } from "../../constants/userConstants";
 import InputTextarea from "../../components/InputTextarea";
@@ -21,36 +21,45 @@ const PaginaPerfil = () => {
     const [tipoUsuario, setTipoUsuario] = useState('');
     const [email, setEmail] = useState('');
     const [dados, setDados] = useState({});
-    const { puxarDados, handleBlur} = usePerfilHook();
-    const [preview, setPreview] = useState(FotoPadrao);
+    const { puxarDados, handleBlur} = puxarDadosHook();
+    const [preview, setPreview] = useState(null);
     const [foto, setFoto] = useState(null);
-
+    
 
     useEffect(() => {
     const carregarPerfil = async () => {
+    if (document.fonts) await document.fonts.ready;
 
-      if (document.fonts) await document.fonts.ready;
+    const token = localStorage.getItem("accessToken");
+    const payload = await decodificarJWT(token) || {};
+    setTipoUsuario(payload.tipoUsuario);
+    setEmail(payload.email);
 
-      const token = localStorage.getItem("accessToken");
-      const payload = await decodificarJWT(token) || {};
-      setTipoUsuario(payload.tipoUsuario);
-      setEmail(payload.email);
-      const usuario = await puxarDados(payload.email, payload.tipoUsuario);
-    
-      const base = FORMS_POR_USUARIO_EDIT[payload.tipoUsuario];
+    const usuario = await puxarDados(payload.email, payload.tipoUsuario);
+    const base = FORMS_POR_USUARIO_EDIT[payload.tipoUsuario];
 
-      setDados(() => {
-        const atualizado = Object.fromEntries(
-            Object.entries(base).map(([campo, info]) =>  {
-                const valor = campo === "data_nascimento" ? usuario.usuario[campo].split('T')[0] : usuario.usuario[campo];
-                return [campo, { ...info, 'valor': valor }];
-            }
-            ));
-        return { ...atualizado, foto_perfil_url: usuario.usuario.foto_perfil_url }
-      });
+    setDados(() => {
+      const atualizado = Object.fromEntries(
+        Object.entries(base).map(([campo, info]) => {
+          const valor = campo === "data_nascimento"
+            ? usuario.usuario[campo].split('T')[0]
+            : usuario.usuario[campo];
+          return [campo, { ...info, valor }];
+        })
+      );
+      return { ...atualizado, foto_perfil_url: usuario.usuario.foto_perfil_url };
+    });
+
+    if (usuario.usuario.foto_perfil_url === null) {
+        setPreview(FotoPadrao);
+    }
+    else {
+        setPreview(`http://localhost:5000${usuario.usuario.foto_perfil_url}`);
     };
-    carregarPerfil();
-    }, []);
+  };
+
+  carregarPerfil();
+}, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -76,10 +85,11 @@ const PaginaPerfil = () => {
 
     const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
+    console.log(dados);
     const formData = new FormData();
     formData.append('email', email);
-    if (dados.nome_usuario) formData.append("nome_usuario", dados.nome_usuario.valor);
+    if (dados.apelido) formData.append("nome_usuario", dados.apelido.valor);
     if (dados.nome_autor) formData.append("nome_autor", dados.nome_autor.valor);
     if (dados.nome_fantasia) formData.append("nome_fantasia", dados.nome_fantasia.valor);
     formData.append("bio", dados.bio.valor);
@@ -97,6 +107,7 @@ const PaginaPerfil = () => {
         const data = await resposta.json();
         if (resposta.ok) {
             alert('Usuário atualizado com sucesso');
+            window.location.href = '/home';
         }
     } catch (err) {
         console.error("Erro:", err);
@@ -115,7 +126,15 @@ const PaginaPerfil = () => {
         const erroMsg = dados[campo]?.erroMsg;
         
         if (meta.tipo === "textarea") {
-            return <InputTextarea text='Biografia' cols='20' rows='8' />
+            return <InputTextarea 
+                    onChange={handleChange} 
+                    text='Biografia' 
+                    cols='20' 
+                    rows='8'
+                    key={campo}
+                    name={campo}
+                    value={dados[campo]?.valor ?? ""}
+                     />
         } 
         else {
             return (
@@ -172,7 +191,7 @@ const PaginaPerfil = () => {
 
                     <div className="flx">
                         <BotaoSimples type='submit'>Salvar</BotaoSimples>
-                        <BotaoSimples variant='cancel'>Cancelar</BotaoSimples>
+                        <BotaoSimples type='button' to='/home' variant='cancel'>Cancelar</BotaoSimples>
                     </div>
                 </form>
             </ContainerBasico>

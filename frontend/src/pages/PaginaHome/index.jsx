@@ -1,7 +1,7 @@
 import decodificarJWT from '../../utils/decodificarJWT.js';
 import useHomeHook from './hooks/useHomeHook.js';
 import { useState, useEffect } from 'react';
-
+import puxarDadosHook from '../../hooks/puxarDadosHook.js';
 
 import Logo from '../../components/LogoScritus/index.jsx';
 import Linha from '../../components/LinhaDegrade/index.jsx';
@@ -19,13 +19,16 @@ import LivroHome from '../../components/LivroHome/index.jsx';
 import Overlay from '../../components/Overlay/index.jsx';
 import LogoutModal from '../../components/LogoutModal/index.jsx';
 import PaginaSplash from '../PaginaSplash/index.jsx';
-
+import FotoPadrao from '../../assets/foto_perfil_padrao.png';
 
 function PaginaHome() {
 
   const [loading, setLoading] = useState(true);
   const [usuario, setUsuario] = useState({ "tipoUsuario": "", "nome": ""});
   const { btnSair, sairConfirm, sairCancel, showOverlay, showLogoutModal } = useHomeHook();
+  const [foto, setFoto] = useState(FotoPadrao);
+
+  const { puxarDados } = puxarDadosHook();
 
   useEffect(() => {
     const carregarHome = async () => {
@@ -35,10 +38,33 @@ function PaginaHome() {
       // Espera dados iniciais
       const token = localStorage.getItem("accessToken");
       const payload = await decodificarJWT(token) || {};
-      const { tipoUsuario, nome } = payload;
-      setUsuario({"tipoUsuario": tipoUsuario, "nome": nome})
-    };
+      const {tipoUsuario} = payload;
 
+      const usuario = await puxarDados(payload.email, payload.tipoUsuario);
+
+      let nome;
+
+      switch (tipoUsuario) {
+        case 'Leitor':
+          nome = usuario.usuario.apelido;
+          break;
+        case 'Autor':
+          nome = usuario.usuario.pseudonimo ?? usuario.usuario.nome_autor;
+          break;
+        case 'Editora':
+          nome = usuario.usuario.nome_fantasia;
+          break;
+      }
+
+      setUsuario({"tipoUsuario": tipoUsuario, "nome": nome})
+
+      if (usuario.usuario.foto_perfil_url === null) {
+        setFoto(FotoPadrao);
+      }
+      else {
+      setFoto(`http://localhost:5000${usuario.usuario.foto_perfil_url}`);
+      };
+    }
     carregarHome();
   }, []);
 
@@ -52,7 +78,7 @@ function PaginaHome() {
       { showLogoutModal && <LogoutModal confirmClick={sairConfirm} cancelClick={sairCancel}/> }
       <Cabecalho>
         <CabecalhoEsquerda>
-          <TextoBemVindo src='../../assets/icons/eyeClosed.svg' usuario={usuario.nome} />
+          <TextoBemVindo src={foto} usuario={usuario.nome} />
           <SeparadorVertical />
           <TagTipoUsuario tipo={usuario.tipoUsuario} />
           <BotaoLogout onClick={btnSair} />

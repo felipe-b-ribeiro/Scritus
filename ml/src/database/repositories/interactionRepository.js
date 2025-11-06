@@ -1,4 +1,4 @@
-import conectarBanco from '../connection.js';
+import {conectarBanco} from '../connection.js';
 import queries from '../queries.js';
 
 /**

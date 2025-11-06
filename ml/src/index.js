@@ -1,28 +1,46 @@
-import { recommendForProfile, recommendForAllProfiles } from './services/recommendationEngine';
-import { closePool } from './database/connection';
-import logger from './utils/logger';
+// src/index.js
+console.log("Iniciando index.js...");
+
+console.log("Importando recommendationEngine...");
+import { recommendForProfile, recommendForAllProfiles } from './services/recommendationEngine.js';
+console.log("recommendationEngine importado!");
+
+console.log("Importando logger...");
+import { logger } from './utils/logger.js';
+console.log("logger importado!");
+
+console.log("Importando conexão...");
+import { closePool } from './database/connection.js';
 
 async function main() {
   try {
-    // Exemplo de uso: node src/index.js <id_perfil> <num_recomendacoes>
-    const profileId = parseInt(process.argv[2]);
+    const command = process.argv[2]; 
     const numRecommendations = parseInt(process.argv[3]) || 10;
+
     
-    if (!profileId) {
-      logger.error('Uso: node src/index.js <id_perfil> [num_recomendacoes]');
-      process.exit(1);
+    if (command === "all") {
+      logger.info(`Gerando recomendações para todos os perfis...`);
+      await recommendForAllProfiles(numRecommendations);
+      logger.info("Recomendações para todos os perfis concluídas!");
+    } 
+    else {
+      const profileId = parseInt(command);
+      if (!profileId) {
+        logger.error('Uso: node src/index.js <id_perfil> [num_recomendacoes] OU node src/index.js all');
+        process.exit(1);
+      }
+
+      logger.info(`Gerando ${numRecommendations} recomendações para o perfil ${profileId}...`);
+
+      const recommendations = await recommendForProfile(profileId, numRecommendations);
+
+      console.log('\n========== RECOMENDAÇÕES ==========');
+      recommendations.forEach((rec, idx) => {
+        const titulo = rec.titulo || `Obra #${rec.id_obra}`;
+        console.log(`${idx + 1}. ${titulo} (peso: ${rec.peso.toFixed(4)})`);
+      });
+      console.log('===================================\n');
     }
-    
-    logger.info(`Gerando ${numRecommendations} recomendações para perfil ${profileId}...`);
-    
-    const recommendations = await recommendForProfile(profileId, numRecommendations);
-    
-    console.log('\n========== RECOMENDAÇÕES ==========');
-    recommendations.forEach((rec, idx) => {
-      console.log(`${idx + 1}. ${rec.titulo} (peso: ${rec.peso.toFixed(4)})`);
-    });
-    console.log('===================================\n');
-    
   } catch (error) {
     logger.error('Erro na execução', error);
     process.exit(1);
@@ -31,12 +49,6 @@ async function main() {
   }
 }
 
-// Executar se for chamado diretamente
-if (require.main === module) {
-  main();
-}
+main();
 
-module.exports = {
-  recommendForProfile,
-  recommendForAllProfiles,
-};
+export { recommendForProfile, recommendForAllProfiles };

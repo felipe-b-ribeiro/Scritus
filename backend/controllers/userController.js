@@ -75,7 +75,7 @@ export const updateUser = async (req, res) => {
             case 'Autor':
                 info = { ...info, nome_autor, bio, data_nascimento, pseudonimo, foto_perfil};
         }
-        console.log(info);
+
         const usuario = await updateUserService(info);
 
         return res.status(200).json({usuario});
