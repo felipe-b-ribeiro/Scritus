@@ -1,13 +1,4 @@
-import { useState } from "react";
-import { FORMS_POR_USUARIO_EDIT } from "../../../constants/userConstants";
-
 const usePerfilHook = () => {
-
-    // const verificarErro = (campo) => {
-    //     if (dados[campo].erro) return "Erro";
-    //     if (dados[campo].validado) return "Sucesso";
-    //     return null;
-    // }
 
     const puxarDados = async (email, tipoUsuarioParam) => {
         try {

@@ -165,3 +165,47 @@ export const pullDataUserRepository = async (info) => {
     client.release();
   }
 }
+
+export const updateUserRepository = async (info) => {
+  const client = await db.connect();
+
+  try {
+
+    const tipoUsuario = info.tipo_usuario;
+    const email = info.email;
+    const tabelas = {
+      'Leitor': 'perfil_leitor',
+      'Autor': 'perfil_autor',
+      'Editora': 'perfil_editora'
+    }
+
+    const tabela = tabelas[tipoUsuario];
+
+    const campos = {
+      'Leitor': 'apelido = $1, data_nascimento = $2, foto_perfil_url = $3, bio = $4',
+      'Autor': 'nome_autor = $1, data_nascimento = $2, foto_perfil_url = $3, bio = $4, pseudonimo = $5',
+      'Editora': 'nome_fantasia = $1, foto_perfil_url = $2, bio = $3, site_oficial = $4'
+    }
+
+    const campo = campos[tipoUsuario];
+
+    const valores = {
+      'Leitor': [info.nome_usuario, info.data_nascimento, info.foto_perfil, info.bio],
+      'Autor': [info.nome_autor, info.data_nascimento, info.foto_perfil, info.bio, info.pseudonimo],
+      'Editora': [info.nome_fantasia, info.foto_perfil, info.bio, info.site_oficial]
+    }
+
+    const valor = valores[tipoUsuario];
+
+    const query = "UPDATE " + tabela + " SET " + campo + " WHERE email = '" + email + "'";
+    const { rows } = await client.query(query, valor);
+
+    return rows[0];
+
+  } catch (err) {
+    console.error('[UPDATE USER REPOSITORY ERROR]: ', err);
+    throw err;
+  } finally {
+    client.release();
+  }
+}

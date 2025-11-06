@@ -11,7 +11,7 @@ import InputBasico from "../../components/InputBasico";
 import ArrowIcon from "../../components/icons/arrowIcon";
 import TagTipoUsuario from "../../components/TagTipoUsuario";
 import Spinner from "../../components/Spinner";
-
+import FotoPadrao from "../../assets/foto_perfil_padrao.png";
 
 import { CAMPOS_EDIT, FORMS_POR_USUARIO_EDIT } from "../../constants/userConstants";
 import InputTextarea from "../../components/InputTextarea";
@@ -19,8 +19,12 @@ import InputTextarea from "../../components/InputTextarea";
 const PaginaPerfil = () => {
 
     const [tipoUsuario, setTipoUsuario] = useState('');
+    const [email, setEmail] = useState('');
     const [dados, setDados] = useState({});
-    const { puxarDados, verificarErro, handleBlur} = usePerfilHook();
+    const { puxarDados, handleBlur} = usePerfilHook();
+    const [preview, setPreview] = useState(FotoPadrao);
+    const [foto, setFoto] = useState(null);
+
 
     useEffect(() => {
     const carregarPerfil = async () => {
@@ -30,8 +34,9 @@ const PaginaPerfil = () => {
       const token = localStorage.getItem("accessToken");
       const payload = await decodificarJWT(token) || {};
       setTipoUsuario(payload.tipoUsuario);
+      setEmail(payload.email);
       const usuario = await puxarDados(payload.email, payload.tipoUsuario);
-
+    
       const base = FORMS_POR_USUARIO_EDIT[payload.tipoUsuario];
 
       setDados(() => {
@@ -41,7 +46,7 @@ const PaginaPerfil = () => {
                 return [campo, { ...info, 'valor': valor }];
             }
             ));
-        return atualizado;
+        return { ...atualizado, foto_perfil_url: usuario.usuario.foto_perfil_url }
       });
     };
     carregarPerfil();
@@ -53,6 +58,51 @@ const PaginaPerfil = () => {
             ...prev, [name]: { ...prev[name], "valor": value }
         }));
     };
+
+    function handleImagem(e) {
+        const file = e.target.files[0];
+        if (file) {
+        setPreview(URL.createObjectURL(file));
+        setFoto(file);
+        }
+    }
+
+    
+    const verificarErro = (campo) => {
+        if (dados[campo].erro) return "Erro";
+        if (dados[campo].validado) return "Sucesso";
+        return null;
+    }
+
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('email', email);
+    if (dados.nome_usuario) formData.append("nome_usuario", dados.nome_usuario);
+    if (dados.nome_autor) formData.append("nome_autor", dados.nome_autor);
+    if (dados.nome_fantasia) formData.append("nome_fantasia", dados.nome_fantasia);
+    formData.append("bio", dados.biografia);
+    if (dados.data_nascimento) formData.append("data_nascimento", dados.data_nascimento);
+    if (dados.pseudonimo) formData.append("pseudonimo", dados.pseudonimo);
+    if (dados.site_oficial) formData.append("site_oficial", dados.site_oficial);
+    formData.append("tipo_usuario", tipoUsuario);
+    if (foto) formData.append("foto_perfil", foto);
+
+    try {
+        const response = await fetch("http://localhost:5000/api/v1/usuarios", {
+            method: "PATCH",
+            body: formData, // não precisa de headers Content-Type
+        });
+        const data = await response.json();
+        console.log(response.status);
+        if (data) {
+            alert('Usuário atualizado com sucesso');
+        }
+    } catch (err) {
+        console.error("Erro:", err);
+    }
+};
 
     const renderInputs = () => {
          
@@ -80,12 +130,12 @@ const PaginaPerfil = () => {
                 text={meta.label}
                 type={meta.tipo}
                 required={meta.required}
-                // className={verificarErro(campo) === "Erro" ? "input-error" : verificarErro(campo) === "Sucesso" ? "input-success" : ""}
+                className={verificarErro(campo) === "Erro" ? "input-error" : verificarErro(campo) === "Sucesso" ? "input-success" : ""}
                 max={meta.data ? hoje : undefined}
                 minLength={meta.minlength}
                 maxLength={meta.maxlength}
                 >
-                {/*verificarErro(campo) && erroMsg ? <ErrorHelper text={erroMsg}/> : null*/}
+                {verificarErro(campo) && erroMsg ? <ErrorHelper text={erroMsg}/> : null}
             </InputBasico>
             );
         }
@@ -108,10 +158,13 @@ const PaginaPerfil = () => {
             </Cabecalho>
             <Linha />
             <ContainerBasico text="Seu Perfil">
-                <form>
+                <form onSubmit={handleSubmit}>
                     {dados && Object.keys(dados).length > 0 ? (
-                        <>
-                            <TagTipoUsuario tipo={tipoUsuario} />
+                        <>  <label htmlFor="upload">
+                                <img style={{ borderRadius: '50%', zIndex: 1, cursor: 'pointer'}} width="100" height="100" src={preview} alt="Foto de Perfil" />
+                            </label>
+                            <input type="file" id="upload" accept="image/*" style={{display: 'none'}} onChange={handleImagem} />
+                            <TagTipoUsuario marginLeft='0px' marginTop='0px' marginBottom='15px' tipo={tipoUsuario} />
                             {renderInputs()}
                         </>
                         ) : (

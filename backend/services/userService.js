@@ -1,4 +1,4 @@
-import { criarUsuarioRepository, encontrarUsuarioPorInfoRepository, pullDataUserRepository  } from '../repositories/userRepository.js'
+import { criarUsuarioRepository, encontrarUsuarioPorInfoRepository, pullDataUserRepository, updateUserRepository  } from '../repositories/userRepository.js'
 import argon2 from 'argon2'
 import { validarEmail, validarCNPJ, validarSenhaForte } from '../../common/util/validations.js'
 import { CAMPOS } from '../../frontend/src/constants/userConstants.js'
@@ -122,4 +122,12 @@ export const pullDataUserService = async (info) => {
         console.error('[PULL DATA USER SERVICE ERROR]: ', err);
         throw err;
     }
+}
+
+export const updateUserService = async (info) => {
+
+    const usuario = await updateUserRepository(info);
+
+    return usuario
+
 }

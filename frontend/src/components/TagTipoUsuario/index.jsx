@@ -1,8 +1,8 @@
 import { SC_Tag } from './styles';
 
-const Tag = ({tipo}) => {
+const Tag = ({tipo, marginLeft, marginTop, marginBottom}) => {
     return (
-        <SC_Tag tipo={tipo}>
+        <SC_Tag tipo={tipo} marginTop={marginTop} marginLeft={marginLeft} marginBottom={marginBottom}>
             {tipo}
         </SC_Tag>
     ); 

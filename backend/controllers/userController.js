@@ -1,4 +1,4 @@
-import { criarUsuarioService, encontrarUsuarioPorInfoService, pullDataUserService } from '../services/userService.js'
+import { criarUsuarioService, encontrarUsuarioPorInfoService, pullDataUserService, updateUserService } from '../services/userService.js'
 
 
 export const createUser = async (req, res) => {
@@ -53,5 +53,35 @@ export const pullDataUser = async (req, res) => {
     } catch (err) {
         console.error('[PULL DATA USER CONTROLLER ERROR]:', err);
         req.status(400).json({ error: err.message });
+    }
+}
+
+export const updateUser = async (req, res) => {
+    try {
+       
+        const { email, nome_usuario, nome_autor, nome_fantasia, bio, tipo_usuario, data_nascimento, pseudonimo, site_oficial} = req.body;
+
+        const { foto_perfil } = req.file ? `/uploads/${req.file.filename}` : null;
+        
+        let info = {'tipo_usuario': tipo_usuario, 'email': email};
+
+        switch (tipo_usuario) {
+            case 'Leitor':
+                info = { ...info, nome_usuario, bio, data_nascimento, foto_perfil};
+                break;
+            case 'Editora':
+                info = { ...info, nome_fantasia, bio, site_oficial, foto_perfil};
+                break;
+            case 'Autor':
+                info = { ...info, nome_autor, bio, data_nascimento, pseudonimo, foto_perfil};
+        }
+        console.log(info);
+        const usuario = await updateUserService(info);
+
+        return res.status(200).json({usuario});
+
+    } catch (err) {
+        console.error('[UPDATE USER CONTROLLER ERROR]: ', err)
+        res.status(400).json({ error: err.message });
     }
 }
