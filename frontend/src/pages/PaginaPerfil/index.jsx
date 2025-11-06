@@ -79,24 +79,23 @@ const PaginaPerfil = () => {
 
     const formData = new FormData();
     formData.append('email', email);
-    if (dados.nome_usuario) formData.append("nome_usuario", dados.nome_usuario);
-    if (dados.nome_autor) formData.append("nome_autor", dados.nome_autor);
-    if (dados.nome_fantasia) formData.append("nome_fantasia", dados.nome_fantasia);
-    formData.append("bio", dados.biografia);
-    if (dados.data_nascimento) formData.append("data_nascimento", dados.data_nascimento);
-    if (dados.pseudonimo) formData.append("pseudonimo", dados.pseudonimo);
-    if (dados.site_oficial) formData.append("site_oficial", dados.site_oficial);
+    if (dados.nome_usuario) formData.append("nome_usuario", dados.nome_usuario.valor);
+    if (dados.nome_autor) formData.append("nome_autor", dados.nome_autor.valor);
+    if (dados.nome_fantasia) formData.append("nome_fantasia", dados.nome_fantasia.valor);
+    formData.append("bio", dados.bio.valor);
+    if (dados.data_nascimento) formData.append("data_nascimento", dados.data_nascimento.valor);
+    if (dados.pseudonimo) formData.append("pseudonimo", dados.pseudonimo.valor);
+    if (dados.site_oficial) formData.append("site_oficial", dados.site_oficial.valor);
     formData.append("tipo_usuario", tipoUsuario);
     if (foto) formData.append("foto_perfil", foto);
 
     try {
-        const response = await fetch("http://localhost:5000/api/v1/usuarios", {
+        const resposta = await fetch("http://localhost:5000/api/v1/usuarios", {
             method: "PATCH",
             body: formData, // não precisa de headers Content-Type
         });
-        const data = await response.json();
-        console.log(response.status);
-        if (data) {
+        const data = await resposta.json();
+        if (resposta.ok) {
             alert('Usuário atualizado com sucesso');
         }
     } catch (err) {

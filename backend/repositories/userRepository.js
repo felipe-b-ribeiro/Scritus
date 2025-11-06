@@ -173,6 +173,7 @@ export const updateUserRepository = async (info) => {
 
     const tipoUsuario = info.tipo_usuario;
     const email = info.email;
+
     const tabelas = {
       'Leitor': 'perfil_leitor',
       'Autor': 'perfil_autor',
@@ -180,6 +181,14 @@ export const updateUserRepository = async (info) => {
     }
 
     const tabela = tabelas[tipoUsuario];
+
+    const siglas = {
+      'Leitor': 'pl',
+      'Autor': 'pa',
+      'Editora': 'pe'
+    }
+
+    const sigla = siglas[tipoUsuario];
 
     const campos = {
       'Leitor': 'apelido = $1, data_nascimento = $2, foto_perfil_url = $3, bio = $4',
@@ -197,7 +206,7 @@ export const updateUserRepository = async (info) => {
 
     const valor = valores[tipoUsuario];
 
-    const query = "UPDATE " + tabela + " SET " + campo + " WHERE email = '" + email + "'";
+    const query = `UPDATE ${tabela} AS ${sigla} SET ${campo} FROM  perfis p JOIN usuarios u ON p.id_usuario = u.id_usuario WHERE ${sigla}.id_perfil = p.id_perfil AND u.email = '${email}'`;
     const { rows } = await client.query(query, valor);
 
     return rows[0];

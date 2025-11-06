@@ -61,7 +61,7 @@ export const updateUser = async (req, res) => {
        
         const { email, nome_usuario, nome_autor, nome_fantasia, bio, tipo_usuario, data_nascimento, pseudonimo, site_oficial} = req.body;
 
-        const { foto_perfil } = req.file ? `/uploads/${req.file.filename}` : null;
+        const foto_perfil = req.file ? `/uploads/${req.file.filename}` : null;
         
         let info = {'tipo_usuario': tipo_usuario, 'email': email};
 
