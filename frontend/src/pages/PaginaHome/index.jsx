@@ -2,6 +2,7 @@ import decodificarJWT from '../../utils/decodificarJWT.js';
 import useHomeHook from './hooks/useHomeHook.js';
 import { useState, useEffect } from 'react';
 import puxarDadosHook from '../../hooks/puxarDadosHook.js';
+import useNavigateCustom from '../../hooks/useNavigateCustom.js';
 
 import Logo from '../../components/LogoScritus/index.jsx';
 import Linha from '../../components/LinhaDegrade/index.jsx';
@@ -20,6 +21,9 @@ import Overlay from '../../components/Overlay/index.jsx';
 import LogoutModal from '../../components/LogoutModal/index.jsx';
 import PaginaSplash from '../PaginaSplash/index.jsx';
 import FotoPadrao from '../../assets/foto_perfil_padrao.png';
+import { SC_WrapperMenuHome, SC_ButtonMenuHome } from '../../components/MenuHome/styles.js';
+import IconCadastrarObra from '../../assets/icons/plus-icon.svg';
+import IconMeusLivros from '../../assets/icons/bookshelf-icon.svg';
 
 function PaginaHome() {
 
@@ -29,6 +33,7 @@ function PaginaHome() {
   const [foto, setFoto] = useState(FotoPadrao);
 
   const { puxarDados } = puxarDadosHook();
+  const { goTo } = useNavigateCustom();
 
   useEffect(() => {
     const carregarHome = async () => {
@@ -91,6 +96,14 @@ function PaginaHome() {
         </CabecalhoDireita>
       </Cabecalho>
       <Linha />
+      <SC_WrapperMenuHome>
+        <SC_ButtonMenuHome onClick={goTo('/cadastrarobra')}>
+          <img width='26' height='26' src={IconCadastrarObra} alt="Cadastrar Obras" />
+        </SC_ButtonMenuHome>
+        <SC_ButtonMenuHome>
+          <img width='26' height='26' src={IconMeusLivros} alt="Meus Livros" />
+        </SC_ButtonMenuHome>
+      </SC_WrapperMenuHome>
       <ContainerHome>
         <TituloBasico>
             Ascendentes no Scritus:

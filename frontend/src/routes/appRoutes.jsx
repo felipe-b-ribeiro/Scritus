@@ -1,13 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from './protectedRoute.jsx';
 
-// Importa páginas
 import PaginaWelcome from "../pages/PaginaWelcome/index.jsx";
 import PaginaCadastro from "../pages/PaginaCadastro/index.jsx";
 import PaginaLogin from "../pages/PaginaLogin/index.jsx";
 import PaginaSobreNos from "../pages/PaginaSobreNos/index.jsx";
 import PaginaHome from "../pages/PaginaHome/index.jsx";
 import PaginaPerfil from "../pages/PaginaPerfil/index.jsx";
+import PaginaCadastroObras from '../pages/PaginaCadastroObras/index.jsx';
 
 function AppRoutes() {
   return (
@@ -19,6 +19,7 @@ function AppRoutes() {
         <Route path="/sobre-nos" element={<PaginaSobreNos />}/>
         <Route path="/home" element={<ProtectedRoute><PaginaHome /></ProtectedRoute>}/>
         <Route path="/perfil" element={<ProtectedRoute><PaginaPerfil /></ProtectedRoute>}/>
+        <Route path="/cadastrarobra" element={<ProtectedRoute allowedRoles={['Autor']}><PaginaCadastroObras /></ProtectedRoute>}></Route>
       </Routes>
     </BrowserRouter>
   );
