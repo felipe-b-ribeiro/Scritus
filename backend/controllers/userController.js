@@ -1,5 +1,5 @@
-import { criarUsuarioService, encontrarUsuarioPorInfoService, pullDataUserService, updateUserService } from '../services/userService.js'
-
+import { criarUsuarioService, encontrarUsuarioPorInfoService, pullDataUserService, updateUserService } from '../services/userService.js';
+import { deleteUserRepository } from '../repositories/userRepository.js';
 
 export const createUser = async (req, res) => {
     try {
@@ -83,5 +83,16 @@ export const updateUser = async (req, res) => {
     } catch (err) {
         console.error('[UPDATE USER CONTROLLER ERROR]: ', err)
         res.status(400).json({ error: err.message });
+    }
+}
+
+export const deleteUser = async (req, res) => {
+    try {
+        const { email } = req.user; // vem do token decodificado
+        await deleteUserRepository(email);
+        res.status(200).json({ mensagem: "Conta deletada com sucesso!" });
+    } catch (err) {
+        console.error("[DELETE USER CONTROLLER ERROR]: ", err);
+        res.status(400).json({error: err.message});
     }
 }

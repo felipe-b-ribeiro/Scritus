@@ -12,6 +12,8 @@ import ArrowIcon from "../../components/icons/arrowIcon";
 import TagTipoUsuario from "../../components/TagTipoUsuario";
 import Spinner from "../../components/Spinner";
 import FotoPadrao from '../../assets/foto_perfil_padrao.png';
+import DeleteModal from "../../components/DeleteModal";
+import Overlay from "../../components/Overlay";
 
 import { CAMPOS_EDIT, FORMS_POR_USUARIO_EDIT } from "../../constants/userConstants";
 import InputTextarea from "../../components/InputTextarea";
@@ -24,7 +26,8 @@ const PaginaPerfil = () => {
     const { puxarDados, handleBlur} = puxarDadosHook();
     const [preview, setPreview] = useState(null);
     const [foto, setFoto] = useState(null);
-    
+    const [overlay, setOverlay] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
 
     useEffect(() => {
     const carregarPerfil = async () => {
@@ -68,7 +71,7 @@ const PaginaPerfil = () => {
         }));
     };
 
-    function handleImagem(e) {
+    const handleImagem = (e) => {
         const file = e.target.files[0];
         if (file) {
         setPreview(URL.createObjectURL(file));
@@ -76,7 +79,29 @@ const PaginaPerfil = () => {
         }
     }
 
+    const handleCancelModal = () => {
+        setOverlay(false);
+        setDeleteModal(false);
+    }
     
+    const handleDeleteAccount =  async () => {
+        try {
+            const resposta = await fetch("http://localhost:5000/api/v1/usuarios", {
+                method: "DELETE",
+                headers: {
+                        "Authorization": `Bearer ${localStorage.getItem('accessToken')}`,
+                    },
+                });
+            if (resposta.ok) {
+                if (localStorage.getItem('accessToken')) localStorage.removeItem('accessToken');
+                alert("Conta deletada com sucesso!");
+                window.location.href = '/';
+            }
+        } catch (err) {
+            console.error("Erro ao deletar conta:", err);
+        }
+    }
+
     const verificarErro = (campo) => {
         if (dados[campo].erro) return "Erro";
         if (dados[campo].validado) return "Sucesso";
@@ -86,7 +111,6 @@ const PaginaPerfil = () => {
     const handleSubmit = async (e) => {
     e.preventDefault();
     
-    console.log(dados);
     const formData = new FormData();
     formData.append('email', email);
     if (dados.apelido) formData.append("nome_usuario", dados.apelido.valor);
@@ -104,13 +128,12 @@ const PaginaPerfil = () => {
             method: "PATCH",
             body: formData, // não precisa de headers Content-Type
         });
-        const data = await resposta.json();
         if (resposta.ok) {
             alert('Usuário atualizado com sucesso');
             window.location.href = '/home';
         }
     } catch (err) {
-        console.error("Erro:", err);
+        console.error("Erro ao atualizar usuário:", err);
     }
 };
 
@@ -163,6 +186,8 @@ const PaginaPerfil = () => {
 
     return (
         <>
+            { overlay && <Overlay />}
+            { deleteModal && <DeleteModal confirmClick={handleDeleteAccount} cancelClick={handleCancelModal} />}
             <Cabecalho>
                 <CabecalhoEsquerda>
                 <BotaoSimples back variant="secondary" className="btn-icone">
@@ -188,7 +213,17 @@ const PaginaPerfil = () => {
                         ) : (
                         <Spinner />
                     )}
-
+                    <button type="button" style={{
+                        padding: '5px 9px',
+                        borderRadius: '15px',
+                        color: 'white',
+                        backgroundColor: 'red',
+                        fontFamily: 'Aboreto',
+                        border: 'none',
+                        cursor: 'pointer'
+                         }}
+                         onClick={() => {setOverlay(true); setDeleteModal(true);}}>
+                            Deletar Conta</button>
                     <div className="flx">
                         <BotaoSimples type='submit'>Salvar</BotaoSimples>
                         <BotaoSimples type='button' to='/home' variant='cancel'>Cancelar</BotaoSimples>

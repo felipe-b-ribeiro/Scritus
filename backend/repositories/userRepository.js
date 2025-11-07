@@ -228,3 +228,21 @@ export const updateUserRepository = async (info) => {
     client.release();
   }
 }
+
+export const deleteUserRepository = async (email) => {
+  const client = await db.connect();
+
+  try {
+    
+    const query = `DELETE FROM usuarios WHERE email = $1`;
+
+    const resposta = client.query(query, [email]);
+
+    return resposta;
+  } catch (err) {
+    console.error("[DELETE USER REPOSITORY ERROR]: ", err);
+    throw err;
+  } finally {
+    client.release();
+  }
+}
