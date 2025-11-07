@@ -97,7 +97,7 @@ function PaginaHome() {
       </Cabecalho>
       <Linha />
       <SC_WrapperMenuHome>
-        <SC_ButtonMenuHome onClick={goTo('/cadastrarobra')}>
+        <SC_ButtonMenuHome onClick={() => goTo('/cadastrarobra')}>
           <img width='26' height='26' src={IconCadastrarObra} alt="Cadastrar Obras" />
         </SC_ButtonMenuHome>
         <SC_ButtonMenuHome>

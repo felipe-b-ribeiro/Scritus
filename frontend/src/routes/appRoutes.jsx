@@ -17,7 +17,7 @@ function AppRoutes() {
         <Route path="/cadastro" element={<PaginaCadastro />}/>
         <Route path="/login" element={<PaginaLogin />} />
         <Route path="/sobre-nos" element={<PaginaSobreNos />}/>
-        <Route path="/home" element={<ProtectedRoute><PaginaHome /></ProtectedRoute>}/>
+        <Route path="/home" element={<ProtectedRoute allowedRoles={['Autor', 'Leitor', 'Editora']}><PaginaHome /></ProtectedRoute>}/>
         <Route path="/perfil" element={<ProtectedRoute><PaginaPerfil /></ProtectedRoute>}/>
         <Route path="/cadastrarobra" element={<ProtectedRoute allowedRoles={['Autor']}><PaginaCadastroObras /></ProtectedRoute>}></Route>
       </Routes>

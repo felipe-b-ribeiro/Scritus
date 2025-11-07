@@ -7,7 +7,6 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   let payload;
   try {
     payload = token ? decodificarJWT(token) : null;
-    console.log("payload:", payload);
   } catch {
     payload = null;
   }
@@ -18,7 +17,6 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     return <Navigate to="/login" replace />;
   }
 
-  // Se o usuário não tiver o tipo necessário
   if (allowedRoles.length > 0 && !allowedRoles.includes(payload.tipoUsuario)) {
     return <Navigate to="/nao-autorizado" replace />;
   }

@@ -54,6 +54,12 @@ const CAMPOS_EDIT = {
   }
 }
 
+const CAMPOS_OBRA = {
+  titulo: { label: "Título", tipo: "text", required: true, minlength: 3, maxlength: 200 },
+  sinopse: { label: 'Sinopse (Mínimo 500 caracteres)', tipo: 'textarea', required: true, minlength: 500, maxlength: 1500},
+  trecho_de_amostra: { label: 'Trecho de Amostra (Opcional)', tipo: 'textarea', required: false, minlength: 500, maxlength: 1500},
+}
+
 const criarFormularioUsuario = (camposObj) =>
   Object.fromEntries(
     Object.keys(camposObj).map(campo => [
@@ -74,4 +80,4 @@ const FORMS_POR_USUARIO_EDIT = {
   Editora: criarFormularioUsuario(CAMPOS_EDIT.Editora)
 }
 
-export { TIPO_USUARIO, FORMS_POR_USUARIO, FORMS_POR_USUARIO_EDIT, CAMPOS, CAMPOS_EDIT};
+export { TIPO_USUARIO, FORMS_POR_USUARIO, FORMS_POR_USUARIO_EDIT, CAMPOS, CAMPOS_EDIT, CAMPOS_OBRA};
