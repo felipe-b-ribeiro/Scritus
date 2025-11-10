@@ -129,8 +129,9 @@ const PaginaPerfil = () => {
             body: formData, // não precisa de headers Content-Type
         });
         if (resposta.ok) {
-            alert('Usuário atualizado com sucesso');
-            window.location.href = '/home';
+            setOverlay(true);
+            setTimeout(() => {alert('Perfil de usuário atualizado com sucesso!');
+            window.location.href = '/home';}, 200);  
         }
     } catch (err) {
         console.error("Erro ao atualizar usuário:", err);

@@ -91,18 +91,18 @@ function PaginaHome() {
         <CabecalhoCentro>
           <Logo goTo={'/home'} />
         </CabecalhoCentro>
-        <CabecalhoDireita>
-          <InputBasico type='search'/>
-        </CabecalhoDireita>
       </Cabecalho>
       <Linha />
       <SC_WrapperMenuHome>
-        <SC_ButtonMenuHome onClick={() => goTo('/cadastrarobra')}>
-          <img width='26' height='26' src={IconCadastrarObra} alt="Cadastrar Obras" />
-        </SC_ButtonMenuHome>
-        <SC_ButtonMenuHome>
-          <img width='26' height='26' src={IconMeusLivros} alt="Meus Livros" />
-        </SC_ButtonMenuHome>
+        { usuario.tipoUsuario === 'Autor' &&
+        <> 
+          <SC_ButtonMenuHome onClick={() => goTo('/cadastrarobra')}>
+            <img width='26' height='26' src={IconCadastrarObra} alt="Cadastrar Obras" />
+          </SC_ButtonMenuHome> 
+          <SC_ButtonMenuHome onClick={() => goTo('/meuslivros')}>
+            <img width='26' height='26' src={IconMeusLivros} alt="Meus Livros" />
+          </SC_ButtonMenuHome>
+        </>  }
       </SC_WrapperMenuHome>
       <ContainerHome>
         <TituloBasico>

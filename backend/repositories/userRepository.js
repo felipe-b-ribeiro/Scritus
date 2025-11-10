@@ -139,17 +139,17 @@ export const pullDataUserRepository = async (info) => {
       case "Leitor":
         tabela = "perfil_leitor";
         sigla = "pl";
-        campos = "u.tipo_usuario, pl.apelido, pl.data_nascimento, pl.foto_perfil_url, pl.bio";
+        campos = "u.id_usuario, u.tipo_usuario, pl.apelido, pl.data_nascimento, pl.foto_perfil_url, pl.bio";
         break;
       case "Editora":
         tabela = "perfil_editora"
         sigla = "pe";
-        campos = "u.tipo_usuario, pe.nome_fantasia, pe.site_oficial, pe.foto_perfil_url, pe.bio";
+        campos = "u.id_usuario, u.tipo_usuario, pe.nome_fantasia, pe.site_oficial, pe.foto_perfil_url, pe.bio";
         break;
       case "Autor":
         tabela = "perfil_autor";
         sigla = "pa";
-        campos = "u.tipo_usuario, pa.nome_autor, pa.pseudonimo, pa.data_nascimento, pa.foto_perfil_url, pa.bio";
+        campos = "u.id_usuario, pa.id_autor, u.tipo_usuario, pa.nome_autor, pa.pseudonimo, pa.data_nascimento, pa.foto_perfil_url, pa.bio";
         break;
     }
     

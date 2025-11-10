@@ -28,8 +28,7 @@ const usePerfilHook = () => {
     }
 
     return {
-        puxarDados,
-        // verificarErro
+        puxarDados
     }
 
     

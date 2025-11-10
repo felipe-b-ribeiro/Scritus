@@ -56,7 +56,7 @@ const CAMPOS_EDIT = {
 
 const CAMPOS_OBRA = {
   titulo: { label: "Título", tipo: "text", required: true, minlength: 3, maxlength: 200 },
-  sinopse: { label: 'Sinopse (Mínimo 500 caracteres)', tipo: 'textarea', required: true, minlength: 500, maxlength: 1500},
+  sinopse: { label: 'Sinopse', tipo: 'textarea', required: true, minlength: 500, maxlength: 1500},
   trecho_de_amostra: { label: 'Trecho de Amostra (Opcional)', tipo: 'textarea', required: false, minlength: 500, maxlength: 1500},
 }
 

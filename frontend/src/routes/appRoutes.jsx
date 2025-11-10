@@ -8,6 +8,7 @@ import PaginaSobreNos from "../pages/PaginaSobreNos/index.jsx";
 import PaginaHome from "../pages/PaginaHome/index.jsx";
 import PaginaPerfil from "../pages/PaginaPerfil/index.jsx";
 import PaginaCadastroObras from '../pages/PaginaCadastroObras/index.jsx';
+import PaginaEstante from '../pages/PaginaEstante/index.jsx';
 
 function AppRoutes() {
   return (
@@ -20,6 +21,7 @@ function AppRoutes() {
         <Route path="/home" element={<ProtectedRoute allowedRoles={['Autor', 'Leitor', 'Editora']}><PaginaHome /></ProtectedRoute>}/>
         <Route path="/perfil" element={<ProtectedRoute><PaginaPerfil /></ProtectedRoute>}/>
         <Route path="/cadastrarobra" element={<ProtectedRoute allowedRoles={['Autor']}><PaginaCadastroObras /></ProtectedRoute>}></Route>
+        <Route path="/minhasobras" element={<ProtectedRoute allowedRoles={['Autor']}><PaginaEstante /></ProtectedRoute>}></Route>
       </Routes>
     </BrowserRouter>
   );
