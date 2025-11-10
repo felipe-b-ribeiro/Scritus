@@ -86,3 +86,29 @@ export const listarObrasPorAutorRepository = async (idAutor) => {
     client.release();
   }
 };
+
+export const deletarObraRepository = async (obraId) => {
+    const client = await db.connect();
+
+    try {
+        const query = "DELETE FROM obras WHERE id_obra = $1";
+        await client.query(query, [obraId]);
+        return true;
+    } catch (err) {
+        console.error("Erro no repository ao deletar obra:", err);
+        throw err;
+    } finally {
+        client.release();
+    }
+};
+
+export const puxarPdfPorIdRepository = async (id_obra) => {
+  const client = await db.connect();
+  try {
+    const query = "SELECT pdf_url, capa_url FROM obras WHERE id_obra = $1";
+    const { rows } = await client.query(query, [id_obra]);
+    return rows[0]; 
+  } finally {
+    client.release();
+  }
+};

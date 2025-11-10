@@ -3,7 +3,7 @@ import useHomeHook from './hooks/useHomeHook.js';
 import { useState, useEffect } from 'react';
 import puxarDadosHook from '../../hooks/puxarDadosHook.js';
 import useNavigateCustom from '../../hooks/useNavigateCustom.js';
-
+import useTitulo from '../../hooks/useTitulo.js';
 import Logo from '../../components/LogoScritus/index.jsx';
 import Linha from '../../components/LinhaDegrade/index.jsx';
 import BotaoSimples from '../../components/BotaoSimples/index.jsx';
@@ -34,6 +34,8 @@ function PaginaHome() {
 
   const { puxarDados } = puxarDadosHook();
   const { goTo } = useNavigateCustom();
+
+  useTitulo('Home - Scritus');
 
   useEffect(() => {
     const carregarHome = async () => {
@@ -99,7 +101,7 @@ function PaginaHome() {
           <SC_ButtonMenuHome onClick={() => goTo('/cadastrarobra')}>
             <img width='26' height='26' src={IconCadastrarObra} alt="Cadastrar Obras" />
           </SC_ButtonMenuHome> 
-          <SC_ButtonMenuHome onClick={() => goTo('/meuslivros')}>
+          <SC_ButtonMenuHome onClick={() => goTo('/minhasobras')}>
             <img width='26' height='26' src={IconMeusLivros} alt="Meus Livros" />
           </SC_ButtonMenuHome>
         </>  }

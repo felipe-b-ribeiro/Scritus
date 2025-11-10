@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import puxarDadosHook from "../../hooks/puxarDadosHook";
 import decodificarJWT from "../../utils/decodificarJWT";
-
+import useTitulo from "../../hooks/useTitulo";
 import { Cabecalho, CabecalhoCentro, CabecalhoDireita, CabecalhoEsquerda } from "../../components/Cabecalho";
 import Logo from "../../components/LogoScritus";
 import ContainerBasico from "../../components/ContainerBasico";
@@ -28,6 +28,8 @@ const PaginaPerfil = () => {
     const [foto, setFoto] = useState(null);
     const [overlay, setOverlay] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
+
+    useTitulo('Meu Perfil - Scritus');
 
     useEffect(() => {
     const carregarPerfil = async () => {
@@ -188,7 +190,7 @@ const PaginaPerfil = () => {
     return (
         <>
             { overlay && <Overlay />}
-            { deleteModal && <DeleteModal confirmClick={handleDeleteAccount} cancelClick={handleCancelModal} />}
+            { deleteModal && <DeleteModal msg='Deseja mesmo deletar a sua conta?' confirmClick={handleDeleteAccount} cancelClick={handleCancelModal} />}
             <Cabecalho>
                 <CabecalhoEsquerda>
                 <BotaoSimples back variant="secondary" className="btn-icone">

@@ -9,6 +9,7 @@ import PaginaHome from "../pages/PaginaHome/index.jsx";
 import PaginaPerfil from "../pages/PaginaPerfil/index.jsx";
 import PaginaCadastroObras from '../pages/PaginaCadastroObras/index.jsx';
 import PaginaEstante from '../pages/PaginaEstante/index.jsx';
+import PaginaVisualizador from '../pages/PaginaVisualizador/index.jsx';
 
 function AppRoutes() {
   return (
@@ -20,8 +21,9 @@ function AppRoutes() {
         <Route path="/sobre-nos" element={<PaginaSobreNos />}/>
         <Route path="/home" element={<ProtectedRoute allowedRoles={['Autor', 'Leitor', 'Editora']}><PaginaHome /></ProtectedRoute>}/>
         <Route path="/perfil" element={<ProtectedRoute><PaginaPerfil /></ProtectedRoute>}/>
-        <Route path="/cadastrarobra" element={<ProtectedRoute allowedRoles={['Autor']}><PaginaCadastroObras /></ProtectedRoute>}></Route>
-        <Route path="/minhasobras" element={<ProtectedRoute allowedRoles={['Autor']}><PaginaEstante /></ProtectedRoute>}></Route>
+        <Route path="/cadastrarobra" element={<ProtectedRoute allowedRoles={['Autor']}><PaginaCadastroObras /></ProtectedRoute>}/>
+        <Route path="/minhasobras" element={<ProtectedRoute allowedRoles={['Autor']}><PaginaEstante /></ProtectedRoute>}/>
+        <Route path="/ler/:id_obra" element={<ProtectedRoute allowedRoles={['Autor', 'Leitor', 'Editora']}><PaginaVisualizador /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );

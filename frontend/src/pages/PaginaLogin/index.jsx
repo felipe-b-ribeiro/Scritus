@@ -1,6 +1,6 @@
 import { useLoginHook } from './hooks/useLoginHook';
 import { useState } from 'react';
-
+import useTitulo from '../../hooks/useTitulo';
 import Logo from '../../components/LogoScritus';
 import Linha from '../../components/LinhaDegrade';
 import BotaoSimples from '../../components/BotaoSimples';
@@ -18,6 +18,8 @@ const PaginaLogin = () => {
   const [senhaVisivel, setSenhaVisivel] = useState(false);
 
   const { handleChange, handleSubmit, verificarErro, campos } = useLoginHook();
+
+  useTitulo('Fazer Login - Scritus');
 
   return (
     <>

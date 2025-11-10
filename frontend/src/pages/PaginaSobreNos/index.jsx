@@ -1,4 +1,4 @@
-
+import useTitulo from '../../hooks/useTitulo.js';
 import Logo from '../../components/LogoScritus';
 import Linha from '../../components/LinhaDegrade';
 import BotaoSimples from '../../components/BotaoSimples';
@@ -10,6 +10,8 @@ import SeparadorVertical from '../../components/separadorVertical';
 
 function PaginaSobreNos() {
 
+  useTitulo('Sobre Nós - Scritus');
+  
   return (
     <>
       <Cabecalho>

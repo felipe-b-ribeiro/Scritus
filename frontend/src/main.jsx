@@ -5,8 +5,8 @@ import EstilosGlobais from './styles/globalStyles';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <EstilosGlobais />
-    <AppRoutes />
+      <EstilosGlobais />
+      <AppRoutes />
   </React.StrictMode>
 );
 

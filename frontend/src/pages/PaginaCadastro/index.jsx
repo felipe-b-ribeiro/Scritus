@@ -3,6 +3,7 @@ import { useState } from "react";
 
 // 2. Hooks customizados
 import { useUserForm } from "./hooks/useUserForm";
+import useTitulo from "../../hooks/useTitulo.js";
 
 // 3. Constants
 import { TIPO_USUARIO, CAMPOS } from "../../constants/userConstants.js";
@@ -35,6 +36,8 @@ const PaginaCadastro = () => {
     'senha': false,
     'confirmarSenha': false
   });
+
+  useTitulo('Cadastre-se - Scritus');
 
   function renderInputs() {
 

@@ -1,24 +1,25 @@
-import { useState, useEffect, useRef } from 'react';
-import decodificarJWT from '../../utils/decodificarJWT';
-import usePuxarDados from '../../hooks/puxarDadosHook';
+import { useState, useEffect, useRef } from "react";
+import decodificarJWT from "../../utils/decodificarJWT";
+import usePuxarDados from "../../hooks/puxarDadosHook";
+import useTitulo from "../../hooks/useTitulo";
 
-import Logo from '../../components/LogoScritus';
-import Linha from '../../components/LinhaDegrade';
-import BotaoSimples from '../../components/BotaoSimples';
-import { Cabecalho, CabecalhoCentro, CabecalhoEsquerda } from '../../components/Cabecalho';
+import Logo from "../../components/LogoScritus";
+import Linha from "../../components/LinhaDegrade";
+import BotaoSimples from "../../components/BotaoSimples";
+import { Cabecalho, CabecalhoCentro, CabecalhoEsquerda } from "../../components/Cabecalho";
 import ArrowIcon from "../../components/icons/arrowIcon";
-import { CAMPOS_OBRA } from '../../constants/userConstants';
-import ContainerBasico from '../../components/ContainerBasico';
-import InputBasico from '../../components/InputBasico';
-import InputTextarea from '../../components/InputTextarea';
-import CapaPadrao from '../../assets/foto_capa_padrao.png';
+import { CAMPOS_OBRA } from "../../constants/userConstants";
+import ContainerBasico from "../../components/ContainerBasico";
+import InputBasico from "../../components/InputBasico";
+import InputTextarea from "../../components/InputTextarea";
+import CapaPadrao from "../../assets/foto_capa_padrao.png";
 import Choices from "choices.js";
 import "choices.js/public/assets/styles/choices.min.css";
 import PaginaSplash from "../PaginaSplash";
-import './choicesChoices.css';
-import './selectEstilization.css';
-import Folder from '../../components/Folder';
-import Overlay from '../../components/Overlay';
+import "./choicesChoices.css";
+import "./selectEstilization.css";
+import Folder from "../../components/Folder";
+import Overlay from "../../components/Overlay";
 
 function PaginaCadastroObras() {
   const [dados, setDados] = useState({
@@ -43,51 +44,52 @@ function PaginaCadastroObras() {
 
   const { puxarDados } = usePuxarDados();
 
+  useTitulo('Cadastrar Obra - Scritus');
+
   // Busca as tags do back-end
-useEffect(() => {
-  const carregarTags = async () => {
-    try {
-      const resp = await fetch("http://localhost:5000/api/v1/tags");
-      if (!resp.ok) {
-        throw new Error(`Erro HTTP: ${resp.status}`);
+  useEffect(() => {
+    const carregarTags = async () => {
+      try {
+        const resp = await fetch("http://localhost:5000/api/v1/tags");
+        if (!resp.ok) {
+          throw new Error(`Erro HTTP: ${resp.status}`);
+        }
+
+        const data = await resp.json();
+        // Se vier dentro de um objeto (ex: { tags: [...] })
+        const lista = Array.isArray(data.tags) ? data.tags : [];
+        setTags(lista);
+
+        const token = localStorage.getItem("accessToken");
+        const payload = (await decodificarJWT(token)) || {};
+
+        const usuario = await puxarDados(payload.email, payload.tipoUsuario);
+        setIdAutor(usuario.usuario.id_autor);
+      } catch (err) {
+        console.error("Erro ao buscar tags:", err);
+        setTags([]); // Fallback pra evitar loop infinito
+      } finally {
+        setCarregando(false); // Sempre sai do loading, mesmo com erro
       }
+    };
 
-      const data = await resp.json();
-      // Se vier dentro de um objeto (ex: { tags: [...] })
-      const lista = Array.isArray(data.tags) ? data.tags :  [];
-      setTags(lista);
+    carregarTags();
+  }, []);
 
-      const token = localStorage.getItem("accessToken");
-      const payload = await decodificarJWT(token) || {};
-
-      const usuario = await puxarDados(payload.email, payload.tipoUsuario);
-      setIdAutor(usuario.usuario.id_autor);
-
-    } catch (err) {
-      console.error("Erro ao buscar tags:", err);
-      setTags([]); // Fallback pra evitar loop infinito
-    } finally {
-      setCarregando(false); // Sempre sai do loading, mesmo com erro
+  // Inicializa o Choices.js quando as tags estiverem carregadas
+  useEffect(() => {
+    if (!carregando && tags.length > 0 && selectRef.current) {
+      choicesRef.current = new Choices(selectRef.current, {
+        removeItemButton: true,
+        maxItemCount: 5,
+        searchEnabled: true,
+        placeholderValue: "Selecione até 5 tags",
+        itemSelectText: "",
+        maxItemText: (maxItemCount) =>
+          `Você só pode selecionar até ${maxItemCount} tags.`,
+      });
     }
-  };
-
-  carregarTags();
-}, []);
-
-// Inicializa o Choices.js quando as tags estiverem carregadas
-useEffect(() => {
-  if (!carregando && tags.length > 0 && selectRef.current) {
-    choicesRef.current = new Choices(selectRef.current, {
-      removeItemButton: true,
-      maxItemCount: 5,
-      searchEnabled: true,
-      placeholderValue: "Selecione até 5 tags",
-      itemSelectText: '',
-      maxItemText: (maxItemCount) => `Você só pode selecionar até ${maxItemCount} tags.`
-    });
-  }
-}, [carregando, tags]);
-
+  }, [carregando, tags]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -112,65 +114,61 @@ useEffect(() => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const formData = new FormData();
+    try {
+      const formData = new FormData();
 
-    formData.append('id_autor', idAutor);
+      formData.append("id_autor", idAutor);
 
-    // Adiciona todos os campos de texto, exceto os selects tratados separadamente
-    Object.entries(dados).forEach(([campo, valorObj]) => {
-      if (campo !== "status_obra" && campo !== "classificacao_indicativa") {
-        formData.append(campo, valorObj.valor);
+      // Adiciona todos os campos de texto, exceto os selects tratados separadamente
+      Object.entries(dados).forEach(([campo, valorObj]) => {
+        if (campo !== "status_obra" && campo !== "classificacao_indicativa") {
+          formData.append(campo, valorObj.valor);
+        }
+      });
+
+      // Adiciona o arquivo da capa, se existir
+      if (capa) {
+        formData.append("capa", capa);
       }
-    });
 
-    // Adiciona o arquivo da capa, se existir
-    if (capa) {
-      formData.append("capa", capa);
+      // Adiciona o PDF, se existir
+      if (pdf) {
+        formData.append("pdf", pdf);
+      }
+
+      // Adiciona as tags selecionadas (Choices.js)
+      const tagsSelecionadas = Array.from(
+        selectRef.current.selectedOptions
+      ).map((opt) => opt.value);
+
+      formData.append("tags", JSON.stringify(tagsSelecionadas));
+
+      // Adiciona as opções de selects simples
+      const privacidade = document.getElementById("privaObra").value;
+      const classificacao = document.getElementById("classInd").value;
+      formData.append("status_obra", privacidade);
+      formData.append("classificacao_indicativa", classificacao);
+
+      // Envia via fetch
+      const resposta = await fetch("http://localhost:5000/api/v1/obra", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (resposta.ok) {
+        setOverlay(true);
+        setTimeout(() => {
+          alert("Obra cadastrada com sucesso!");
+          window.location.href = "/minhasobras";
+        }, 200);
+      }
+    } catch (err) {
+      console.error("Erro no envio:", err);
+      alert("Erro ao enviar os dados. Veja o console para mais detalhes.");
     }
-
-    // Adiciona o PDF, se existir
-    if (pdf) {
-      formData.append("pdf", pdf);
-    }
-
-    // Adiciona as tags selecionadas (Choices.js)
-    const tagsSelecionadas = Array.from(
-      selectRef.current.selectedOptions
-    ).map(opt => opt.value);
-
-    formData.append("tags", JSON.stringify(tagsSelecionadas));
-
-    // Adiciona as opções de selects simples
-    const privacidade = document.getElementById("privaObra").value;
-    const classificacao = document.getElementById("classInd").value;
-    formData.append("status_obra", privacidade);
-    formData.append("classificacao_indicativa", classificacao);
-
-    // Envia via fetch
-    const resposta = await fetch("http://localhost:5000/api/v1/obra", {
-      method: "POST",
-      body: formData,
-    });
-
-
-    if (resposta.ok) {
-      setOverlay(true);
-      setTimeout(() => {
-        alert("Obra cadastrada com sucesso!");
-        window.location.href = '/minhasobras';
-      }, 200);
-      
-    }
-
-
-  } catch (err) {
-    console.error("Erro no envio:", err);
-    alert("Erro ao enviar os dados. Veja o console para mais detalhes.");
-  }
-};
+  };
 
   const renderInputs = () => {
     return Object.entries(CAMPOS_OBRA).map(([campo, meta]) => {
@@ -210,7 +208,9 @@ useEffect(() => {
             minLength={meta.minlength}
             maxLength={meta.maxlength}
           >
-            {verificarErro(campo) && erroMsg ? <ErrorHelper text={erroMsg} /> : null}
+            {verificarErro(campo) && erroMsg ? (
+              <ErrorHelper text={erroMsg} />
+            ) : null}
           </InputBasico>
         );
       }
@@ -223,7 +223,7 @@ useEffect(() => {
 
   return (
     <>
-      { overlay && <Overlay />}
+      {overlay && <Overlay />}
       <Cabecalho>
         <CabecalhoEsquerda>
           <BotaoSimples back variant="secondary" className="btn-icone">
@@ -238,7 +238,7 @@ useEffect(() => {
       <Linha />
       <ContainerBasico width="50vw" text="Cadastrar Obra">
         <form onSubmit={handleSubmit}>
-          <div style={{position: 'relative', right: '30px'}} className='flx'>
+          <div style={{ position: "relative", right: "30px" }} className="flx">
             <label htmlFor="capa">
               <img
                 width="200"
@@ -259,7 +259,7 @@ useEffect(() => {
             id="capa"
             style={{ display: "none" }}
             onChange={handleImagem}
-          /> 
+          />
 
           {renderInputs()}
 
@@ -277,7 +277,9 @@ useEffect(() => {
             <option value="Privado">Privado</option>
             <option value="Público">Público</option>
           </select>
-          <label htmlFor="classInd">Qual a classificação indicativa da sua obra?</label>
+          <label htmlFor="classInd">
+            Qual a classificação indicativa da sua obra?
+          </label>
           <select name="classInd" id="classInd">
             <option value="Livre">Livre</option>
             <option value="10">10 Anos</option>
@@ -286,9 +288,15 @@ useEffect(() => {
             <option value="16">16 Anos</option>
             <option value="18">18 Anos</option>
           </select>
-          <div className='flx'>
-            <BotaoSimples type='submit'>Cadastrar</BotaoSimples>
-            <BotaoSimples type='button' variant='cancel' onClick={() => history.back()}>Cancelar</BotaoSimples>
+          <div className="flx">
+            <BotaoSimples type="submit">Cadastrar</BotaoSimples>
+            <BotaoSimples
+              type="button"
+              variant="cancel"
+              onClick={() => history.back()}
+            >
+              Cancelar
+            </BotaoSimples>
           </div>
         </form>
       </ContainerBasico>
