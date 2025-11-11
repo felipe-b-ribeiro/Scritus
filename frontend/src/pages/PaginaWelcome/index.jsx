@@ -5,6 +5,7 @@ import BotaoSimples from '../../components/BotaoSimples';
 import { Cabecalho, CabecalhoCentro, CabecalhoDireita, CabecalhoEsquerda } from '../../components/Cabecalho/index.jsx';
 import GuestIcon from '../../components/icons/guestIcon';
 import SeparadorVertical from '../../components/separadorVertical';
+import Banner from '../../assets/banner.png';
 
 function PaginaWelcome() {
 
@@ -31,6 +32,7 @@ function PaginaWelcome() {
         </CabecalhoDireita>
       </Cabecalho>
       <Linha />
+      <img width='100%' height='100%' src={Banner} alt="Banner Principal" />
     </>
   );
 }

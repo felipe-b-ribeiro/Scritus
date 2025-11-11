@@ -26,7 +26,7 @@ const variantes = {
 
 const SC_CardBasico = styled.div`
   display: flex;
-  flex-direction: column;
+  gap: 10px;
   align-items: center;
   justify-content: center;
   font-family: 'Cinzel', serif;

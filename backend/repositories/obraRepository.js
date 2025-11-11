@@ -112,3 +112,29 @@ export const puxarPdfPorIdRepository = async (id_obra) => {
     client.release();
   }
 };
+
+export const puxarTodasObrasRepository = async () => {
+  const client = await db.connect();
+
+  try {
+    const query = `
+      SELECT 
+        o.id_obra,
+        pa.nome_autor,
+        pa.pseudonimo,
+        o.titulo,
+        o.capa_url,
+        o.pdf_url,
+        o.status_obra,
+        o.classificacao_indicativa
+      FROM obras o JOIN perfil_autor pa ON o.id_autor = pa.id_autor;
+    `;
+    const result = await client.query(query);
+    return result.rows;
+  } catch (err) {
+    console.error("Erro no listarTodasObrasRepository:", err);
+    throw err;
+  } finally {
+    client.release();
+  }
+};

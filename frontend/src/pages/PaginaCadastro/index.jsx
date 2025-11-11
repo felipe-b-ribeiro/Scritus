@@ -25,6 +25,9 @@ import LinkSimples from "../../components/LinkSimples/index.jsx";
 import { Cabecalho, CabecalhoCentro, CabecalhoDireita, CabecalhoEsquerda } from "../../components/Cabecalho";
 import ArrowIcon from "../../components/icons/arrowIcon";
 import EyeIcon from "../../components/icons/passwordIcon";
+import CardEditora from '../../assets/card-editora.png';
+import CardAutor from '../../assets/card-autor.png';
+import CardLeitor from '../../assets/card-leitor.png';
 
 
 
@@ -83,14 +86,17 @@ const PaginaCadastro = () => {
           <Card variant='primary' onClick={() => handleTipoUsuario(TIPO_USUARIO.LEITOR)} role='button' tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') handleTipoUsuario(TIPO_USUARIO.LEITOR); }}>
             <h2>Sou leitor</h2>
             <h5>e quero ler livros profundos e impactantes.</h5>
+            <img style={{position: 'absolute', bottom: '0px', right: '65px'}} width='110' height='110' src={CardLeitor} alt="Foto do Card de Leitor" />
           </Card>
           <Card variant='secondary' onClick={() => handleTipoUsuario(TIPO_USUARIO.AUTOR)} role='button' tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') handleTipoUsuario(TIPO_USUARIO.AUTOR); }}>
             <h2>Sou autor</h2>
             <h5>e quero mostrar meus livros profissionalmente.</h5>
+            <img style={{position: 'absolute', bottom: '0px', right: '30px'}} width='140' height='140' src={CardAutor} alt="Foto do Card de Autor" />
           </Card>
           <Card variant='terciary' onClick={() => handleTipoUsuario(TIPO_USUARIO.EDITORA)} role='button' tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') handleTipoUsuario(TIPO_USUARIO.EDITORA); }}>
             <h2>Sou editora</h2>
             <h5>e quero garimpar verdadeiras obras-primas.</h5>
+            <img style={{position: 'absolute', bottom: '0px', right: '65px'}} width='120' height='120' src={CardEditora} alt="Foto do Card de Editora" />
           </Card>
         </ContainerBasico>
       );

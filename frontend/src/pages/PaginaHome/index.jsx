@@ -6,11 +6,9 @@ import useNavigateCustom from '../../hooks/useNavigateCustom.js';
 import useTitulo from '../../hooks/useTitulo.js';
 import Logo from '../../components/LogoScritus/index.jsx';
 import Linha from '../../components/LinhaDegrade/index.jsx';
-import BotaoSimples from '../../components/BotaoSimples/index.jsx';
 import BotaoLogout from '../../components/BotaoLogout/index.jsx';
 import SeparadorVertical from '../../components/separadorVertical/index.jsx';
 import { Cabecalho, CabecalhoCentro, CabecalhoDireita, CabecalhoEsquerda } from '../../components/Cabecalho/index.jsx';
-import InputBasico from '../../components/InputBasico';
 import TextoBemVindo from '../../components/TextoBemVindo/index.jsx';
 import TagTipoUsuario from '../../components/TagTipoUsuario/index.jsx';
 import TituloBasico from '../../components/TituloBasico/index.jsx';
@@ -21,9 +19,16 @@ import Overlay from '../../components/Overlay/index.jsx';
 import LogoutModal from '../../components/LogoutModal/index.jsx';
 import PaginaSplash from '../PaginaSplash/index.jsx';
 import FotoPadrao from '../../assets/foto_perfil_padrao.png';
+import capaPadrao from '../../assets/foto_capa_padrao.png';
 import { SC_WrapperMenuHome, SC_ButtonMenuHome } from '../../components/MenuHome/styles.js';
 import IconCadastrarObra from '../../assets/icons/plus-icon.svg';
 import IconMeusLivros from '../../assets/icons/bookshelf-icon.svg';
+import livre from '../../assets/classificacao/livre.png';
+import dez from '../../assets/classificacao/10.png';
+import doze from '../../assets/classificacao/12.png';
+import catorze from '../../assets/classificacao/14.png'
+import dezesseis from '../../assets/classificacao/16.png';
+import dezoito from '../../assets/classificacao/18.png';
 
 function PaginaHome() {
 
@@ -31,6 +36,7 @@ function PaginaHome() {
   const [usuario, setUsuario] = useState({ "tipoUsuario": "", "nome": ""});
   const { btnSair, sairConfirm, sairCancel, showOverlay, showLogoutModal } = useHomeHook();
   const [foto, setFoto] = useState(FotoPadrao);
+  const [obras, setObras] = useState([]);
 
   const { puxarDados } = puxarDadosHook();
   const { goTo } = useNavigateCustom();
@@ -39,50 +45,82 @@ function PaginaHome() {
 
   useEffect(() => {
     const carregarHome = async () => {
-      // Espera fontes
-      if (document.fonts) await document.fonts.ready;
+      try {
+        if (document.fonts) await document.fonts.ready;
 
-      // Espera dados iniciais
-      const token = localStorage.getItem("accessToken");
-      const payload = await decodificarJWT(token) || {};
-      const {tipoUsuario} = payload;
+        const token = localStorage.getItem("accessToken");
+        const payload = await decodificarJWT(token) || {};
+        const { tipoUsuario } = payload;
 
-      const usuario = await puxarDados(payload.email, payload.tipoUsuario);
+        const usuario = await puxarDados(payload.email, payload.tipoUsuario);
 
-      let nome;
+        let nome;
+        switch (tipoUsuario) {
+          case 'Leitor':
+            nome = usuario.usuario.apelido;
+            break;
+          case 'Autor':
+            nome = usuario.usuario.pseudonimo ?? usuario.usuario.nome_autor;
+            break;
+          case 'Editora':
+            nome = usuario.usuario.nome_fantasia;
+            break;
+        }
 
-      switch (tipoUsuario) {
-        case 'Leitor':
-          nome = usuario.usuario.apelido;
-          break;
-        case 'Autor':
-          nome = usuario.usuario.pseudonimo ?? usuario.usuario.nome_autor;
-          break;
-        case 'Editora':
-          nome = usuario.usuario.nome_fantasia;
-          break;
+        setUsuario({"tipoUsuario": tipoUsuario, "nome": nome});
+
+        if (usuario.usuario.foto_perfil_url === null) {
+          setFoto(FotoPadrao);
+        } else {
+          setFoto(`http://localhost:5000${usuario.usuario.foto_perfil_url}`);
+        }
+
+        // 🔥 Puxa TODAS as obras do sistema
+        const resp = await fetch(`http://localhost:5000/api/v1/obra`);
+        if (!resp.ok) throw new Error("Erro ao buscar obras");
+        const data = await resp.json();
+        setObras(data);
+      } catch (err) {
+        console.error("Erro ao carregar home:", err);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      setUsuario({"tipoUsuario": tipoUsuario, "nome": nome})
-
-      if (usuario.usuario.foto_perfil_url === null) {
-        setFoto(FotoPadrao);
-      }
-      else {
-      setFoto(`http://localhost:5000${usuario.usuario.foto_perfil_url}`);
-      };
-    }
     carregarHome();
   }, []);
 
-  setTimeout(() => {setLoading(false)}, 2000);
-
   if (loading) return <PaginaSplash />;
+
+  const abrirPDF = (pdf_url) => {
+    if (pdf_url) {
+      window.open(`http://localhost:5000${pdf_url}`, "_blank");
+    } else {
+      alert("PDF não encontrado para esta obra.");
+    }
+  };
+
+  const imgClassificacao = (idade) => {
+  
+      let imagem;
+  
+      switch (idade) {
+        case 'Livre': imagem = livre; break;
+        case '10': imagem = dez; break;
+        case '12': imagem = doze; break;
+        case '14': imagem = catorze; break;
+        case '16': imagem = dezesseis; break;
+        case '18': imagem = dezoito; break;
+      }
+  
+      return imagem;
+    }
 
   return (
     <> 
       { showOverlay && <Overlay />}
       { showLogoutModal && <LogoutModal confirmClick={sairConfirm} cancelClick={sairCancel}/> }
+
       <Cabecalho>
         <CabecalhoEsquerda>
           <TextoBemVindo src={foto} usuario={usuario.nome} />
@@ -94,39 +132,49 @@ function PaginaHome() {
           <Logo goTo={'/home'} />
         </CabecalhoCentro>
       </Cabecalho>
+
       <Linha />
-      <SC_WrapperMenuHome>
-        { usuario.tipoUsuario === 'Autor' &&
-        <> 
+
+      { usuario.tipoUsuario === 'Autor' &&
+        <SC_WrapperMenuHome> 
           <SC_ButtonMenuHome onClick={() => goTo('/cadastrarobra')}>
             <img width='26' height='26' src={IconCadastrarObra} alt="Cadastrar Obras" />
           </SC_ButtonMenuHome> 
           <SC_ButtonMenuHome onClick={() => goTo('/minhasobras')}>
             <img width='26' height='26' src={IconMeusLivros} alt="Meus Livros" />
           </SC_ButtonMenuHome>
-        </>  }
-      </SC_WrapperMenuHome>
+        </SC_WrapperMenuHome>
+      }
+
       <ContainerHome>
-        <TituloBasico>
-            Ascendentes no Scritus:
-        </TituloBasico>
-        <ContainerCarrosel>
-            <LivroHome />
-            <LivroHome />
-            <LivroHome />
-            <LivroHome />
-            <LivroHome />
-        </ContainerCarrosel>
-        <TituloBasico>
-            Mergulhe em romances açucarados:
-        </TituloBasico>
-        <ContainerCarrosel>
-            <LivroHome />
-            <LivroHome />
-            <LivroHome />
-            <LivroHome />
-            <LivroHome />
-        </ContainerCarrosel>
+        <TituloBasico>Navegue no Mundo Literário:</TituloBasico>
+
+        {obras.length === 0 ? (
+          <p style={{ textAlign: "center", fontFamily: "Cinzel", color: "var(--cor-principal)" }}>
+            Nenhuma obra disponível no momento.
+          </p>
+        ) : (
+          Array.from({ length: Math.ceil(obras.length / 5) }).map((_, i) => {
+            const grupo = obras.slice(i * 5, i * 5 + 5);
+            return (
+              <ContainerCarrosel key={i}>
+                {grupo.map((obra) => (
+                  <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+                  <LivroHome
+                    key={obra.id_obra}
+                    src={(!obra.capa_url || obra.capa_url === '[default]') ? capaPadrao : obra.capa_url}
+                    onClick={() => abrirPDF(obra.pdf_url)}
+                  >
+                  <img style={{ zIndex: '5', position: 'relative', top: '-50px', left: '6px'}} width='40' height='40' src={imgClassificacao(obra.classificacao_indicativa)} alt="Classificação Indicativa" />
+                  </LivroHome>
+                  <h4 style={{marginTop: '7px', fontFamily: 'Cinzel', width: '200px', textAlign: 'center'}}>{obra.titulo}</h4>
+                  <h6 style={{fontFamily: 'Cinzel', marginTop: '5px', color: 'var(--cor-principal)'}}>Escrito por {obra.pseudonimo || obra.nome_autor.split('')}</h6>
+                  </div>
+                ))}
+              </ContainerCarrosel>
+            );
+          })
+        )}
       </ContainerHome>
     </>
   );

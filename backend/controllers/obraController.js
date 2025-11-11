@@ -1,4 +1,4 @@
-import { criarObraRepository, listarObrasPorAutorRepository, deletarObraRepository, puxarPdfPorIdRepository } from "../repositories/obraRepository.js";
+import { criarObraRepository, listarObrasPorAutorRepository, deletarObraRepository, puxarPdfPorIdRepository, puxarTodasObrasRepository } from "../repositories/obraRepository.js";
 
 export const criarObraController = async (req, res) => {
   try {
@@ -47,13 +47,13 @@ export const criarObraController = async (req, res) => {
 
 export const listarObrasPorAutorController = async (req, res) => {
   try {
-    const { id_autor } = req.params;
+    const { id } = req.params;
 
-    if (!id_autor) {
+    if (!id) {
       return res.status(400).json({ erro: "ID do autor não fornecido." });
     }
 
-    const obras = await listarObrasPorAutorRepository(id_autor);
+    const obras = await listarObrasPorAutorRepository(id);
 
     return res.status(200).json(obras);
   } catch (err) {
@@ -93,5 +93,17 @@ export const puxarPdfObraPorIdController = async (req, res) => {
   } catch (err) {
     console.error("Erro ao buscar PDF:", err);
     res.status(500).json({ mensagem: "Erro interno do servidor" });
+  }
+};
+
+export const puxarTodasObrasController = async (req, res) => {
+  try {
+
+    const obras = await puxarTodasObrasRepository();
+
+    return res.status(200).json(obras);
+  } catch (err) {
+    console.error("Erro no listarTodasObrasController:", err);
+    res.status(500).json({ erro: "Erro ao buscar obras." });
   }
 };
