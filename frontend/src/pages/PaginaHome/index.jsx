@@ -23,6 +23,7 @@ import capaPadrao from '../../assets/foto_capa_padrao.png';
 import { SC_WrapperMenuHome, SC_ButtonMenuHome } from '../../components/MenuHome/styles.js';
 import IconCadastrarObra from '../../assets/icons/plus-icon.svg';
 import IconMeusLivros from '../../assets/icons/bookshelf-icon.svg';
+import IconFavorito from '../../components/icons/favoritoIcon/index.jsx';
 import livre from '../../assets/classificacao/livre.png';
 import dez from '../../assets/classificacao/10.png';
 import doze from '../../assets/classificacao/12.png';
@@ -135,16 +136,21 @@ function PaginaHome() {
 
       <Linha />
 
+      <SC_WrapperMenuHome>
       { usuario.tipoUsuario === 'Autor' &&
-        <SC_WrapperMenuHome> 
+          <>
           <SC_ButtonMenuHome onClick={() => goTo('/cadastrarobra')}>
             <img width='26' height='26' src={IconCadastrarObra} alt="Cadastrar Obras" />
           </SC_ButtonMenuHome> 
           <SC_ButtonMenuHome onClick={() => goTo('/minhasobras')}>
             <img width='26' height='26' src={IconMeusLivros} alt="Meus Livros" />
           </SC_ButtonMenuHome>
-        </SC_WrapperMenuHome>
+          </> 
       }
+      <SC_ButtonMenuHome onClick={() => goTo('/favoritos')}>
+            <IconFavorito />
+      </SC_ButtonMenuHome>
+      </SC_WrapperMenuHome>
 
       <ContainerHome>
         <TituloBasico>Navegue no Mundo Literário:</TituloBasico>

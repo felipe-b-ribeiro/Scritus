@@ -207,7 +207,7 @@ const PaginaPerfil = () => {
                 <form onSubmit={handleSubmit}>
                     {dados && Object.keys(dados).length > 0 ? (
                         <>  <label htmlFor="upload">
-                                <img style={{ borderRadius: '50%', zIndex: 1, cursor: 'pointer'}} width="100" height="100" src={preview} alt="Foto de Perfil" />
+                                <img style={{ borderRadius: '50%', zIndex: 1, cursor: 'pointer', border: '1px solid black'}} width="100" height="100" src={preview} alt="Foto de Perfil" />
                             </label>
                             <input type="file" id="upload" accept="image/*" style={{display: 'none'}} onChange={handleImagem} />
                             <TagTipoUsuario marginLeft='0px' marginTop='0px' marginBottom='15px' tipo={tipoUsuario} />

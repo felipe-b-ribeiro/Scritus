@@ -5,10 +5,12 @@ export const SC_Img = styled.img`
     height: 50px;
     border-radius: 50%;
     transition: 0.5s var(--transicao-basica);
+    border: 1px solid black;
 
     &:hover {
         transform: scale(1.03);
         cursor: pointer;
+        border: none;
         box-shadow:
         4px 0 5px var(--cor-secundaria),   /* sombra à direita */
         -4px 0 5px var(--cor-principal),   /* sombra à esquerda */
