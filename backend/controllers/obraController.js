@@ -1,4 +1,4 @@
-import { criarObraRepository, listarObrasPorAutorRepository, deletarObraRepository, puxarPdfPorIdRepository, puxarTodasObrasRepository } from "../repositories/obraRepository.js";
+import { criarObraRepository, listarObrasPorAutorRepository, deletarObraRepository, puxarTodasObrasRepository, puxarObraPorIdRepository } from "../repositories/obraRepository.js";
 
 export const criarObraController = async (req, res) => {
   try {
@@ -47,13 +47,13 @@ export const criarObraController = async (req, res) => {
 
 export const listarObrasPorAutorController = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { autorId } = req.params;
 
-    if (!id) {
+    if (!autorId) {
       return res.status(400).json({ erro: "ID do autor não fornecido." });
     }
 
-    const obras = await listarObrasPorAutorRepository(id);
+    const obras = await listarObrasPorAutorRepository(autorId);
 
     return res.status(200).json(obras);
   } catch (err) {
@@ -64,13 +64,13 @@ export const listarObrasPorAutorController = async (req, res) => {
 
 export const deletarObraController = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { obraId } = req.params;
 
         console.log(id);
 
         if (!id) return res.status(400).json({ mensagem: "ID da obra é obrigatório" });
 
-        await deletarObraRepository(id);
+        await deletarObraRepository(obraId);
 
         res.status(200).json({ mensagem: "Obra deletada com sucesso" });
     } catch (err) {
@@ -79,31 +79,26 @@ export const deletarObraController = async (req, res) => {
     }
 };
 
-export const puxarPdfObraPorIdController = async (req, res) => {
-  const { id } = req.params;
-  console.log(id);
-  try {
-    const resultado = await puxarPdfPorIdRepository(id);
-
-    if (!resultado) {
-      return res.status(404).json({ mensagem: "Obra não encontrada" });
-    }
-
-    res.json({ pdf_url: resultado.pdf_url });
-  } catch (err) {
-    console.error("Erro ao buscar PDF:", err);
-    res.status(500).json({ mensagem: "Erro interno do servidor" });
-  }
-};
-
 export const puxarTodasObrasController = async (req, res) => {
   try {
-
     const obras = await puxarTodasObrasRepository();
-
     return res.status(200).json(obras);
   } catch (err) {
-    console.error("Erro no listarTodasObrasController:", err);
+    console.error("[LISTAR TODAS OBRAS CONTROLLER ERROR]:", err);
     res.status(500).json({ erro: "Erro ao buscar obras." });
   }
 };
+
+export const puxarObraPorIdController = async (req, res) => {
+  try {
+
+    const { obraId } = req.params;
+
+    const obra = await puxarObraPorIdRepository(obraId);
+    console.log(obra);
+    return res.status(200).json(obra);
+  } catch (err) {
+    console.error('[PUXAR OBRA POR ID CONTROLLER ERROR]:', err);
+    res.status(500);
+  }
+}

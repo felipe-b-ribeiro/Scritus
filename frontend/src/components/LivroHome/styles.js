@@ -3,8 +3,8 @@ import styled from "styled-components";
 export const SC_LivroHome = styled.div`
     background-color: lightgray;
     border-radius: 15px;
-    height: 40vh;
-    width: 15vw;
+    height: 300px;
+    width: 220px;
     transition: 0.5s var(--transicao-basica);
 
     &:hover {

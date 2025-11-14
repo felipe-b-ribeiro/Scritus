@@ -2,9 +2,8 @@ import styled from "styled-components";
 
 const SC_ContainerBasico = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: ${props => props.direction || 'column'};
   align-items: center;
-  max-width: '47vw';
   width: ${props => props.width || 'max-content'};
   margin: 10vh auto;
   padding: 0 6rem 10px 6rem;
@@ -15,7 +14,7 @@ const SC_ContainerBasico = styled.div`
   0 4px 10px var(--cor-terciaria);   /* sombra abaixo */;
 
 
-  h1 {
+  #textContainer {
     font-family: 'Cinzel', serif;
     background-color: var(--cor-principal);
     color: white;
@@ -42,7 +41,7 @@ const SC_ContainerBasico = styled.div`
   @media (max-width: 600px) {
     max-width: 85vw;
 
-    h1 {
+    #textContainer {
       font-size: 1.45em;
     }
   }

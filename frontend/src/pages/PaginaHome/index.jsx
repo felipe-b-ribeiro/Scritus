@@ -76,7 +76,6 @@ function PaginaHome() {
           setFoto(`http://localhost:5000${usuario.usuario.foto_perfil_url}`);
         }
 
-        // 🔥 Puxa TODAS as obras do sistema
         const resp = await fetch(`http://localhost:5000/api/v1/obra`);
         if (!resp.ok) throw new Error("Erro ao buscar obras");
         const data = await resp.json();
@@ -90,16 +89,6 @@ function PaginaHome() {
 
     carregarHome();
   }, []);
-
-  if (loading) return <PaginaSplash />;
-
-  const abrirPDF = (pdf_url) => {
-    if (pdf_url) {
-      window.open(`http://localhost:5000${pdf_url}`, "_blank");
-    } else {
-      alert("PDF não encontrado para esta obra.");
-    }
-  };
 
   const imgClassificacao = (idade) => {
   
@@ -116,6 +105,8 @@ function PaginaHome() {
   
       return imagem;
     }
+
+  if (loading) return <PaginaSplash />;
 
   return (
     <> 
@@ -169,7 +160,7 @@ function PaginaHome() {
                   <LivroHome
                     key={obra.id_obra}
                     src={(!obra.capa_url || obra.capa_url === '[default]') ? capaPadrao : obra.capa_url}
-                    onClick={() => abrirPDF(obra.pdf_url)}
+                    onClick={() => goTo(`/obra/${obra.id_obra}`)}
                   >
                   <img style={{ zIndex: '5', position: 'relative', top: '-50px', left: '6px'}} width='40' height='40' src={imgClassificacao(obra.classificacao_indicativa)} alt="Classificação Indicativa" />
                   </LivroHome>

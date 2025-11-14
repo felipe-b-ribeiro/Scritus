@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import puxarDadosHook from "../../hooks/puxarDadosHook";
+import useNavigateCustom from "../../hooks/useNavigateCustom";
 import useTitulo from "../../hooks/useTitulo";
 import decodificarJWT from "../../utils/decodificarJWT";
 import Logo from "../../components/LogoScritus";
@@ -31,6 +32,8 @@ function PaginaEstante() {
 
   useTitulo('Minhas Obras - Scritus');
 
+  const { goTo } = useNavigateCustom();
+
   useEffect(() => {
     const carregarObras = async () => {
       try {
@@ -41,7 +44,7 @@ function PaginaEstante() {
         console.log(usuario);
 
         const resp = await fetch(
-          `http://localhost:5000/api/v1/obra/${usuario.usuario.id_autor}`
+          `http://localhost:5000/api/v1/obra/autor/${usuario.usuario.id_autor}`
         );
         if (!resp.ok) throw new Error("Erro ao buscar obras");
 
@@ -160,7 +163,7 @@ function PaginaEstante() {
                   >
                     <LivroHome
                       src={(!obra.capa_url || obra.capa_url === '[default]') ? capaPadrao : obra.capa_url}
-                      onClick={() => abrirPDF(obra.pdf_url)}
+                      onClick={() => goTo(`/obra/${obra.id_obra}`)}
                     >
                       <img style={{ zIndex: '5', position: 'relative', top: '-50px', left: '6px'}} width='40' height='40' src={imgClassificacao(obra.classificacao_indicativa)} alt="Classificação Indicativa" />
                       <button 

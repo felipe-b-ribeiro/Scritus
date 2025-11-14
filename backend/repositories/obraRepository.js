@@ -61,7 +61,7 @@ export const criarObraRepository = async (obra) => {
   }
 };
 
-export const listarObrasPorAutorRepository = async (idAutor) => {
+export const listarObrasPorAutorRepository = async (autorId) => {
   const client = await db.connect();
 
   try {
@@ -77,8 +77,8 @@ export const listarObrasPorAutorRepository = async (idAutor) => {
       WHERE id_autor = $1
       ORDER BY id_obra DESC
     `;
-    const result = await client.query(query, [idAutor]);
-    return result.rows;
+    const resposta = await client.query(query, [autorId]);
+    return resposta.rows;
   } catch (err) {
     console.error("Erro no listarObrasPorAutorRepository:", err);
     throw err;
@@ -102,20 +102,8 @@ export const deletarObraRepository = async (obraId) => {
     }
 };
 
-export const puxarPdfPorIdRepository = async (id_obra) => {
-  const client = await db.connect();
-  try {
-    const query = "SELECT pdf_url, capa_url FROM obras WHERE id_obra = $1";
-    const { rows } = await client.query(query, [id_obra]);
-    return rows[0]; 
-  } finally {
-    client.release();
-  }
-};
-
 export const puxarTodasObrasRepository = async () => {
   const client = await db.connect();
-
   try {
     const query = `
       SELECT 
@@ -138,3 +126,17 @@ export const puxarTodasObrasRepository = async () => {
     client.release();
   }
 };
+
+export const puxarObraPorIdRepository = async (obraId) => {
+  const client = await db.connect();
+  try {
+    const query = "SELECT o.*, pa.nome_autor, pa.pseudonimo, pa.foto_perfil_url FROM obras o JOIN perfil_autor pa ON o.id_autor = pa.id_autor WHERE id_obra = $1;";
+    const resposta = await client.query(query, [obraId]);
+    return resposta.rows[0];
+  } catch (err) {
+    console.error('[PUXAR OBRA POR ID REPOSITORY ERROR]: ', err);
+    throw err;
+  } finally {
+    client.release();
+  }
+}
