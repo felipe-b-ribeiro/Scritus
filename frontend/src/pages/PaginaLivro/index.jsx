@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect} from 'react';
 import { useParams } from 'react-router-dom';
 import useTitulo from "../../hooks/useTitulo";
 import Logo from '../../components/LogoScritus';
@@ -15,6 +15,7 @@ import SavedFullfiledIcon from '../../components/icons/savedFullfiledIcon';
 import ClickIcon from '../../components/icons/clickIcon';
 import PaginaSplash from '../PaginaSplash';
 import ContainerBasico from '../../components/ContainerBasico';
+import fotoPadrao from '../../assets/foto_perfil_padrao.png';
 import livre from '../../assets/classificacao/livre.png';
 import dez from '../../assets/classificacao/10.png';
 import doze from '../../assets/classificacao/12.png';
@@ -82,6 +83,76 @@ function PaginaLivro() {
           return imagem;
         }
 
+    const criarInteracao = async (interacaoObj) => {
+    try {
+        await fetch("http://localhost:5000/api/v1/interacao", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(interacaoObj),
+        });
+        console.log("Interação enviada:", interacaoObj);
+    } catch (err) {
+        console.error("Erro ao enviar interação:", err);
+    }
+    };
+
+    let timerCriar;
+    const criarInteracaoDebounced = (obj) => {
+        return () => {
+            clearTimeout(timerCriar);
+            timerCriar = setTimeout(() => criarInteracao(obj), 1000);
+        };
+    }
+
+    const excluirInteracao = async (interacaoObj) => {
+        try {
+            await fetch("http://localhost:5000/api/v1/interacao", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(interacaoObj),
+            });
+            console.log("Interação deletada:", interacaoObj);
+        } catch (err) {
+            console.error("Erro ao deletar interação:", err);
+        }
+    }
+
+    let timerExcluir;
+    const excluirInteracaoDebounced = (obj) => {
+        return () => {
+            clearTimeout(timerExcluir);
+            timerExcluir = setTimeout(() => excluirInteracao(obj), 1000);
+        };
+    }
+
+
+    const handleInteracao = (tipo) => {
+    
+        const novoEstadoAtivado = !interacoes[tipo]; 
+
+        
+        setInteracoes(prevInteracoes => ({ 
+            ...prevInteracoes, 
+            [tipo]: novoEstadoAtivado 
+        }));
+
+        
+        if (novoEstadoAtivado) {
+            criarInteracaoDebounced({
+                id_perfil: idPerfil,
+                id_obra: id_obra,
+                tipo_interacao: tipo,
+                conteudoParam: null
+            })();
+        } else {  
+            excluirInteracaoDebounced({
+                id_perfil: idPerfil,
+                id_obra: id_obra, 
+                tipo_interacao: tipo
+            })();
+        }
+    }
+
     if (loading) return <PaginaSplash />;
 
     return (
@@ -135,11 +206,11 @@ function PaginaLivro() {
                         <div><p style={{fontFamily: 'Cinzel', color: 'var(--cor-principal)', marginBottom: '5px'}}>Escrito por:</p></div>
                         <div className='flx' style={{alignItems: 'center'}}>
                             <SC_MiniWrapper>
-                                <img style={{borderRadius:'50%', border: '1px solid black'}} width='50' height='50' src={`http://localhost:5000${obra.foto_perfil_url}`} alt="Foto do Autor" />
+                                <img style={{borderRadius:'50%', border: '1px solid black'}} width='50' height='50' src={obra.foto_perfil_url ? `http://localhost:5000${obra.foto_perfil_url}` : fotoPadrao} alt="Foto do Autor" />
                                 <h5 style={{ marginLeft: '10px', fontSize: '1.3em', fontFamily: 'Raleway', fontWeight: 'normal'}}>{obra.pseudonimo ?? obra.nome_autor}</h5>
                             </SC_MiniWrapper>
-                            <SC_ButtonInteracao onClick={() => setInteracoes({...interacoes, "curtida": !interacoes.curtida})} cor='red'>{interacoes.curtida ? <HeartFullfiledIcon /> : <HeartIcon />}9999</SC_ButtonInteracao>
-                            <SC_ButtonInteracao onClick={() => setInteracoes({...interacoes, "salvo": !interacoes.salvo})} cor='blue'>{interacoes.salvo ? <SavedFullfiledIcon /> : <SavedIcon />}999</SC_ButtonInteracao>
+                            <SC_ButtonInteracao onClick={() => handleInteracao('curtida')} cor='red'>{interacoes.curtida ? <HeartFullfiledIcon /> : <HeartIcon />}9999</SC_ButtonInteracao>
+                            <SC_ButtonInteracao onClick={() => handleInteracao('salvo')} cor='blue'>{interacoes.salvo ? <SavedFullfiledIcon /> : <SavedIcon />}999</SC_ButtonInteracao>
                             <SC_ButtonInteracao nohover cor='black'><ClickIcon />999</SC_ButtonInteracao>
                         </div>
                     </div>

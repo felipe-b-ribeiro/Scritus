@@ -52,7 +52,9 @@ export async function recommendForProfile(profileId, topN = DEFAULT_RECOMMENDATI
 
   // 1️⃣ Buscar interações e obras públicas
   const interactions = await interactionRepository.getAllInteractions();
-  const works = await workRepository.getAllWorks();
+
+  if (interactions.length > 0) {
+      const works = await workRepository.getAllWorks();
 
   // 2️⃣ Construir matriz perfil -> obras com pesos
   const profileMatrix = {};
@@ -107,7 +109,10 @@ export async function recommendForProfile(profileId, topN = DEFAULT_RECOMMENDATI
 
   logger.info(`✅ ${recommendations.length} recomendações geradas para perfil ${profileId}`);
   return recommendations;
+} else {
+  
 }
+  }
 
 /**
  * Gera recomendações para todos os perfis

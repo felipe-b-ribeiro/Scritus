@@ -10,7 +10,7 @@ export const authUserService = async (emailDigitado, senha) => {
 
     const payload = await authUserRepository(emailDigitado, senha);
 
-    const { email, tipoUsuario, nome } = payload;
+    const { email, tipoUsuario, nome, id_perfil, id_usuario } = payload;
 
     const token = gerarToken(payload);
 

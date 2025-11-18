@@ -155,7 +155,6 @@ export const puxarObraPorIdRepository = async (obraId) => {
     pa.nome_autor,
     pa.pseudonimo,
     pa.foto_perfil_url;
-
     `;
     const resposta = await client.query(query, [obraId]);
     return resposta.rows[0];

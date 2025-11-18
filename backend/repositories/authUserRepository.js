@@ -37,15 +37,23 @@ export const authUserRepository = async (email, senha) => {
         campoBanco = 'pe.nome_fantasia';
     }
 
-    const queryPayload = "SELECT " + campoBanco + " from usuarios u join perfis p on u.id_usuario = p.id_usuario join " + tabela + " " + sigla + " on p.id_perfil = " + sigla + ".id_perfil where email=$1";
+    const queryPayload = 
+    `
+    SELECT ${campoBanco}, u.id_usuario, p.id_perfil
+    FROM usuarios u
+    JOIN perfis p ON u.id_usuario = p.id_usuario
+    JOIN ${tabela} ${sigla} ON p.id_perfil = ${sigla}.id_perfil
+    WHERE email = $1`;
 
-    const respostaNome = await client.query(queryPayload, [email]);
-    const nome = respostaNome.rows[0][Object.keys(respostaNome.rows[0])[0]];
+    const { rows } = await client.query(queryPayload, [email]);
+    const nome = rows[0][Object.keys(rows[0])[0]];
     
     const payload = {
       "tipoUsuario": tipoUsuario,
       "email": email,
-      "nome": nome
+      "nome": nome,
+      "id_usuario": rows[0].id_usuario,
+      "id_perfil": rows[0].id_perfil
     }
 
     return payload;
