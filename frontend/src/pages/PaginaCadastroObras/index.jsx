@@ -161,7 +161,7 @@ function PaginaCadastroObras() {
         setOverlay(true);
         setTimeout(() => {
           alert("Obra cadastrada com sucesso!");
-          window.location.href = "/minhasobras";
+          window.location.href = "/minhas-obras";
         }, 200);
       }
     } catch (err) {
@@ -249,6 +249,7 @@ function PaginaCadastroObras() {
                   borderRadius: "20px",
                   marginBottom: "20px",
                   cursor: "pointer",
+                  border: '1px solid black'
                 }}
               />
             </label>

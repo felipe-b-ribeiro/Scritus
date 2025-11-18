@@ -5,6 +5,7 @@ export const SC_LivroHome = styled.div`
     border-radius: 15px;
     height: 300px;
     width: 220px;
+    border: 1px solid black;
     transition: 0.5s var(--transicao-basica);
 
     &:hover {

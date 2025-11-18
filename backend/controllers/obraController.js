@@ -1,4 +1,10 @@
-import { criarObraRepository, listarObrasPorAutorRepository, deletarObraRepository, puxarTodasObrasRepository, puxarObraPorIdRepository } from "../repositories/obraRepository.js";
+import { criarObraRepository,
+  listarObrasPorAutorRepository,
+  deletarObraRepository,
+  puxarTodasObrasRepository,
+  puxarObraPorIdRepository,
+  puxarObrasPorNomeTagRepository } from "../repositories/obraRepository.js";
+import { buscarTagPorNomeRepository } from '../repositories/tagsRepository.js';
 
 export const criarObraController = async (req, res) => {
   try {
@@ -91,14 +97,32 @@ export const puxarTodasObrasController = async (req, res) => {
 
 export const puxarObraPorIdController = async (req, res) => {
   try {
-
     const { obraId } = req.params;
-
+    if (!obraId) {
+      return res.status(400).json({ erro: "ID da obra não fornecido." });
+    }
     const obra = await puxarObraPorIdRepository(obraId);
-    console.log(obra);
     return res.status(200).json(obra);
   } catch (err) {
     console.error('[PUXAR OBRA POR ID CONTROLLER ERROR]:', err);
+    res.status(500);
+  }
+}
+
+export const puxarObrasPorNomeTag = async (req, res) => {
+  try {
+    const { nomeTag } = req.params;
+    if (!nomeTag) {
+      return res.status(400).json({ erro: "Nome da tag não fornecido." });
+    }
+    const tag = await buscarTagPorNomeRepository(nomeTag);
+    if (!tag) {
+    return res.status(404).json({ erro: "Tag não encontrada" });
+    }
+    const obras = await puxarObrasPorNomeTagRepository(nomeTag);
+    return res.status(200).json(obras);
+  } catch (err) {
+    console.error('[PUXAR OBRAS POR TAG CONTROLLER ERROR]:', err);
     res.status(500);
   }
 }

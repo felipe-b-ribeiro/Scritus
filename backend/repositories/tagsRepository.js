@@ -17,3 +17,22 @@ export const pullTagsRepository = async () => {
         client.release();
     }
 }
+
+export const buscarTagPorNomeRepository = async (nomeTag) => {
+    const client = await db.connect();
+    try {
+        const query = `
+        SELECT 1
+        FROM tags
+        WHERE nome_tag = $1
+        LIMIT 1
+        `;
+        const { rows } = await client.query(query, [nomeTag])
+        return rows.length > 0;
+    } catch (err) {
+        console.error('[BUSCAR TAG POR NOME REPOSITORY ERROR]: ', err);
+        throw err;
+    } finally {
+        client.release();
+    }
+}

@@ -8,7 +8,7 @@ import Logo from '../../components/LogoScritus/index.jsx';
 import Linha from '../../components/LinhaDegrade/index.jsx';
 import BotaoLogout from '../../components/BotaoLogout/index.jsx';
 import SeparadorVertical from '../../components/separadorVertical/index.jsx';
-import { Cabecalho, CabecalhoCentro, CabecalhoDireita, CabecalhoEsquerda } from '../../components/Cabecalho/index.jsx';
+import { Cabecalho, CabecalhoCentro, CabecalhoEsquerda } from '../../components/Cabecalho/index.jsx';
 import TextoBemVindo from '../../components/TextoBemVindo/index.jsx';
 import TagTipoUsuario from '../../components/TagTipoUsuario/index.jsx';
 import TituloBasico from '../../components/TituloBasico/index.jsx';
@@ -23,13 +23,13 @@ import capaPadrao from '../../assets/foto_capa_padrao.png';
 import { SC_WrapperMenuHome, SC_ButtonMenuHome } from '../../components/MenuHome/styles.js';
 import IconCadastrarObra from '../../assets/icons/plus-icon.svg';
 import IconMeusLivros from '../../assets/icons/bookshelf-icon.svg';
-import IconFavorito from '../../components/icons/favoritoIcon/index.jsx';
 import livre from '../../assets/classificacao/livre.png';
 import dez from '../../assets/classificacao/10.png';
 import doze from '../../assets/classificacao/12.png';
 import catorze from '../../assets/classificacao/14.png'
 import dezesseis from '../../assets/classificacao/16.png';
 import dezoito from '../../assets/classificacao/18.png';
+import SavedIcon from '../../components/icons/savedIcon/index.jsx';
 
 function PaginaHome() {
 
@@ -130,16 +130,16 @@ function PaginaHome() {
       <SC_WrapperMenuHome>
       { usuario.tipoUsuario === 'Autor' &&
           <>
-          <SC_ButtonMenuHome onClick={() => goTo('/cadastrarobra')}>
+          <SC_ButtonMenuHome onClick={() => goTo('/cadastrar-obra')}>
             <img width='26' height='26' src={IconCadastrarObra} alt="Cadastrar Obras" />
           </SC_ButtonMenuHome> 
-          <SC_ButtonMenuHome onClick={() => goTo('/minhasobras')}>
+          <SC_ButtonMenuHome onClick={() => goTo('/minhas-obras')}>
             <img width='26' height='26' src={IconMeusLivros} alt="Meus Livros" />
           </SC_ButtonMenuHome>
           </> 
       }
-      <SC_ButtonMenuHome onClick={() => goTo('/favoritos')}>
-            <IconFavorito />
+      <SC_ButtonMenuHome onClick={() => goTo('/meus-salvos')}>
+            <SavedIcon cor='#000000' height='30' width='30'/>
       </SC_ButtonMenuHome>
       </SC_WrapperMenuHome>
 

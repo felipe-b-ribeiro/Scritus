@@ -1,5 +1,10 @@
 import express from 'express';
-import { criarObraController, listarObrasPorAutorController, deletarObraController, puxarTodasObrasController, puxarObraPorIdController} from '../controllers/obraController.js'
+import { criarObraController,
+   listarObrasPorAutorController,
+   deletarObraController,
+   puxarTodasObrasController,
+   puxarObraPorIdController,
+   puxarObrasPorNomeTag} from '../controllers/obraController.js'
 import { upload } from "../config/multer.js";
 import { autenticarToken } from '../middleware/autenticarJWT.js';
 
@@ -16,9 +21,10 @@ router.post(
 router.get(
   '/obra/autor/:autorId',
   listarObrasPorAutorController
-)
+);
 router.delete('/obra/:obraId', autenticarToken, deletarObraController);
 router.get('/obra', puxarTodasObrasController);
 router.get('/obra/:obraId', puxarObraPorIdController);
+router.get('/obra/tag/:nomeTag', puxarObrasPorNomeTag);
 
 export default router;

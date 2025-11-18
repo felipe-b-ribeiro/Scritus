@@ -3,10 +3,10 @@ import styled from "styled-components";
 const SC_ContainerBasico = styled.div`
   display: flex;
   flex-direction: ${props => props.direction || 'column'};
-  align-items: center;
+  align-items: ${props => props.align || 'center'};
   width: ${props => props.width || 'max-content'};
-  margin: 10vh auto;
-  padding: 0 6rem 10px 6rem;
+  margin: 80px auto;
+  padding: ${props => props.padding || '0 6rem 10px 6rem'};
   border-radius: 30px;
   box-shadow:
    4px 0 10px var(--cor-secundaria),   /* sombra à direita */

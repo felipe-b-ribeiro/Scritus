@@ -130,11 +130,70 @@ export const puxarTodasObrasRepository = async () => {
 export const puxarObraPorIdRepository = async (obraId) => {
   const client = await db.connect();
   try {
-    const query = "SELECT o.*, pa.nome_autor, pa.pseudonimo, pa.foto_perfil_url FROM obras o JOIN perfil_autor pa ON o.id_autor = pa.id_autor WHERE id_obra = $1;";
+    const query = `
+    SELECT
+    o.*,
+    u.id_usuario,
+    pa.nome_autor,
+    pa.pseudonimo,
+    pa.foto_perfil_url,
+    COALESCE(
+        array_agg(t.nome_tag) FILTER (WHERE t.nome_tag IS NOT NULL),
+        '{}'
+    ) AS tags
+    FROM obras o
+    JOIN perfil_autor pa ON o.id_autor = pa.id_autor
+    JOIN perfis p ON pa.id_perfil = p.id_perfil
+    JOIN usuarios u ON p.id_usuario = u.id_usuario
+    LEFT JOIN obra_tags ot ON o.id_obra = ot.id_obra
+    LEFT JOIN tags t ON ot.id_tag = t.id_tag
+    WHERE o.id_obra = $1
+    GROUP BY 
+    o.id_obra,
+    u.id_usuario,
+    pa.id_autor,
+    pa.nome_autor,
+    pa.pseudonimo,
+    pa.foto_perfil_url;
+
+    `;
     const resposta = await client.query(query, [obraId]);
     return resposta.rows[0];
   } catch (err) {
     console.error('[PUXAR OBRA POR ID REPOSITORY ERROR]: ', err);
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+export const puxarObrasPorNomeTagRepository = async (nomeTag) => {
+  const client = await db.connect();
+  try {
+    const query = `
+      SELECT 
+      o.*,
+      pa.nome_autor,
+      pa.pseudonimo,
+      pa.foto_perfil_url,
+      COALESCE(array_agg(t.nome_tag), '{}') AS tags
+      FROM obras o
+      JOIN perfil_autor pa ON o.id_autor = pa.id_autor
+      JOIN obra_tags ot ON o.id_obra = ot.id_obra
+      JOIN tags t ON ot.id_tag = t.id_tag
+      WHERE t.nome_tag = $1
+      GROUP BY 
+      o.id_obra,
+      pa.nome_autor,
+      pa.pseudonimo,
+      pa.foto_perfil_url;
+    `;
+
+    const resposta = await client.query(query, [nomeTag]);
+    console.log(resposta.rows);
+    return resposta.rows;
+  } catch (err) {
+    console.log('[PUXAR OBRAS POR TAG REPOSITORY ERROR]:', err);
     throw err;
   } finally {
     client.release();
