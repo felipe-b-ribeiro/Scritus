@@ -19,10 +19,13 @@ import Overlay from '../../components/Overlay/index.jsx';
 import LogoutModal from '../../components/LogoutModal/index.jsx';
 import PaginaSplash from '../PaginaSplash/index.jsx';
 import FotoPadrao from '../../assets/foto_perfil_padrao.png';
-import capaPadrao from '../../assets/foto_capa_padrao.png';
 import { SC_WrapperMenuHome, SC_ButtonMenuHome } from '../../components/MenuHome/styles.js';
-import IconCadastrarObra from '../../assets/icons/plus-icon.svg';
+import IconCadastrarObra from '../../assets/icons/plusIcon.svg';
 import IconMeusLivros from '../../assets/icons/bookshelf-icon.svg';
+import FeedIcon from '../../assets/icons/feedIcon.png'
+import FollowHomeIcon from '../../assets/icons/followHomeIcon.png';
+import HomeIcon from '../../assets/icons/homeIcon.png';
+import { SC_MenuBarInferior, SC_MenuBarButton } from './styles.js';
 import livre from '../../assets/classificacao/livre.png';
 import dez from '../../assets/classificacao/10.png';
 import doze from '../../assets/classificacao/12.png';
@@ -30,6 +33,8 @@ import catorze from '../../assets/classificacao/14.png'
 import dezesseis from '../../assets/classificacao/16.png';
 import dezoito from '../../assets/classificacao/18.png';
 import SavedIcon from '../../components/icons/savedIcon/index.jsx';
+import HeartIcon from '../../components/icons/heartIcon/index.jsx';
+import RecentIcon from '../../components/icons/recentIcon/index.jsx';
 
 function PaginaHome() {
 
@@ -112,7 +117,23 @@ function PaginaHome() {
     <> 
       { showOverlay && <Overlay />}
       { showLogoutModal && <LogoutModal confirmClick={sairConfirm} cancelClick={sairCancel}/> }
-
+      <SC_MenuBarInferior onClick={() => goTo('/feed')}>
+        <SC_MenuBarButton>
+          <img width='22' height='22' src={FeedIcon} alt="Ícone do feed" />
+        </SC_MenuBarButton>
+        <SC_MenuBarButton onClick={(e) => {
+          e.stopPropagation();
+          window.location.reload()
+          }}>
+          <img width='36' height='36' src={HomeIcon} alt="Ícone do feed" />
+        </SC_MenuBarButton>
+        <SC_MenuBarButton onClick={(e) => {
+          e.stopPropagation();
+          goTo('/seguindo')
+          }}>
+          <img width='22' height='22' src={FollowHomeIcon} alt="Ícone do feed" />
+        </SC_MenuBarButton>
+      </SC_MenuBarInferior>
       <Cabecalho>
         <CabecalhoEsquerda>
           <TextoBemVindo src={foto} usuario={usuario.nome} />
@@ -141,6 +162,12 @@ function PaginaHome() {
       <SC_ButtonMenuHome onClick={() => goTo('/meus-salvos')}>
             <SavedIcon cor='#000000' height='30' width='30'/>
       </SC_ButtonMenuHome>
+      <SC_ButtonMenuHome onClick={() => goTo('/minhas-curtidas')}>
+            <HeartIcon cor='#000000' height='30' width='30'/>
+      </SC_ButtonMenuHome>
+      <SC_ButtonMenuHome onClick={() => goTo('/recentes')}>
+            <RecentIcon />
+      </SC_ButtonMenuHome>
       </SC_WrapperMenuHome>
 
       <ContainerHome>
@@ -159,9 +186,10 @@ function PaginaHome() {
                   <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
                   <LivroHome
                     key={obra.id_obra}
-                    src={(!obra.capa_url || obra.capa_url === '[default]') ? capaPadrao : obra.capa_url}
+                    src={obra.capa_url}
                     onClick={() => goTo(`/obra/${obra.id_obra}`)}
                   >
+                    {console.log(obra.capa_url)}
                   <img style={{ zIndex: '5', position: 'relative', top: '-50px', left: '6px'}} width='40' height='40' src={imgClassificacao(obra.classificacao_indicativa)} alt="Classificação Indicativa" />
                   </LivroHome>
                   <h4 style={{marginTop: '7px', fontFamily: 'Cinzel', width: '200px', textAlign: 'center'}}>{obra.titulo}</h4>

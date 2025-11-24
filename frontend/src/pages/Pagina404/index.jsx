@@ -8,10 +8,10 @@ import ContainerPrincipal from '../../components/ContainerBasico';
 import img404 from '../../assets/404.svg'; 
 import { useNavigate } from 'react-router-dom';
 
-function Pagina404() {
+function Pagina404({navigate}) {
 
   useTitulo('Não encontrado - Scritus');
-  const navigate = useNavigate();
+  const navegar = useNavigate();
   return (
     <>
       <Cabecalho>
@@ -22,7 +22,7 @@ function Pagina404() {
       <Linha />
       <ContainerPrincipal text='404' width='70vw'>
         <img width='50%' src={img404} alt="404 - Não Encontrado" />
-        <BotaoSimples onClick={() => navigate(-3)} variant="secondary" className="btn-icone">
+        <BotaoSimples onClick={() => navegar(navigate === 'true' ? -1 : -2)} variant="secondary" className="btn-icone">
               <ArrowIcon />
               <span>Voltar</span>
         </BotaoSimples>

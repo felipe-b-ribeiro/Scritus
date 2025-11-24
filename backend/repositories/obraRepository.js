@@ -129,35 +129,43 @@ export const puxarTodasObrasRepository = async () => {
 
 export const puxarObraPorIdRepository = async (obraId) => {
   const client = await db.connect();
+
   try {
     const query = `
     SELECT
     o.*,
     u.id_usuario,
+    p.id_perfil as id_perfil_autor,
     pa.nome_autor,
     pa.pseudonimo,
     pa.foto_perfil_url,
     COALESCE(
-        array_agg(t.nome_tag) FILTER (WHERE t.nome_tag IS NOT NULL),
+        array_agg(DISTINCT t.nome_tag) FILTER (WHERE t.nome_tag IS NOT NULL),
         '{}'
-    ) AS tags
+    ) AS tags,
+    COUNT(DISTINCT i.id_interacao) FILTER (WHERE i.tipo = 'curtida') AS curtidas,
+    COUNT(DISTINCT i.id_interacao) FILTER (WHERE i.tipo = 'salvo') AS salvos,
+    COUNT(DISTINCT i.id_interacao) FILTER (WHERE i.tipo = 'clique') AS cliques,
+    COUNT(DISTINCT i.id_interacao) FILTER (WHERE i.tipo = 'comentario') AS comentarios
     FROM obras o
     JOIN perfil_autor pa ON o.id_autor = pa.id_autor
     JOIN perfis p ON pa.id_perfil = p.id_perfil
     JOIN usuarios u ON p.id_usuario = u.id_usuario
     LEFT JOIN obra_tags ot ON o.id_obra = ot.id_obra
     LEFT JOIN tags t ON ot.id_tag = t.id_tag
-    WHERE o.id_obra = $1
+    LEFT JOIN interacoes i ON i.id_obra = o.id_obra
+    WHERE o.id_obra = ANY($1)
     GROUP BY 
     o.id_obra,
     u.id_usuario,
     pa.id_autor,
+    p.id_perfil,
     pa.nome_autor,
     pa.pseudonimo,
     pa.foto_perfil_url;
     `;
     const resposta = await client.query(query, [obraId]);
-    return resposta.rows[0];
+    return resposta.rows;
   } catch (err) {
     console.error('[PUXAR OBRA POR ID REPOSITORY ERROR]: ', err);
     throw err;
@@ -193,6 +201,34 @@ export const puxarObrasPorNomeTagRepository = async (nomeTag) => {
     return resposta.rows;
   } catch (err) {
     console.log('[PUXAR OBRAS POR TAG REPOSITORY ERROR]:', err);
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+export const listarObrasPorInteracaoEIdPerfilRepository = async (idPerfil, tipoInteracao) => {
+  const client = await db.connect();
+  try {
+     const query = `
+      SELECT
+        o.id_obra,
+        pa.nome_autor,
+        pa.pseudonimo,
+        o.titulo,
+        o.capa_url,
+        o.pdf_url,
+        o.status_obra,
+        o.classificacao_indicativa
+      FROM obras o JOIN interacoes i ON o.id_obra = i.id_obra
+      JOIN perfil_autor pa ON o.id_autor = pa.id_autor
+      WHERE i.id_perfil = $1
+      AND i.tipo = $2 ${tipoInteracao === 'clique' ? 'ORDER BY i.criado_em DESC;' : ';'}
+     `;
+     const resposta = await client.query(query, [idPerfil, tipoInteracao]);
+     return resposta.rows; 
+  } catch (err) {
+    console.error('[PUXAR OBRAS POR INTERAÇÃO REPOSITORY ERROR]: ', err);
     throw err;
   } finally {
     client.release();

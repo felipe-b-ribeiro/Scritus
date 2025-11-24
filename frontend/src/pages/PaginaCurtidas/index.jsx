@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import useTitulo from "../../hooks/useTitulo";
 import useNavigateCustom from '../../hooks/useNavigateCustom';
 import Logo from '../../components/LogoScritus';
@@ -18,25 +17,23 @@ import catorze from '../../assets/classificacao/14.png'
 import dezesseis from '../../assets/classificacao/16.png';
 import dezoito from '../../assets/classificacao/18.png';
 import { SC_TagGrande, SC_Info, PALETA } from './styles';
+import decodificarJWT from '../../utils/decodificarJWT';
 
-function PaginaTag() {
+function PaginaCurtidas() {
 
-    const { nome_tag } = useParams();
-    const nomeTag = nome_tag.replace(/_/g, " ");
     const [obras, setObras] = useState();
-    const [cor] = useState(PALETA[Math.floor(Math.random() * PALETA.length)]);
     const [loading, setLoading] = useState(true);
 
-    useTitulo(nome_tag && `${nome_tag} - Scritus`);
+    useTitulo('Minhas Curtidas - Scritus');
 
     const { goTo } = useNavigateCustom();
 
     useEffect(() => {
         const carregarPagina = async () => {
             try {
-                const resposta = await fetch(`http://localhost:5000/api/v1/obra/tag/${nomeTag}`)
-                if (resposta.status === 404) goTo('/404');
-                if (!resposta.ok) throw new Error('Falha ao buscar obras.');
+                const token = localStorage.getItem('accessToken');
+                const { id_perfil } = await decodificarJWT(token);
+                const resposta = await fetch(`http://localhost:5000/api/v1/obra/salvos?idPerfil=${id_perfil}&tipoInteracao=curtida`)
                 const data = await resposta.json();
                 console.log('Dados vindo do back', data);
                 setObras(data);
@@ -82,15 +79,15 @@ function PaginaTag() {
         </Cabecalho>
         <Linha />
         <ContainerBasico width='90vw'>
-            <SC_TagGrande cor={cor}>
-                Livros do gênero <strong>"{nomeTag}"</strong>
+            <SC_TagGrande cor='red'>
+                Suas <strong>Curtidas</strong>
             </SC_TagGrande>
-            <SC_Info cor={cor}>
-                <strong>{obras.length}</strong> livros associados com essa tag
+            <SC_Info cor='red'>
+                <strong>{obras.length}</strong>{ obras.length === 1 ? ' livro curtido' : ' livros curtidos'}
             </SC_Info>
             {obras.length === 0 ? (
                 <p style={{ textAlign: "center", fontFamily: "Cinzel", color: "var(--cor-principal)" }}>
-                    Nenhuma obra associada a essa tag.
+                    Nenhum livro foi curtido ainda.
                 </p>
                 ) : (
                 Array.from({ length: Math.ceil(obras.length / 5) }).map((_, i) => {
@@ -119,4 +116,4 @@ function PaginaTag() {
     );
 }
 
-export default PaginaTag;
+export default PaginaCurtidas;

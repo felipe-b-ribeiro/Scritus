@@ -246,3 +246,51 @@ export const deleteUserRepository = async (email) => {
     client.release();
   }
 }
+
+export const puxarPerfilRepository = async (idPerfil) => {
+  const client = await db.connect();
+  try {
+    const query = `
+      SELECT
+      u.tipo_usuario FROM perfis p JOIN usuarios u ON p.id_usuario = u.id_usuario WHERE id_perfil = $1
+    `;
+    const resposta = await client.query(query, [idPerfil]);
+    const tipoUsuario = resposta.rows[0].tipo_usuario;
+    
+    let tabela, sigla, campos;
+    switch (tipoUsuario) {
+      case 'Autor': 
+        tabela = 'perfil_autor';
+        sigla = 'pa';
+        campos = 'pa.nome_autor as nome_usuario, pa.pseudonimo';
+        break;
+      case 'Leitor':
+        tabela = 'perfil_leitor';
+        sigla = 'pl';
+        campos = 'pl.apelido as nome_usuario';
+        break;
+      case 'Editora':
+        tabela = 'perfil_editora';
+        sigla = 'pe';
+        campos = 'pe.nome_fantasia as nome_usuario, pe.cnpj, pe.site_oficial'
+    }
+
+    const query2 = `
+      SELECT 
+      ${sigla}.bio,
+      ${sigla}.criado_em,
+      ${sigla}.foto_perfil_url,
+      ${campos} 
+      FROM ${tabela} ${sigla}
+      JOIN perfis p ON ${sigla}.id_perfil = p.id_perfil
+      WHERE p.id_perfil = $1;
+    `
+    const resposta2 = await client.query(query2, [idPerfil]);
+    return Object.assign(resposta2.rows[0], resposta.rows[0]);
+  } catch (err) {
+    console.error('[PUXAR PERFIL REPOSITORY ERROR]: ', err);
+    throw err;
+  } finally {
+    client.release();
+  } 
+}

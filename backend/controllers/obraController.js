@@ -3,8 +3,11 @@ import { criarObraRepository,
   deletarObraRepository,
   puxarTodasObrasRepository,
   puxarObraPorIdRepository,
-  puxarObrasPorNomeTagRepository } from "../repositories/obraRepository.js";
+  puxarObrasPorNomeTagRepository,
+  listarObrasPorInteracaoEIdPerfilRepository } from "../repositories/obraRepository.js";
 import { buscarTagPorNomeRepository } from '../repositories/tagsRepository.js';
+import { gerarRecomendacao } from "../../ml/scripts/runSingleProfile.js";
+import { puxarIdObraRecomendacoesRepository, deletarRecomendacoesPorIdRepository } from '../repositories/recomendacaoRepository.js';
 
 export const criarObraController = async (req, res) => {
   try {
@@ -97,11 +100,17 @@ export const puxarTodasObrasController = async (req, res) => {
 
 export const puxarObraPorIdController = async (req, res) => {
   try {
-    const { obraId } = req.params;
-    if (!obraId) {
-      return res.status(400).json({ erro: "ID da obra não fornecido." });
+    let { id_obra } = req.body;
+
+    if (!id_obra) {
+      return res.status(400).json({ erro: "Envie um ID ou uma lista de IDs." });
     }
-    const obra = await puxarObraPorIdRepository(obraId);
+
+    if (!Array.isArray(id_obra)) {
+      id_obra = [id_obra];
+    }
+
+    const obra = await puxarObraPorIdRepository(id_obra);
     return res.status(200).json(obra);
   } catch (err) {
     console.error('[PUXAR OBRA POR ID CONTROLLER ERROR]:', err);
@@ -109,7 +118,7 @@ export const puxarObraPorIdController = async (req, res) => {
   }
 }
 
-export const puxarObrasPorNomeTag = async (req, res) => {
+export const puxarObrasPorNomeTagController = async (req, res) => {
   try {
     const { nomeTag } = req.params;
     if (!nomeTag) {
@@ -124,5 +133,44 @@ export const puxarObrasPorNomeTag = async (req, res) => {
   } catch (err) {
     console.error('[PUXAR OBRAS POR TAG CONTROLLER ERROR]:', err);
     res.status(500);
+  }
+}
+
+export const gerarRecomendacaoController = async (req, res) => {
+  try {
+    const idPerfil = Number(req.query.idPerfil);
+    const quantidade = Number(req.query.quantidade);
+    
+    const recomendacoes = await gerarRecomendacao(idPerfil, quantidade);
+    const listaIds = await puxarIdObraRecomendacoesRepository(idPerfil);
+    res.status(200).json({listaIds});
+
+  } catch (err) {
+    console.error('[GERAR RECOMENDAÇÃO CONTROLLER ERROR]: ', err);
+    res.status(500).json({err});
+  }
+}
+
+export const deletarRecomendacoesPorIdController = async (req, res) => {
+  try {
+    const idPerfil = Number(req.query.idPerfil);
+
+    const deletou = await deletarRecomendacoesPorIdRepository(idPerfil);
+    if (deletou) return res.status(200).json({deletou});
+  } catch (err) {
+    console.error('[DELETAR RECOMENDACOES CONTROLLER ERROR]: ', err);
+    res.status(500).json({err});
+  }
+}
+
+export const listarObrasPorInteracaoEIdPerfilController = async (req, res) => {
+  try {
+    const {idPerfil, tipoInteracao} = req.query;
+
+    const obras = await listarObrasPorInteracaoEIdPerfilRepository(idPerfil, tipoInteracao);
+    res.status(200).json(obras);
+  } catch (err) {
+    console.error('[LISTAR OBRAS SALVAS CONTROLLER ERROR]: ', err);
+    res.status(500).json(err.message);
   }
 }

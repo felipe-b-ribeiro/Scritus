@@ -62,14 +62,6 @@ function PaginaEstante() {
 
   if (carregando) return <PaginaSplash />;
 
-  const abrirPDF = (pdf_url) => {
-    if (pdf_url) {
-      window.open(`http://localhost:5000${pdf_url}`, "_blank");
-    } else {
-      alert("PDF não encontrado para esta obra.");
-    }
-  };
-
   const handleCancelModal = () => {
     setOverlay(false);
     setDeleteModal(false);
@@ -162,7 +154,7 @@ function PaginaEstante() {
                     }}
                   >
                     <LivroHome
-                      src={(!obra.capa_url || obra.capa_url === '[default]') ? capaPadrao : obra.capa_url}
+                      src={obra.capa_url}
                       onClick={() => goTo(`/obra/${obra.id_obra}`)}
                     >
                       <img style={{ zIndex: '5', position: 'relative', top: '-50px', left: '6px'}} width='40' height='40' src={imgClassificacao(obra.classificacao_indicativa)} alt="Classificação Indicativa" />

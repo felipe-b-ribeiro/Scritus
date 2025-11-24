@@ -8,7 +8,6 @@ export const SC_Wrapper = styled.div`
 
 export const SC_MiniWrapper = styled.div`
     display: flex;
-    border: 1px solid black;
     border-radius: 8px;
     padding: 10px;
     transition: 0.5s var(--transicao-basica);
@@ -16,7 +15,6 @@ export const SC_MiniWrapper = styled.div`
 
     &:hover {
         cursor: pointer;
-        background-color: #eee;
     }
 `;
 

@@ -16,32 +16,34 @@ import doze from '../../assets/classificacao/12.png';
 import catorze from '../../assets/classificacao/14.png'
 import dezesseis from '../../assets/classificacao/16.png';
 import dezoito from '../../assets/classificacao/18.png';
+import { SC_FotoPerfil, SC_NomeUsuario, SC_Pseudonimo } from './styles';
+import fotoPadrao from '../../assets/foto_perfil_padrao.png';
 
 function PaginaPerfil() {
 
-    const { id_usuario } = useParams();
-    const [obras, setObras] = useState();
-    const [dadosUsuario, setDadosUsuario] = useState();
+    const { id_perfil } = useParams();
+    const [perfil, setPerfil] = useState();
     const [loading, setLoading] = useState(true);
-
-    useTitulo(dadosUsuario?.nome_usuario && `${obra.nome_usuario} - Scritus`);
 
     useEffect(() => {
         const carregarPagina = async () => {
             try {
-                const resp = await fetch(`http://localhost:5000/api/v1/obra/${id_obra}`);
-                if (!resp.ok) throw new Error('Erro ao buscar obra.');
-                const data = await resp.json();
-                setObras(data);
+                
+                const perfil = await fetch(`http://localhost:5000/api/v1/usuarios/perfil/${id_perfil}`);
+                if (!perfil.ok) throw new Error('Erro ao buscar perfil.');
+                const data = await perfil.json();
+                setPerfil(data);
                 console.log(data);
             } catch (err) {
-                console.error('Erro ao carregar página: ', err);
+                console.error('Erro ao carregar perfil: ', err);
             } finally {
                 setLoading(false);
             }
         }
         carregarPagina();
     }, [] );
+
+    useTitulo(`Perfil - Scritus`);
 
     const imgClassificacao = (idade) => {
       
@@ -76,7 +78,13 @@ function PaginaPerfil() {
         </Cabecalho>
         <Linha />
         <ContainerBasico width='90vw' direction='row' align='normal' padding='20px'>
-            
+            <div className='flx' style={{alignItems:' center'}}>
+            <SC_FotoPerfil src={perfil.foto_perfil_url ? `http://localhost:5000${perfil.foto_perfil_url}` : fotoPadrao} />
+            <div>
+            <SC_NomeUsuario>{perfil.nome_usuario}</SC_NomeUsuario>
+            {perfil.tipo_usuario === 'Autor' && perfil.pseudonimo ? <SC_Pseudonimo>{perfil.pseudonimo}</SC_Pseudonimo> : null}
+            </div>
+            </div>
         </ContainerBasico>
         </>
     );

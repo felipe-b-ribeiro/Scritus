@@ -1,5 +1,5 @@
 import { criarUsuarioService, encontrarUsuarioPorInfoService, pullDataUserService, updateUserService } from '../services/userService.js';
-import { deleteUserRepository } from '../repositories/userRepository.js';
+import { deleteUserRepository, puxarPerfilRepository } from '../repositories/userRepository.js';
 
 export const createUser = async (req, res) => {
     try {
@@ -93,6 +93,17 @@ export const deleteUser = async (req, res) => {
         res.status(200).json({ mensagem: "Conta deletada com sucesso!" });
     } catch (err) {
         console.error("[DELETE USER CONTROLLER ERROR]: ", err);
+        res.status(400).json({error: err.message});
+    }
+}
+
+export const puxarPerfilController = async (req, res) => {
+    try {
+        const { id_perfil } = req.params;
+        const perfil = await puxarPerfilRepository(id_perfil);
+        res.status(200).json(perfil);
+    } catch (err) {
+        console.error("[PUXAR PERFIL CONTROLLER ERROR]: ", err);
         res.status(400).json({error: err.message});
     }
 }
