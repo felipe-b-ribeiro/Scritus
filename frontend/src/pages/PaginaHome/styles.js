@@ -31,7 +31,11 @@ export const SC_MenuBarButton = styled.button`
     bottom: 7px;
     transition: 0.5s var(--transicao-basica);
 
-    & img {
+    &:has(svg) {
+        padding: 18px 2px !important;
+    }
+
+    & img, svg {
         transition: 0.6s var(--transicao-basica);
     }
 
@@ -39,7 +43,7 @@ export const SC_MenuBarButton = styled.button`
         cursor: pointer;
         background-color: #c4c4c4ff;
 
-        & img {
+        & img, svg {
             transform: scale(1.1);
         }
     }
@@ -49,7 +53,7 @@ export const SC_MenuBarButton = styled.button`
         padding: 27px 14px;
 
         &:hover {
-            & img {
+            & img, svg {
                 transform: scale(1.05);
             }
         }

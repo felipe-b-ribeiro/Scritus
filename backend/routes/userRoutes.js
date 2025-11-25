@@ -7,9 +7,9 @@ const router = express.Router();
 
 router.post('/usuarios', createUser);
 router.post('/usuarios/verificar-disponibilidade', findUserbyInfo);
-router.get('/usuarios/perfil/:id_perfil', puxarPerfilController)
 router.post('/usuarios/puxardados', pullDataUser);
 router.patch('/usuarios', upload.single('foto_perfil'),  updateUser);
 router.delete('/usuarios', autenticarToken, deleteUser);
+router.get('/usuarios/perfil/:id_perfil', puxarPerfilController)
 
 export default router;

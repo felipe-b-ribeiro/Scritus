@@ -4,7 +4,6 @@ import capaPadrao from "../../assets/foto_capa_padrao.png";
 const LivroHome = ({src, children, onClick}) => {
     return (
         <SC_LivroHome>
-            {console.log(src)}
             <img onClick={onClick} style={{borderRadius: '15px', cursor: 'pointer'}} width='100%' height='100%' src={src === null ? capaPadrao : `http://localhost:5000${src}`} alt="Capa do Livro"/>
             {children}
         </SC_LivroHome>

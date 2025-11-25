@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const SC_BotaoLogout = styled.button`
-    padding: 4px 8px;
+    padding: 7px 10px;
     position: relative;
     display: flex;
     justify-content: center;
@@ -9,7 +9,6 @@ export const SC_BotaoLogout = styled.button`
     gap: 5px;
     color: white;
     font-family: 'Raleway', serif;
-    font-size: 12px;
     background-color: red;
     border: none;
     border-radius: 30px;

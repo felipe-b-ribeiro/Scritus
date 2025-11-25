@@ -129,9 +129,9 @@ function PaginaHome() {
         </SC_MenuBarButton>
         <SC_MenuBarButton onClick={(e) => {
           e.stopPropagation();
-          goTo('/seguindo')
+          goTo('/recentes')
           }}>
-          <img width='22' height='22' src={FollowHomeIcon} alt="Ícone do feed" />
+          <RecentIcon />
         </SC_MenuBarButton>
       </SC_MenuBarInferior>
       <Cabecalho>
@@ -164,9 +164,6 @@ function PaginaHome() {
       </SC_ButtonMenuHome>
       <SC_ButtonMenuHome onClick={() => goTo('/minhas-curtidas')}>
             <HeartIcon cor='#000000' height='30' width='30'/>
-      </SC_ButtonMenuHome>
-      <SC_ButtonMenuHome onClick={() => goTo('/recentes')}>
-            <RecentIcon />
       </SC_ButtonMenuHome>
       </SC_WrapperMenuHome>
 

@@ -6,6 +6,7 @@ import uploadRoutes from './routes/uploadRoutes.js';
 import tagsRoutes from './routes/tagsRoutes.js';
 import obraRoutes from './routes/obraRoutes.js';
 import interacaoRoutes from './routes/interacaoRoutes.js';
+import seguidorRoutes from './routes/seguidorRoutes.js';
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/api/v1/', loginRoutes);
 app.use('/', uploadRoutes);
 app.use('/api/v1/', tagsRoutes);
 app.use('/api/v1/', obraRoutes);
-app.use('/api/v1', interacaoRoutes)
+app.use('/api/v1', interacaoRoutes);
+app.use('/api/v1/', seguidorRoutes);
 
 app.listen(5000, () => console.log('Servidor rodando na porta 5000'));

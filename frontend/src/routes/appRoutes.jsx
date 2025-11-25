@@ -33,7 +33,7 @@ function AppRoutes() {
         <Route path="/obra/:id_obra" element={<ProtectedRoute allowedRoles={['Autor', 'Leitor', 'Editora']}><PaginaLivro /></ProtectedRoute>}/>
         <Route path="/tag/:nome_tag" element={<ProtectedRoute allowedRoles={['Autor', 'Leitor', 'Editora']}><PaginaTag /></ProtectedRoute>}/>
         <Route path="/404" element={<ProtectedRoute allowedRoles={['Autor', 'Leitor', 'Editora']}><Pagina404 /></ProtectedRoute>}/>
-        <Route path="/perfil/:id_perfil" element={<ProtectedRoute allowedRoles={['Autor', 'Leitor', 'Editora']}><PaginaPerfil /></ProtectedRoute>}/>
+        <Route path="/perfil/:id_perfil_autor" element={<ProtectedRoute allowedRoles={['Autor', 'Leitor', 'Editora']}><PaginaPerfil /></ProtectedRoute>}/>
         <Route path="/feed" element={<ProtectedRoute allowedRoles={['Autor', 'Leitor', 'Editora']}><PaginaFeed /></ProtectedRoute>}/>
         <Route path="/meus-salvos" element={<ProtectedRoute allowedRoles={['Autor', 'Leitor', 'Editora']}><PaginaSalvos /></ProtectedRoute>}/>
         <Route path="/minhas-curtidas" element={<ProtectedRoute allowedRoles={['Autor', 'Leitor', 'Editora']}><PaginaCurtidas /></ProtectedRoute>}/>

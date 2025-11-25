@@ -19,7 +19,6 @@ import doze from '../../assets/classificacao/12.png';
 import catorze from '../../assets/classificacao/14.png'
 import dezesseis from '../../assets/classificacao/16.png';
 import dezoito from '../../assets/classificacao/18.png';
-import capaPadrao from '../../assets/foto_capa_padrao.png';
 import TrashIcon from "../../components/icons/trashIcon";
 
 function PaginaEstante() {

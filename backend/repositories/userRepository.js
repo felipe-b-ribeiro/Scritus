@@ -250,47 +250,74 @@ export const deleteUserRepository = async (email) => {
 export const puxarPerfilRepository = async (idPerfil) => {
   const client = await db.connect();
   try {
+    // Primeiro descobre o tipo de usuário
     const query = `
-      SELECT
-      u.tipo_usuario FROM perfis p JOIN usuarios u ON p.id_usuario = u.id_usuario WHERE id_perfil = $1
+      SELECT u.tipo_usuario
+      FROM perfis p
+      JOIN usuarios u ON p.id_usuario = u.id_usuario
+      WHERE p.id_perfil = $1
     `;
     const resposta = await client.query(query, [idPerfil]);
-    const tipoUsuario = resposta.rows[0].tipo_usuario;
-    
+    const tipoUsuario = resposta.rows[0]?.tipo_usuario;
+
     let tabela, sigla, campos;
+
     switch (tipoUsuario) {
       case 'Autor': 
         tabela = 'perfil_autor';
         sigla = 'pa';
-        campos = 'pa.nome_autor as nome_usuario, pa.pseudonimo';
+        campos = 'pa.nome_autor AS nome_usuario, pa.id_autor, pa.pseudonimo';
         break;
+
       case 'Leitor':
         tabela = 'perfil_leitor';
         sigla = 'pl';
-        campos = 'pl.apelido as nome_usuario';
+        campos = 'pl.apelido AS nome_usuario';
         break;
+
       case 'Editora':
         tabela = 'perfil_editora';
         sigla = 'pe';
-        campos = 'pe.nome_fantasia as nome_usuario, pe.cnpj, pe.site_oficial'
+        campos = 'pe.nome_fantasia AS nome_usuario, pe.cnpj, pe.site_oficial';
+        break;
     }
 
+    // Constrói lista de campos sem aliases para o GROUP BY
+    const camposLista = campos
+      .split(',')
+      .map(c => c.trim().replace(/ as .*/i, '')); // remove "AS algo"
+
+    const groupBy = [
+      `${sigla}.bio`,
+      `${sigla}.criado_em`,
+      `${sigla}.foto_perfil_url`,
+      ...camposLista
+    ].join(', ');
+
+    // Query final
     const query2 = `
       SELECT 
-      ${sigla}.bio,
-      ${sigla}.criado_em,
-      ${sigla}.foto_perfil_url,
-      ${campos} 
+        ${sigla}.bio,
+        ${sigla}.criado_em,
+        ${sigla}.foto_perfil_url,
+        COUNT(s.id_seguidor) AS seguidores,
+        ${campos}
       FROM ${tabela} ${sigla}
       JOIN perfis p ON ${sigla}.id_perfil = p.id_perfil
-      WHERE p.id_perfil = $1;
-    `
+      LEFT JOIN seguidores s ON s.id_seguido = p.id_perfil
+      WHERE p.id_perfil = $1
+      GROUP BY ${groupBy};
+    `;
+
     const resposta2 = await client.query(query2, [idPerfil]);
+
+    // Junta infos do primeiro SELECT com o segundo
     return Object.assign(resposta2.rows[0], resposta.rows[0]);
+
   } catch (err) {
     console.error('[PUXAR PERFIL REPOSITORY ERROR]: ', err);
     throw err;
   } finally {
     client.release();
-  } 
+  }
 }
