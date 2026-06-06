@@ -1,17 +1,22 @@
-import { SC_Img, SC_Wrapper, SC_Texto } from './styles';
-import ImgPadrao from '../../assets/foto_perfil_padrao.png';
+import { Link } from 'react-router-dom';
+import useScreen from "../../hooks/useScreen";
+import { SC_Img, SC_Texto, SC_Wrapper } from "./styles";
 
-const TextoBemVindo = ({src, usuario}) => {
-    return (
-        <SC_Wrapper>
-            <a href="/perfil">
-                <SC_Img src={src || ImgPadrao} role='button'/>
-            </a>
-            <SC_Texto>
-                Bem vindo, <strong>{usuario}</strong>
-            </SC_Texto>
-        </SC_Wrapper>
-    );
-}
+const TextoBemVindo = ({ src, usuario }) => {
+  const { isMobile } = useScreen();
+
+  return (
+    <SC_Wrapper>
+      <Link to='/perfil'>
+        <SC_Img src={src}/>
+      </Link>
+      {!isMobile && (
+        <SC_Texto>
+          Bem vindo, <strong>{usuario}</strong>
+        </SC_Texto>
+      )}
+    </SC_Wrapper>
+  );
+};
 
 export default TextoBemVindo;

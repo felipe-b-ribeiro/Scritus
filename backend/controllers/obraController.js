@@ -1,13 +1,18 @@
-import { criarObraRepository,
-  listarObrasPorAutorRepository,
+import { gerarRecomendacao } from "../../ml/scripts/runSingleProfile.js";
+import {
+  criarObraRepository,
   deletarObraRepository,
-  puxarTodasObrasRepository,
+  listarObrasPorAutorRepository,
+  listarObrasPorInteracaoEIdPerfilRepository,
   puxarObraPorIdRepository,
   puxarObrasPorNomeTagRepository,
-  listarObrasPorInteracaoEIdPerfilRepository } from "../repositories/obraRepository.js";
-import { buscarTagPorNomeRepository } from '../repositories/tagsRepository.js';
-import { gerarRecomendacao } from "../../ml/scripts/runSingleProfile.js";
-import { puxarIdObraRecomendacoesRepository, deletarRecomendacoesPorIdRepository } from '../repositories/recomendacaoRepository.js';
+  puxarTodasObrasRepository,
+} from "../repositories/obraRepository.js";
+import {
+  deletarRecomendacoesPorIdRepository,
+  puxarIdObraRecomendacoesRepository,
+} from "../repositories/recomendacaoRepository.js";
+import { buscarTagPorNomeRepository } from "../repositories/tagsRepository.js";
 
 export const criarObraController = async (req, res) => {
   try {
@@ -50,7 +55,9 @@ export const criarObraController = async (req, res) => {
     });
   } catch (err) {
     console.error("Erro no criarObraController:", err);
-    return res.status(500).json({ message: "Erro ao cadastrar obra.", erro: err.message });
+    return res
+      .status(500)
+      .json({ message: "Erro ao cadastrar obra.", erro: err.message });
   }
 };
 
@@ -72,23 +79,22 @@ export const listarObrasPorAutorController = async (req, res) => {
 };
 
 export const deletarObraController = async (req, res) => {
-    try {
-        const { obraId } = req.params;
+  try {
+    const { obraId } = req.params;
 
-        console.log(id);
+    if (!obraId)
+      return res.status(400).json({ mensagem: "ID da obra é obrigatório" });
 
-        if (!id) return res.status(400).json({ mensagem: "ID da obra é obrigatório" });
+    await deletarObraRepository(obraId);
 
-        await deletarObraRepository(obraId);
-
-        res.status(200).json({ mensagem: "Obra deletada com sucesso" });
-    } catch (err) {
-        console.error("Erro no controller ao deletar obra:", err);
-        res.status(500).json({ mensagem: "Erro ao deletar obra" });
-    }
+    res.status(200).json({ mensagem: "Obra deletada com sucesso" });
+  } catch (err) {
+    console.error("Erro no controller ao deletar obra:", err);
+    res.status(500).json({ mensagem: "Erro ao deletar obra" });
+  }
 };
 
-export const puxarTodasObrasController = async (req, res) => {
+export const puxarTodasObrasController = async (_req, res) => {
   try {
     const obras = await puxarTodasObrasRepository();
     return res.status(200).json(obras);
@@ -113,10 +119,10 @@ export const puxarObraPorIdController = async (req, res) => {
     const obra = await puxarObraPorIdRepository(id_obra);
     return res.status(200).json(obra);
   } catch (err) {
-    console.error('[PUXAR OBRA POR ID CONTROLLER ERROR]:', err);
+    console.error("[PUXAR OBRA POR ID CONTROLLER ERROR]:", err);
     res.status(500);
   }
-}
+};
 
 export const puxarObrasPorNomeTagController = async (req, res) => {
   try {
@@ -126,51 +132,53 @@ export const puxarObrasPorNomeTagController = async (req, res) => {
     }
     const tag = await buscarTagPorNomeRepository(nomeTag);
     if (!tag) {
-    return res.status(404).json({ erro: "Tag não encontrada" });
+      return res.status(404).json({ erro: "Tag não encontrada" });
     }
     const obras = await puxarObrasPorNomeTagRepository(nomeTag);
     return res.status(200).json(obras);
   } catch (err) {
-    console.error('[PUXAR OBRAS POR TAG CONTROLLER ERROR]:', err);
+    console.error("[PUXAR OBRAS POR TAG CONTROLLER ERROR]:", err);
     res.status(500);
   }
-}
+};
 
 export const gerarRecomendacaoController = async (req, res) => {
   try {
     const idPerfil = Number(req.query.idPerfil);
     const quantidade = Number(req.query.quantidade);
-    
-    const recomendacoes = await gerarRecomendacao(idPerfil, quantidade);
-    const listaIds = await puxarIdObraRecomendacoesRepository(idPerfil);
-    res.status(200).json({listaIds});
 
+    const _recomendacoes = await gerarRecomendacao(idPerfil, quantidade);
+    const listaIds = await puxarIdObraRecomendacoesRepository(idPerfil);
+    res.status(200).json({ listaIds });
   } catch (err) {
-    console.error('[GERAR RECOMENDAÇÃO CONTROLLER ERROR]: ', err);
-    res.status(500).json({err});
+    console.error("[GERAR RECOMENDAÇÃO CONTROLLER ERROR]: ", err);
+    res.status(500).json({ err });
   }
-}
+};
 
 export const deletarRecomendacoesPorIdController = async (req, res) => {
   try {
     const idPerfil = Number(req.query.idPerfil);
 
     const deletou = await deletarRecomendacoesPorIdRepository(idPerfil);
-    if (deletou) return res.status(200).json({deletou});
+    if (deletou) return res.status(200).json({ deletou });
   } catch (err) {
-    console.error('[DELETAR RECOMENDACOES CONTROLLER ERROR]: ', err);
-    res.status(500).json({err});
+    console.error("[DELETAR RECOMENDACOES CONTROLLER ERROR]: ", err);
+    res.status(500).json({ err });
   }
-}
+};
 
 export const listarObrasPorInteracaoEIdPerfilController = async (req, res) => {
   try {
-    const {idPerfil, tipoInteracao} = req.query;
+    const { idPerfil, tipoInteracao } = req.query;
 
-    const obras = await listarObrasPorInteracaoEIdPerfilRepository(idPerfil, tipoInteracao);
+    const obras = await listarObrasPorInteracaoEIdPerfilRepository(
+      idPerfil,
+      tipoInteracao,
+    );
     res.status(200).json(obras);
   } catch (err) {
-    console.error('[LISTAR OBRAS SALVAS CONTROLLER ERROR]: ', err);
+    console.error("[LISTAR OBRAS SALVAS CONTROLLER ERROR]: ", err);
     res.status(500).json(err.message);
   }
-}
+};

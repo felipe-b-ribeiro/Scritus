@@ -1,16 +1,24 @@
-import { authUserRepository } from "../repositories/authUserRepository.js";
 import { validarEmail } from "../../common/util/validations.js";
+import { authUserRepository } from "../repositories/authUserRepository.js";
 import { gerarToken } from "../utils/jwt.js";
 
 export const authUserService = async (emailDigitado, senha) => {
   try {
-    if (!validarEmail(emailDigitado)) {
+    let email = emailDigitado;
+
+    if (!emailDigitado.includes("@")) {
+      email = `${emailDigitado}@gmail.com`;
+    }
+
+    if (!validarEmail(email)) {
       throw new Error("Formato do e-mail inválido.");
     }
 
     const payload = await authUserRepository(emailDigitado, senha);
 
-    const { email, tipoUsuario, nome, id_perfil, id_usuario } = payload;
+    if (!payload) {
+      throw new Error("Email ou senha inválidos.");
+    }
 
     const token = gerarToken(payload);
 

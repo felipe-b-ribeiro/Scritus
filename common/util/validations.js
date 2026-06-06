@@ -27,7 +27,7 @@ export const validarCNPJ = (cnpj) => {
   }
 
   let resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
-  if (resultado != digitos.charAt(0)) return false;
+  if (resultado !== digitos.charAt(0)) return false;
 
   tamanho = tamanho + 1;
   numeros = cnpj.substring(0, tamanho);
@@ -40,7 +40,7 @@ export const validarCNPJ = (cnpj) => {
   }
 
   resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
-  if (resultado != digitos.charAt(1)) return false;
+  if (resultado !== digitos.charAt(1)) return false;
 
   return true;
 };
@@ -53,16 +53,13 @@ export const validarSenhaForte = (senha) => {
 
 export const verificarDisponibilidade = async (nomeCampo, valorCampo) => {
   try {
-    const res = await fetch(
-      "http://localhost:5000/api/v1/usuarios/verificar-disponibilidade",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ [nomeCampo]: valorCampo }),
-      }
-    );
+    const res = await fetch(" /api/v1/usuarios/verificar-disponibilidade", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ [nomeCampo]: valorCampo }),
+    });
     const data = await res.json();
     console.log(data.disponivel);
     return data.disponivel;

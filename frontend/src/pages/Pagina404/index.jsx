@@ -1,31 +1,19 @@
-import useTitulo from '../../hooks/useTitulo.js';
-import Logo from '../../components/LogoScritus';
-import Linha from '../../components/LinhaDegrade';
-import BotaoSimples from '../../components/BotaoSimples';
-import { Cabecalho, CabecalhoCentro, CabecalhoDireita, CabecalhoEsquerda } from '../../components/Cabecalho';
-import ArrowIcon from "../../components/icons/arrowIcon";
-import ContainerPrincipal from '../../components/ContainerBasico';
-import img404 from '../../assets/404.svg'; 
-import { useNavigate } from 'react-router-dom';
+import ContainerPrincipal from "../../components/ContainerBasico";
+import Header from "../../components/Header";
+import Linha from "../../components/LinhaDegrade";
+import Logo from "../../components/LogoScritus";
+import useTitulo from "../../hooks/useTitulo.js";
+import Content404 from "./components/404Content";
 
-function Pagina404({navigate}) {
+function Pagina404() {
+  useTitulo("Não encontrado - Scritus");
 
-  useTitulo('Não encontrado - Scritus');
-  const navegar = useNavigate();
   return (
     <>
-      <Cabecalho>
-        <CabecalhoCentro>
-          <Logo />
-        </CabecalhoCentro>
-      </Cabecalho>
+      <Header center={<Logo reload />} />
       <Linha />
-      <ContainerPrincipal text='404' width='70vw'>
-        <img width='50%' src={img404} alt="404 - Não Encontrado" />
-        <BotaoSimples onClick={() => navegar(navigate === 'true' ? -1 : -2)} variant="secondary" className="btn-icone">
-              <ArrowIcon />
-              <span>Voltar</span>
-        </BotaoSimples>
+      <ContainerPrincipal text="404" width="70vw">
+        <Content404 />
       </ContainerPrincipal>
     </>
   );

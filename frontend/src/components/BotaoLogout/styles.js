@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 export const SC_BotaoLogout = styled.button`
     padding: 7px 10px;
@@ -24,8 +24,9 @@ export const SC_BotaoLogout = styled.button`
         width: 16px;
         height: 16px;
     }
-`
+`;
 export const SC_Wrapper = styled.div`
     position: relative;
     z-index: 4000;
-`
+    anchor-name: --logout-anchor;
+`;

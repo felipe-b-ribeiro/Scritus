@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { SC_Overlay, SC_Img, SC_Titulo1, SC_Titulo2 } from "./styles";
+import { useEffect, useState } from "react";
 import Img from "../../assets/Splash.gif";
+import { SC_Img, SC_Overlay, SC_Titulo1, SC_Titulo2 } from "./styles";
 
 const PaginaSplash = () => {
   const [texto, setTexto] = useState("Carregando");
@@ -9,7 +9,7 @@ const PaginaSplash = () => {
     const interval = setInterval(() => {
       setTexto((prev) => {
         if (prev.endsWith("...")) return "Carregando";
-        return prev + ".";
+        return `${prev}.`;
       });
     }, 300);
 

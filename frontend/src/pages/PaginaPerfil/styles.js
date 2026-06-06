@@ -11,26 +11,26 @@ export const SC_NomeUsuario = styled.h1`
     font-family: 'Cinzel', serif;
     margin-left: 50px;
     font-size: 2em;
-`
+`;
 
 export const SC_Pseudonimo = styled.h5`
     font-family: 'Cinzel', serif;
     margin-left: 50px;
     font-size: 1em;
     color: var(--cor-principal);
-`
+`;
 export const SC_Biografia = styled.div`
     font-family: 'Cinzel', serif;
     margin-left: 50px;
-`
+`;
 
 const cores = {
-    "leitor": '#5B4028',
-    "autor": '#CB8446',
-    "editora": '#FF6526'
-}
+  leitor: "#5B4028",
+  autor: "#CB8446",
+  editora: "#FF6526",
+};
 
-const cor = props => cores[props.tipo.toLowerCase()];
+const cor = (props) => cores[props.tipo.toLowerCase()];
 
 export const SC_Tag = styled.div`
     padding: 5px 10px;

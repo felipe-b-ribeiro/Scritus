@@ -1,5 +1,5 @@
-import { conectarBanco } from '../connection.js';
-import queries from '../queries.js';
+import { conectarBanco } from "../connection.js";
+import queries from "../queries.js";
 
 /**
  * Busca TODAS as interações (útil para o recommendForAllProfiles)
@@ -17,10 +17,10 @@ async function getInteractionsByProfile(profileId) {
   const pool = await conectarBanco();
   const result = await pool.query(
     `SELECT id_obra FROM interacoes WHERE id_perfil = $1`,
-    [profileId]
+    [profileId],
   );
-  
-  return result.rows.map(row => row.id_obra);
+
+  return result.rows.map((row) => row.id_obra);
 }
 
 async function getAllProfiles() {
@@ -32,5 +32,4 @@ async function getAllProfiles() {
   return result.rows;
 }
 
-export { getAllInteractions, getInteractionsByProfile, getAllProfiles };
-
+export { getAllInteractions, getAllProfiles, getInteractionsByProfile };

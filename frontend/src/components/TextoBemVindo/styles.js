@@ -1,11 +1,14 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const SC_Img = styled.img`
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    aspect-ratio: 1 / 1;
     border-radius: 50%;
     transition: 0.5s var(--transicao-basica);
     border: 1px solid black;
+    display: block;
+
+    @media (min-width: 1024px) {width: 50px}
 
     &:hover {
         transform: scale(1.03);
@@ -16,14 +19,14 @@ export const SC_Img = styled.img`
         -4px 0 5px var(--cor-principal),   /* sombra à esquerda */
         0 4px 5px var(--cor-terciaria);   /* sombra abaixo */;
     }
-`
+`;
 
 export const SC_Wrapper = styled.div`
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 4px 4px 4px 15px;
-`
+    height: fit-content;
+`;
 
 export const SC_Texto = styled.h2`
     color: black;
@@ -31,8 +34,11 @@ export const SC_Texto = styled.h2`
     font-size: 1rem;
     user-select: none;
     margin-right: 10px;
+    max-width: 270px;
+    overflow: hidden;
+    white-space: nowrap;
 
     & strong {
         color: var(--cor-principal);
     }
-`
+`;

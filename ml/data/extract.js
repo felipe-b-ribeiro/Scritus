@@ -1,6 +1,5 @@
 // ml/data/extract.js
-import conectarBanco from '../../backend/config/db.js'; // ajuste o caminho
-
+import conectarBanco from "../../backend/config/db.js"; // ajuste o caminho
 
 export const getInteracoes = async () => {
   const pool = await conectarBanco();
@@ -11,7 +10,7 @@ export const getInteracoes = async () => {
     `);
     return res.rows;
   } catch (err) {
-    console.error('Erro ao extrair interações:', err);
+    console.error("Erro ao extrair interações:", err);
     throw err;
   } finally {
     pool.release(); // garante que a conexão seja liberada
@@ -27,7 +26,7 @@ export const getObras = async () => {
     `);
     return res.rows;
   } catch (err) {
-    console.error('Erro ao extrair obras:', err);
+    console.error("Erro ao extrair obras:", err);
     throw err;
   } finally {
     pool.release();
@@ -43,7 +42,7 @@ export const getObraTags = async () => {
     `);
     return res.rows;
   } catch (err) {
-    console.error('Erro ao extrair tags das obras:', err);
+    console.error("Erro ao extrair tags das obras:", err);
     throw err;
   } finally {
     pool.release();
@@ -59,7 +58,7 @@ export const getPerfisLeitores = async () => {
     `);
     return res.rows;
   } catch (err) {
-    console.error('Erro ao extrair perfis de leitores:', err);
+    console.error("Erro ao extrair perfis de leitores:", err);
     throw err;
   } finally {
     pool.release();

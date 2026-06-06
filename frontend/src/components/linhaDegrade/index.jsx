@@ -1,9 +1,7 @@
-import LinhaDegrade from './styles';
+import { SC_LinhaDegrade } from "./styles";
 
 function Linha() {
-  return (
-    <LinhaDegrade />
-  );
+  return <SC_LinhaDegrade />;
 }
 
 export default Linha;

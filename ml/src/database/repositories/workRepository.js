@@ -1,5 +1,5 @@
-import {conectarBanco} from '../connection.js';
-import queries from '../queries.js';
+import { conectarBanco } from "../connection.js";
+import queries from "../queries.js";
 
 /**
  * Busca todas as obras públicas
@@ -11,4 +11,4 @@ async function getAllWorks() {
   return result.rows;
 }
 
-export {getAllWorks};
+export { getAllWorks };

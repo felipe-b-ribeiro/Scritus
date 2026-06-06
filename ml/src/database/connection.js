@@ -1,12 +1,12 @@
-import { Pool } from 'pg';
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import dotenv from "dotenv";
+import { Pool } from "pg";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 // Cria um pool de conexões
 const pool = new Pool({
@@ -20,10 +20,10 @@ const pool = new Pool({
 // Função para retornar o pool
 const conectarBanco = async () => {
   try {
-    console.log('Conexão com o banco de dados estabelecida com sucesso!');
+    console.log("Conexão com o banco de dados estabelecida com sucesso!");
     return pool;
   } catch (error) {
-    console.error('Erro ao conectar ao banco de dados:', error);
+    console.error("Erro ao conectar ao banco de dados:", error);
     throw error;
   }
 };
@@ -32,10 +32,10 @@ const conectarBanco = async () => {
 const closePool = async () => {
   try {
     await pool.end();
-    console.log('Conexões com o banco de dados encerradas.');
+    console.log("Conexões com o banco de dados encerradas.");
   } catch (error) {
-    console.error('Erro ao encerrar conexões com o banco:', error);
+    console.error("Erro ao encerrar conexões com o banco:", error);
   }
 };
 
-export { conectarBanco, closePool, pool };
+export { closePool, conectarBanco, pool };

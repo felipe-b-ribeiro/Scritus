@@ -1,17 +1,19 @@
-import { SC_Linha, SC_Titulo, SC_Container } from "./styles";
-import BotaoSimples from '../BotaoSimples';
+import BotaoSimples from "../BotaoSimples";
+import { SC_Container } from "./styles";
 
-const LogoutModal = ({confirmClick, cancelClick}) => {
-    return (
-        <SC_Container>
-            <SC_Titulo>Você <strong>deseja mesmo</strong> sair?</SC_Titulo>
-            <SC_Linha />
-            <div className="flx">
-                <BotaoSimples onClick={confirmClick} variant='cancel2'>Sair</BotaoSimples>
-                <BotaoSimples onClick={cancelClick} variant='cancel'>Cancelar</BotaoSimples>
-            </div>
-        </SC_Container>
-    );
+const LogoutModal = ({ confirmClick, cancelClick, state }) => {
+  return (
+    <SC_Container className={state}>
+      <p className="popupTitle">
+        Você <strong>deseja mesmo</strong> sair?
+      </p>
+      <hr className="popupLine" />
+      <div className="flex m-10 gap-8">
+        <BotaoSimples onClick={confirmClick} variant="cancel2" text="Sair" />
+        <BotaoSimples onClick={cancelClick} variant="cancel" text="Cancelar" />
+      </div>
+    </SC_Container>
+  );
 };
 
 export default LogoutModal;

@@ -1,37 +1,35 @@
-import express from 'express';
-import { criarObraController,
-   listarObrasPorAutorController,
-   deletarObraController,
-   puxarTodasObrasController,
-   puxarObraPorIdController,
-   puxarObrasPorNomeTagController,
-   gerarRecomendacaoController,
-   deletarRecomendacoesPorIdController,
-   listarObrasPorInteracaoEIdPerfilController} from '../controllers/obraController.js'
+import express from "express";
 import { upload } from "../config/multer.js";
-import { autenticarToken } from '../middleware/autenticarJWT.js';
+import {
+  criarObraController,
+  deletarObraController,
+  deletarRecomendacoesPorIdController,
+  gerarRecomendacaoController,
+  listarObrasPorAutorController,
+  listarObrasPorInteracaoEIdPerfilController,
+  puxarObraPorIdController,
+  puxarObrasPorNomeTagController,
+  puxarTodasObrasController,
+} from "../controllers/obraController.js";
+import { autenticarToken } from "../middleware/autenticarJWT.js";
 
 const router = express.Router();
 
 router.post(
-  '/obra',
+  "/obra",
   upload.fields([
-    { name: 'capa', maxCount: 1 },
-    { name: 'pdf', maxCount: 1 },
+    { name: "capa", maxCount: 1 },
+    { name: "pdf", maxCount: 1 },
   ]),
-  criarObraController
+  criarObraController,
 );
-router.get('/obra/recomendacao', gerarRecomendacaoController)
-router.delete('/obra/recomendacao', deletarRecomendacoesPorIdController)
-router.get('/obra/salvos', listarObrasPorInteracaoEIdPerfilController);
-router.post('/obra/puxarporid', puxarObraPorIdController);
-router.get(
-  '/obra/autor/:autorId',
-  listarObrasPorAutorController
-);
-router.delete('/obra/:obraId', autenticarToken, deletarObraController);
-router.get('/obra', puxarTodasObrasController);
-router.get('/obra/tag/:nomeTag', puxarObrasPorNomeTagController);
-
+router.get("/obra/recomendacao", gerarRecomendacaoController);
+router.delete("/obra/recomendacao", deletarRecomendacoesPorIdController);
+router.get("/obra/salvos", listarObrasPorInteracaoEIdPerfilController);
+router.post("/obra/puxarporid", puxarObraPorIdController);
+router.get("/obra/autor/:autorId", listarObrasPorAutorController);
+router.delete("/obra/:obraId", autenticarToken, deletarObraController);
+router.get("/obra", puxarTodasObrasController);
+router.get("/obra/tag/:nomeTag", puxarObrasPorNomeTagController);
 
 export default router;

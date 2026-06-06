@@ -44,7 +44,7 @@ const queries = {
       (id_perfil, id_obra, peso, algoritmo_versao, parametros)
     VALUES 
       ($1, $2, $3, $4, $5)
-  `
+  `,
 };
 
 export default queries;

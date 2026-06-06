@@ -1,10 +1,6 @@
 import { SC_TituloBasico } from "./styles";
 
-const TituloBasico = ({ children }) => {
-    return (
-        <SC_TituloBasico>
-            {children}
-        </SC_TituloBasico>
-    );
-}
+const TituloBasico = ({ text }) => {
+  return <SC_TituloBasico>{text}</SC_TituloBasico>;
+};
 export default TituloBasico;

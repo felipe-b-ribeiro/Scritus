@@ -25,56 +25,66 @@ export const criarUsuarioRepository = async (usuario) => {
 
     const idPerfil = respostaPerfil.rows[0].id_perfil;
 
+    let nome = "";
+
     switch (tipoMaiusculo) {
-      default:
-        throw new Error(`Tipo de usuário inválido: ${tipo}`);
-      case "Leitor":
+      case "Leitor": {
+        nome = dados.nomeUsuario;
         const valoresPerfilLeitor = [
           idPerfil,
-          dados.nomeUsuario,
+          nome,
           dados.dataNascimento,
         ];
         await client.query(
           "INSERT INTO perfil_leitor (id_perfil, apelido, data_nascimento) VALUES ($1, $2, $3)",
-          valoresPerfilLeitor
+          valoresPerfilLeitor,
         );
         break;
-      case "Autor":
+      }
+      case "Autor": {
         const pseudonimo = dados.pseudonimo || null;
+        nome = dados.nomeCompleto;
         const valoresPerfilAutor = [
           idPerfil,
           pseudonimo,
-          dados.nomeCompleto,
+          nome,
           dados.dataNascimento,
         ];
         await client.query(
           "INSERT INTO perfil_autor (id_perfil, pseudonimo, nome_autor, data_nascimento) VALUES ($1, $2, $3, $4)",
-          valoresPerfilAutor
+          valoresPerfilAutor,
         );
         break;
-      case "Editora":
+      }
+      case "Editora": {
         const siteOficial = dados.siteOficial || null;
+        nome = dados.nomeFantasia;
         const valoresPerfilEditora = [
           idPerfil,
-          dados.nomeFantasia,
+          nome,
           dados.cnpj,
           siteOficial,
         ];
         await client.query(
           "INSERT INTO perfil_editora (id_perfil, nome_fantasia, cnpj, site_oficial) VALUES ($1, $2, $3, $4)",
-          valoresPerfilEditora
+          valoresPerfilEditora,
         );
         break;
+      }
+      default:
+        throw new Error(`Tipo de usuário inválido: ${tipo}`);
     }
 
     await client.query("COMMIT");
 
-    return {
-      idUsuario,
-      idPerfil,
-      tipoMaiusculo,
-      dados: usuario.dados,
+    const payload = {
+      tipoUsuario: tipoMaiusculo,
+      email: dados.email,
+      nome,
+      id_usuario: idUsuario,
+      id_perfil: idPerfil,
     };
+    return payload;
   } catch (err) {
     await client.query("ROLLBACK");
     console.error("[USER REPOSITORY ERROR]:", err);
@@ -129,84 +139,115 @@ export const pullDataUserRepository = async (info) => {
   const client = await db.connect();
 
   try {
-    
     const email = info.email;
     const tipoUsuario = info.tipoUsuario;
 
     let tabela, campos, sigla;
-    
-    switch(tipoUsuario) {
+
+    switch (tipoUsuario) {
       case "Leitor":
         tabela = "perfil_leitor";
         sigla = "pl";
-        campos = "u.id_usuario, u.tipo_usuario, pl.apelido, pl.data_nascimento, pl.foto_perfil_url, pl.bio";
+        campos =
+          "u.id_usuario, u.tipo_usuario, pl.apelido, pl.data_nascimento, pl.foto_perfil_url, pl.bio";
         break;
       case "Editora":
-        tabela = "perfil_editora"
+        tabela = "perfil_editora";
         sigla = "pe";
-        campos = "u.id_usuario, u.tipo_usuario, pe.nome_fantasia, pe.site_oficial, pe.foto_perfil_url, pe.bio";
+        campos =
+          "u.id_usuario, u.tipo_usuario, pe.nome_fantasia, pe.site_oficial, pe.foto_perfil_url, pe.bio";
         break;
       case "Autor":
         tabela = "perfil_autor";
         sigla = "pa";
-        campos = "u.id_usuario, pa.id_autor, u.tipo_usuario, pa.nome_autor, pa.pseudonimo, pa.data_nascimento, pa.foto_perfil_url, pa.bio";
+        campos =
+          "u.id_usuario, pa.id_autor, u.tipo_usuario, pa.nome_autor, pa.pseudonimo, pa.data_nascimento, pa.foto_perfil_url, pa.bio";
         break;
     }
-    
-    const query = "SELECT " + campos + " from usuarios u JOIN perfis p ON u.id_usuario = p.id_usuario JOIN " + tabela + " " + sigla + " ON p.id_perfil = " + sigla + ".id_perfil WHERE email = $1";
+
+    const query =
+      "SELECT " +
+      campos +
+      " from usuarios u JOIN perfis p ON u.id_usuario = p.id_usuario JOIN " +
+      tabela +
+      " " +
+      sigla +
+      " ON p.id_perfil = " +
+      sigla +
+      ".id_perfil WHERE email = $1";
     const resposta = await client.query(query, [email]);
 
     return resposta.rows[0];
-
   } catch (err) {
     console.error("[PULL USER DATA REPOSITORY ERROR]: ", err);
     throw err;
   } finally {
     client.release();
   }
-}
+};
 
 export const updateUserRepository = async (info) => {
   const client = await db.connect();
 
   try {
-    
     const tipoUsuario = info.tipo_usuario;
     const email = info.email;
 
     const tabelas = {
-      'Leitor': 'perfil_leitor',
-      'Autor': 'perfil_autor',
-      'Editora': 'perfil_editora'
-    }
+      Leitor: "perfil_leitor",
+      Autor: "perfil_autor",
+      Editora: "perfil_editora",
+    };
 
     const tabela = tabelas[tipoUsuario];
 
     const siglas = {
-      'Leitor': 'pl',
-      'Autor': 'pa',
-      'Editora': 'pe'
-    }
+      Leitor: "pl",
+      Autor: "pa",
+      Editora: "pe",
+    };
 
     const sigla = siglas[tipoUsuario];
 
     const campos = {
-      'Leitor': 'apelido = $1, data_nascimento = $2, bio = $3, foto_perfil_url = $4',
-      'Autor': 'nome_autor = $1, data_nascimento = $2, bio = $3, pseudonimo = $4, foto_perfil_url = $5',
-      'Editora': 'nome_fantasia = $1, bio = $2, site_oficial = $3, foto_perfil_url = $4'
-    }
+      Leitor:
+        "apelido = $1, data_nascimento = $2, bio = $3, foto_perfil_url = $4",
+      Autor:
+        "nome_autor = $1, data_nascimento = $2, bio = $3, pseudonimo = $4, foto_perfil_url = $5",
+      Editora:
+        "nome_fantasia = $1, bio = $2, site_oficial = $3, foto_perfil_url = $4",
+    };
 
     const valores = {
-      'Leitor': [info.nome_usuario, info.data_nascimento, info.bio, info.foto_perfil],
-      'Autor': [info.nome_autor, info.data_nascimento, info.bio, info.pseudonimo, info.foto_perfil],
-      'Editora': [info.nome_fantasia, info.bio, info.site_oficial,  info.foto_perfil]
-    }
+      Leitor: [
+        info.nome_usuario,
+        info.data_nascimento,
+        info.bio,
+        info.foto_perfil,
+      ],
+      Autor: [
+        info.nome_autor,
+        info.data_nascimento,
+        info.bio,
+        info.pseudonimo,
+        info.foto_perfil,
+      ],
+      Editora: [
+        info.nome_fantasia,
+        info.bio,
+        info.site_oficial,
+        info.foto_perfil,
+      ],
+    };
 
     let campo, valor;
 
     if (info.foto_perfil === null) {
       // Remove apenas o trecho da foto no campo atual (string SQL)
-      campo = campos[tipoUsuario].replace(/,\s*foto_perfil_url\s*=\s*\$\d+/, '');
+      campo = campos[tipoUsuario].replace(
+        /,\s*foto_perfil_url\s*=\s*\$\d+/,
+        "",
+      );
 
       // Remove o último valor da array de valores
       valor = valores[tipoUsuario].slice(0, -1);
@@ -215,25 +256,22 @@ export const updateUserRepository = async (info) => {
       valor = valores[tipoUsuario];
     }
 
-
     const query = `UPDATE ${tabela} AS ${sigla} SET ${campo} FROM  perfis p JOIN usuarios u ON p.id_usuario = u.id_usuario WHERE ${sigla}.id_perfil = p.id_perfil AND u.email = '${email}'`;
     const { rows } = await client.query(query, valor);
 
     return rows[0];
-
   } catch (err) {
-    console.error('[UPDATE USER REPOSITORY ERROR]: ', err);
+    console.error("[UPDATE USER REPOSITORY ERROR]: ", err);
     throw err;
   } finally {
     client.release();
   }
-}
+};
 
 export const deleteUserRepository = async (email) => {
   const client = await db.connect();
 
   try {
-    
     const query = `DELETE FROM usuarios WHERE email = $1`;
 
     const resposta = client.query(query, [email]);
@@ -245,7 +283,7 @@ export const deleteUserRepository = async (email) => {
   } finally {
     client.release();
   }
-}
+};
 
 export const puxarPerfilRepository = async (idPerfil) => {
   const client = await db.connect();
@@ -263,36 +301,36 @@ export const puxarPerfilRepository = async (idPerfil) => {
     let tabela, sigla, campos;
 
     switch (tipoUsuario) {
-      case 'Autor': 
-        tabela = 'perfil_autor';
-        sigla = 'pa';
-        campos = 'pa.nome_autor AS nome_usuario, pa.id_autor, pa.pseudonimo';
+      case "Autor":
+        tabela = "perfil_autor";
+        sigla = "pa";
+        campos = "pa.nome_autor AS nome_usuario, pa.id_autor, pa.pseudonimo";
         break;
 
-      case 'Leitor':
-        tabela = 'perfil_leitor';
-        sigla = 'pl';
-        campos = 'pl.apelido AS nome_usuario';
+      case "Leitor":
+        tabela = "perfil_leitor";
+        sigla = "pl";
+        campos = "pl.apelido AS nome_usuario";
         break;
 
-      case 'Editora':
-        tabela = 'perfil_editora';
-        sigla = 'pe';
-        campos = 'pe.nome_fantasia AS nome_usuario, pe.cnpj, pe.site_oficial';
+      case "Editora":
+        tabela = "perfil_editora";
+        sigla = "pe";
+        campos = "pe.nome_fantasia AS nome_usuario, pe.cnpj, pe.site_oficial";
         break;
     }
 
     // Constrói lista de campos sem aliases para o GROUP BY
     const camposLista = campos
-      .split(',')
-      .map(c => c.trim().replace(/ as .*/i, '')); // remove "AS algo"
+      .split(",")
+      .map((c) => c.trim().replace(/ as .*/i, "")); // remove "AS algo"
 
     const groupBy = [
       `${sigla}.bio`,
       `${sigla}.criado_em`,
       `${sigla}.foto_perfil_url`,
-      ...camposLista
-    ].join(', ');
+      ...camposLista,
+    ].join(", ");
 
     // Query final
     const query2 = `
@@ -313,11 +351,10 @@ export const puxarPerfilRepository = async (idPerfil) => {
 
     // Junta infos do primeiro SELECT com o segundo
     return Object.assign(resposta2.rows[0], resposta.rows[0]);
-
   } catch (err) {
-    console.error('[PUXAR PERFIL REPOSITORY ERROR]: ', err);
+    console.error("[PUXAR PERFIL REPOSITORY ERROR]: ", err);
     throw err;
   } finally {
     client.release();
   }
-}
+};

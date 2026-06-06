@@ -1,32 +1,31 @@
-import * as interactionRepository from '../database/repositories/interactionRepository.js';
-import * as workRepository from '../database/repositories/workRepository.js';
-import * as recommendationRepository from '../database/repositories/recommendationRepository.js';
-
-
-import { logger } from '../utils/logger.js';
-
 import {
-  K_NEIGHBORS,
   DEFAULT_RECOMMENDATIONS,
-  WEIGHT_CURTIDA,
-  WEIGHT_SALVO,
+  FOLLOWED_AUTHOR_BONUS,
+  K_NEIGHBORS,
   WEIGHT_CLIQUE,
   WEIGHT_COMENTARIO,
-  FOLLOWED_AUTHOR_BONUS
-} from '../config/algorithm.js';
+  WEIGHT_CURTIDA,
+  WEIGHT_SALVO,
+} from "../config/algorithm.js";
+import * as interactionRepository from "../database/repositories/interactionRepository.js";
+import * as recommendationRepository from "../database/repositories/recommendationRepository.js";
+import * as workRepository from "../database/repositories/workRepository.js";
+import { logger } from "../utils/logger.js";
 
 /* -----------------------------------------------------
    🔒 OBRAS BLOQUEADAS
    (já consumidas + recomendadas nos últimos 7 dias)
 ----------------------------------------------------- */
 async function getBlockedWorkIds(profileId) {
-  const pastInteractions = await interactionRepository.getInteractionsByProfile(profileId);
-  const recentRecommendations = await recommendationRepository.getRecentRecommendations(profileId);
+  const pastInteractions =
+    await interactionRepository.getInteractionsByProfile(profileId);
+  const recentRecommendations =
+    await recommendationRepository.getRecentRecommendations(profileId);
 
   const blocked = new Set();
 
-  pastInteractions.forEach(i => blocked.add(i.id_obra));
-  recentRecommendations.forEach(r => blocked.add(r));
+  pastInteractions.forEach((i) => {blocked.add(i.id_obra)});
+  recentRecommendations.forEach((r) => {blocked.add(r)});
 
   return blocked;
 }
@@ -35,7 +34,9 @@ async function getBlockedWorkIds(profileId) {
    📐 SIMILARIDADE COSENO
 ----------------------------------------------------- */
 function cosineSimilarity(a, b) {
-  let dot = 0, normA = 0, normB = 0;
+  let dot = 0,
+    normA = 0,
+    normB = 0;
 
   const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
   for (const key of keys) {
@@ -47,7 +48,7 @@ function cosineSimilarity(a, b) {
     normB += y * y;
   }
 
-  return (normA && normB) ? dot / (Math.sqrt(normA) * Math.sqrt(normB)) : 0;
+  return normA && normB ? dot / (Math.sqrt(normA) * Math.sqrt(normB)) : 0;
 }
 
 /* -----------------------------------------------------
@@ -71,7 +72,7 @@ async function fallbackRandomRecommendations(profileId, topN) {
   const allWorks = await workRepository.getAllWorks();
   const blocked = await getBlockedWorkIds(profileId);
 
-  let eligible = allWorks.filter(w => !blocked.has(w.id_obra));
+  let eligible = allWorks.filter((w) => !blocked.has(w.id_obra));
 
   if (eligible.length < topN) {
     logger.warn(`⚠️ Poucas obras elegíveis. Expandindo pool.`);
@@ -80,13 +81,13 @@ async function fallbackRandomRecommendations(profileId, topN) {
 
   const shuffled = shuffle(eligible);
 
-  const selected = shuffled.slice(0, topN).map(w => ({
+  const selected = shuffled.slice(0, topN).map((w) => ({
     id_obra: w.id_obra,
-    peso: Math.random()
+    peso: Math.random(),
   }));
 
   await recommendationRepository.saveRecommendations(profileId, selected, {
-    version: 'fallback-v1.2'
+    version: "fallback-v1.2",
   });
 
   return selected;
@@ -95,7 +96,11 @@ async function fallbackRandomRecommendations(profileId, topN) {
 /* -----------------------------------------------------
    🔥 RECOMENDAÇÕES POR SIMILARIDADE
 ----------------------------------------------------- */
-export async function recommendForProfile(profileId, topN = DEFAULT_RECOMMENDATIONS, customWeights = {}) {
+export async function recommendForProfile(
+  profileId,
+  topN = DEFAULT_RECOMMENDATIONS,
+  customWeights = {},
+) {
   logger.info(`Iniciando recomendações para o perfil ${profileId}`);
 
   const weights = {
@@ -103,7 +108,7 @@ export async function recommendForProfile(profileId, topN = DEFAULT_RECOMMENDATI
     salvo: customWeights.salvo ?? WEIGHT_SALVO,
     clique: customWeights.clique ?? WEIGHT_CLIQUE,
     comentario: customWeights.comentario ?? WEIGHT_COMENTARIO,
-    seguido: customWeights.seguido ?? FOLLOWED_AUTHOR_BONUS
+    seguido: customWeights.seguido ?? FOLLOWED_AUTHOR_BONUS,
   };
 
   const interactions = await interactionRepository.getAllInteractions();
@@ -114,7 +119,7 @@ export async function recommendForProfile(profileId, topN = DEFAULT_RECOMMENDATI
   }
 
   const blocked = await getBlockedWorkIds(profileId);
-  const eligibleWorks = works.filter(w => !blocked.has(w.id_obra));
+  const eligibleWorks = works.filter((w) => !blocked.has(w.id_obra));
 
   if (eligibleWorks.length === 0) {
     logger.warn(`⚠️ Sem obras elegíveis para perfil ${profileId}. Fallback.`);
@@ -133,7 +138,7 @@ export async function recommendForProfile(profileId, topN = DEFAULT_RECOMMENDATI
       curtida: weights.curtida,
       salvo: weights.salvo,
       clique: weights.clique,
-      comentario: weights.comentario
+      comentario: weights.comentario,
     };
 
     const value = weightMap[inter.tipo] || 0;
@@ -148,7 +153,7 @@ export async function recommendForProfile(profileId, topN = DEFAULT_RECOMMENDATI
     .filter(([id]) => Number(id) !== Number(profileId))
     .map(([id, vector]) => ({
       profileId: Number(id),
-      similarity: cosineSimilarity(targetVector, vector)
+      similarity: cosineSimilarity(targetVector, vector),
     }))
     .sort((a, b) => b.similarity - a.similarity)
     .slice(0, K_NEIGHBORS);
@@ -166,7 +171,7 @@ export async function recommendForProfile(profileId, topN = DEFAULT_RECOMMENDATI
     }
   }
 
-  let recommendations = Object.entries(scores)
+  const recommendations = Object.entries(scores)
     .map(([id_obra, peso]) => ({ id_obra: Number(id_obra), peso }))
     .sort((a, b) => b.peso - a.peso)
     .slice(0, topN);
@@ -175,9 +180,13 @@ export async function recommendForProfile(profileId, topN = DEFAULT_RECOMMENDATI
     return fallbackRandomRecommendations(profileId, topN);
   }
 
-  await recommendationRepository.saveRecommendations(profileId, recommendations, {
-    version: 'v1.1'
-  });
+  await recommendationRepository.saveRecommendations(
+    profileId,
+    recommendations,
+    {
+      version: "v1.1",
+    },
+  );
 
   return recommendations;
 }

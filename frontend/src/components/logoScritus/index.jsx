@@ -1,9 +1,17 @@
-import LogoScritus from './styles';
-import { Link } from 'react-router-dom';
+import useNavigateCustom from "../../hooks/useNavigateCustom";
+import { SC_LogoScritus } from "./styles";
 
-function Logo({goTo}) {
+function Logo({ to, reload }) {
+  const { goTo } = useNavigateCustom();
+
+  const onClick = () =>
+    reload ? window.location.reload() : goTo(to || "/home");
+  const role = reload ? "button" : "link";
+
   return (
-    <LogoScritus><Link to={ goTo || '/'}>ScRi<strong>tUS</strong></Link></LogoScritus>
+    <SC_LogoScritus tabIndex={0} role={role} onClick={onClick}>
+      ScRi<strong>tUS</strong>
+    </SC_LogoScritus>
   );
 }
 

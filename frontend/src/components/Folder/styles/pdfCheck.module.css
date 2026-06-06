@@ -1,0 +1,21 @@
+.pdfCheckWrapper {
+  position: absolute;
+  z-index: 4;
+  right: -10px;
+  bottom: -13px;
+  max-height: 53px;
+  max-width: 53px;
+
+  > svg {
+    display: block;
+  }
+}
+
+.pdfCheckBackground {
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: white;
+}

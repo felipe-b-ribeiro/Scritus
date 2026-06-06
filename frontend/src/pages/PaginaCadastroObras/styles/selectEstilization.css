@@ -1,0 +1,21 @@
+#privaObra,
+#classInd {
+  font-family: "Raleway", serif;
+  border: solid 1px black;
+  padding: 8px;
+  width: 35%;
+  border-radius: 15px;
+  margin-top: 10px;
+}
+
+#privaObra {
+  margin-bottom: 10px;
+}
+
+#privaObra option,
+#classInd option {
+  color: black;
+  &:hover {
+    background-color: lightgray;
+  }
+}

@@ -1,139 +1,19 @@
-// 1. Bibliotecas externas
-import { useState } from "react";
-
-// 2. Hooks customizados
-import { useUserForm } from "./hooks/useUserForm";
-import useTitulo from "../../hooks/useTitulo.js";
-
-// 3. Constants
-import { TIPO_USUARIO, CAMPOS } from "../../constants/userConstants.js";
-
-// 4. Utils/helpers
-import { aplicarMascaraCNPJ } from "../../utils/mascaraCNPJ";
-
-// 5. Componentes globais
-import Logo from "../../components/LogoScritus";
+import BackButton from "../../components/BackButton";
+import Header from "../../components/Header";
 import Linha from "../../components/LinhaDegrade";
-import BotaoSimples from "../../components/BotaoSimples";
-import ContainerBasico from "../../components/ContainerBasico";
-import InputBasico from "../../components/InputBasico";
-import Card from "../../components/CardBasico";
-import ErrorHelper from '../../components/ErrorHelper';
-import LinkSimples from "../../components/LinkSimples/index.jsx";
-
-// 6. Componentes de layout / específicos
-import { Cabecalho, CabecalhoCentro, CabecalhoDireita, CabecalhoEsquerda } from "../../components/Cabecalho";
-import ArrowIcon from "../../components/icons/arrowIcon";
-import EyeIcon from "../../components/icons/passwordIcon";
-import CardEditora from '../../assets/card-editora.png';
-import CardAutor from '../../assets/card-autor.png';
-import CardLeitor from '../../assets/card-leitor.png';
-
-
+import Logo from "../../components/LogoScritus";
+import useTitulo from "../../hooks/useTitulo.js";
+import ContainerCards from "./components/ContainerCards";
 
 const PaginaCadastro = () => {
-
-  const { tipoUsuario, forms, verificarErro, handleChange, handleBlur, handleTipoUsuario, handleSubmit, cleanState, goBackIfUserNull } = useUserForm();
-
-  const [senhaVisivel, setSenhaVisivel] = useState({
-    'senha': false,
-    'confirmarSenha': false
-  });
-
-  useTitulo('Cadastre-se - Scritus');
-
-  function renderInputs() {
-
-    if (!tipoUsuario) return null;
-
-    const hoje = new Date().toISOString().split('T')[0];
-    
-    return Object.entries(CAMPOS[tipoUsuario]).map(([campo, meta]) => {
-
-    const erroMsg = forms[tipoUsuario][campo].erroMsg;
-
-      return (
-          <InputBasico
-            key={campo}
-            name={campo}
-            value={
-              meta.cnpj
-                ? aplicarMascaraCNPJ(forms[tipoUsuario][campo].valor || "")
-                : forms[tipoUsuario][campo].valor || ""
-            }
-            onChange={handleChange}
-            // onFocus={() => handleFocus(campo)}
-            onBlur={campo === 'email' || campo === 'nomeUsuario' || campo === 'cnpj' ? (e) => handleBlur(campo, e.target.value) : undefined}
-            onInvalid={(e) => e.preventDefault()}
-            text={meta.label}
-            type={meta.senha && senhaVisivel[campo] ? 'text' : meta.tipo}
-            required={meta.required}
-            className={verificarErro(campo) === "Erro" ? "input-error" : verificarErro(campo) === "Sucesso" ? "input-success" : ""}
-            max={meta.data ? hoje : undefined}
-            minLength={meta.minlength}
-          >
-            {meta.senha && <EyeIcon aberto={!senhaVisivel[campo]} onClick={() => setSenhaVisivel(prev => ({ ...prev, [campo]: !prev[campo] }))} />}
-            {verificarErro(campo) && erroMsg ? <ErrorHelper text={erroMsg}/> : null}
-          </InputBasico>
-      );
-    });
-  }
-
-  function renderCards() {
-    if (!tipoUsuario) {
-      return (
-        <ContainerBasico text="O que você busca no Scritus?">
-          <Card variant='primary' onClick={() => handleTipoUsuario(TIPO_USUARIO.LEITOR)} role='button' tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') handleTipoUsuario(TIPO_USUARIO.LEITOR); }}>
-            <h2>Sou leitor</h2>
-            <h5>e quero ler livros profundos e impactantes.</h5>
-            <img style={{position: 'absolute', bottom: '0px', right: '65px'}} width='110' height='110' src={CardLeitor} alt="Foto do Card de Leitor" />
-          </Card>
-          <Card variant='secondary' onClick={() => handleTipoUsuario(TIPO_USUARIO.AUTOR)} role='button' tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') handleTipoUsuario(TIPO_USUARIO.AUTOR); }}>
-            <h2>Sou autor</h2>
-            <h5>e quero mostrar meus livros profissionalmente.</h5>
-            <img style={{position: 'absolute', bottom: '0px', right: '30px'}} width='140' height='140' src={CardAutor} alt="Foto do Card de Autor" />
-          </Card>
-          <Card variant='terciary' onClick={() => handleTipoUsuario(TIPO_USUARIO.EDITORA)} role='button' tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') handleTipoUsuario(TIPO_USUARIO.EDITORA); }}>
-            <h2>Sou editora</h2>
-            <h5>e quero garimpar verdadeiras obras-primas.</h5>
-            <img style={{position: 'absolute', bottom: '0px', right: '65px'}} width='120' height='120' src={CardEditora} alt="Foto do Card de Editora" />
-          </Card>
-        </ContainerBasico>
-      );
-    }
-
-    return (
-      <ContainerBasico text={`Criar conta de ${tipoUsuario}`}>
-        <form onSubmit={handleSubmit} noValidate>
-          {renderInputs()}
-          <LinkSimples to='/login'><strong>Já tem uma conta?</strong> Entrar</LinkSimples>
-          <div className='flx space-a'>
-            <BotaoSimples variant={'cancel'} type='reset' onClick={cleanState}><a>Cancelar</a></BotaoSimples>
-            <BotaoSimples variant={'primary'} type='submit'><a>Criar Conta</a></BotaoSimples>
-          </div>
-        </form>
-      </ContainerBasico>
-    );
-  }
-
+  useTitulo("Cadastre-se - Scritus");
   return (
     <>
-      <Cabecalho>
-        <CabecalhoEsquerda>
-          <BotaoSimples variant="secondary" onClick={goBackIfUserNull}>
-            <ArrowIcon aria-label="Voltar" />
-            <span>Voltar</span>
-          </BotaoSimples>
-        </CabecalhoEsquerda>
-        <CabecalhoCentro>
-          <Logo />
-        </CabecalhoCentro>
-      </Cabecalho>
+      <Header left={<BackButton />} center={<Logo to="/" />} />
       <Linha />
-
-      {renderCards()}
+      <ContainerCards />
     </>
   );
-}
+};
 
 export default PaginaCadastro;

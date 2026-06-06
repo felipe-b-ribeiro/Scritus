@@ -1,0 +1,94 @@
+:root {
+  --folder-color: var(--cor-principal);
+  --folder-back-color: #a86e3c;
+  --folder-animation-duration: 0.5s;
+}
+
+.wrapper-folder {
+  position: relative;
+  left: 50px;
+  top: 200px;
+}
+
+.folder {
+  transition: all 0.2s ease-in;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  display: block;
+}
+
+.folder__front {
+  position: absolute;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  background: var(--folder-color);
+  border-radius: 5px 10px 10px 10px;
+  transform-origin: bottom;
+  transition: all var(--folder-animation-duration) ease-in-out;
+}
+
+.folder__back {
+  position: relative;
+  width: 100px;
+  height: 80px;
+  background: var(--folder-back-color);
+  border-radius: 0px 10px 10px 10px;
+
+  &::after {
+    position: absolute;
+    z-index: 0;
+    bottom: 98%;
+    left: 0;
+    content: "";
+    width: 30px;
+    height: 10px;
+    background: var(--folder-back-color);
+    border-radius: 5px 5px 0 0;
+  }
+
+  > label {
+    display: block;
+    width: fit-content;
+    height: fit-content;
+  }
+}
+
+.paper {
+  align-items: center;
+  background-color: #e6e6e6;
+  border-radius: 10px;
+  border: 1px solid var(--cor-principal);
+  inset: auto auto 20px 50%;
+  color: var(--cor-principal);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Cinzel', serif;
+  font-size: 0.65em;
+  gap: 5px;
+  height: 80%;
+  justify-content: center;
+  padding: 10px;
+  position: absolute;
+  transform: translate(-50%, 10%);
+  transition: var(--folder-animation-duration) ease-in-out;
+  width: 90%;
+  z-index: 2;
+}
+
+.folder.open {
+  transform: translateY(-8px);
+
+  & .paper {
+    transform: translate(-50%, -100%) rotate(5deg);
+  }
+  & .folder__front {
+    transform: skew(15deg) scaleY(0.6);
+  }
+
+  & .right {
+    transform: skew(-15deg) scaleY(0.6);
+  }
+}

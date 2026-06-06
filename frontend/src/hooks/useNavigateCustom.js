@@ -1,17 +1,17 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const useNavigateCustom = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const goTo =  (path) => {
-        navigate(path);
-    }
+  const goTo = (path) => {
+    navigate(path);
+  };
 
-    const goBack = () => {
-        navigate(-1);
-    }
-    
-    return { goTo, goBack }
-}
+  const goBack = () => {
+    navigate(-1);
+  };
+
+  return { goTo, goBack };
+};
 
 export default useNavigateCustom;

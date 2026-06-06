@@ -1,5 +1,7 @@
 # Node modules
 node_modules/
+package.json
+package-lock.json
 
 # Arquivos de ambiente (variáveis sensíveis)
 .env

@@ -1,15 +1,20 @@
-import { SC_Textarea, SC_TextareaWrapper } from "./styles";
+import { SC_TextareaWrapper } from "./styles";
 
-const InputTextarea = ({ text, id, children, value, ...props }) => {
-    
-    
-    return (
-        <SC_TextareaWrapper>
-            <SC_Textarea id={id} value={value} {...props} />
-            <label htmlFor={id}>{text}</label>
-            {children}
-        </SC_TextareaWrapper>
-    );
+const InputTextarea = ({
+  text,
+  id,
+  children,
+  value,
+  tipoUsuario,
+  ...props
+}) => {
+  return (
+    <SC_TextareaWrapper className={tipoUsuario?.toLowerCase()}>
+      <textarea id={id} value={value == null ? "" : value} {...props} />
+      <label htmlFor={id}>{text}</label>
+      {children}
+    </SC_TextareaWrapper>
+  );
 };
 
 export default InputTextarea;

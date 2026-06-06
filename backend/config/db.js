@@ -1,13 +1,12 @@
-import { Pool } from 'pg';
-
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import dotenv from "dotenv";
+import { Pool } from "pg";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const pool = new Pool({
   host: process.env.BD_HOST,
@@ -18,9 +17,9 @@ const pool = new Pool({
 });
 
 try {
-  pool.connect()
-  console.log('Conectado ao banco de dados com sucesso!')
-} catch(err) {
+  pool.connect();
+  console.log("Conectado ao banco de dados com sucesso!");
+} catch (err) {
   console.error(err);
 }
 

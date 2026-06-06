@@ -8,18 +8,42 @@ const EstilosGlobais = createGlobalStyle`
     box-sizing: border-box;
     }
 
-    body {
+    html {
+        overflow: hidden;
+        scrollbar-width: none;
         min-height: 100vh;
-        width: 100vw;
+        &::-webkit-scrollbar {display: none;}
+    }
+
+    #root {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100vh;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--cor-principal) transparent;
+    
+    &::-webkit-scrollbar {
+        width: 8px;
+        background: transparent;
+    }
+    
+    &::-webkit-scrollbar-track {background: transparent;}
+    
+    &::-webkit-scrollbar-thumb {
+        background: #cb8446 !important;
+        border-radius: 4px;
+        
+        &:hover {background: #E89953 !important;}
+    }
     }
 
     a {
         text-decoration: none;
         color: inherit;
-    }
+        font-size: inherit;
 
-    a:hover {
-        cursor: pointer;
+        &:hover {cursor:pointer}
     }
 
     textarea { 
@@ -46,18 +70,6 @@ const EstilosGlobais = createGlobalStyle`
         box-shadow: 0 0 0px 1000px white inset;
         -moz-text-fill-color: black;
     }
-
-    .flx {
-        display: flex;
-    }
-
-    .gap-8 {
-        gap: 8px;
-    }
-
-    .space-a {
-        justify-content: space-around;
-    }
     
     :root {
         --cor-principal: #cb8446;
@@ -65,10 +77,15 @@ const EstilosGlobais = createGlobalStyle`
         --cor-terciaria: #E89953;
         --cor-texto: #ffffff;
         --cor-destaque: #1342b0;
+        --cor-salvar: #0077FF;
         --cor-sair-deletar: #a40f0f;
         --cor-splash: #ffffff;
+        --cor-leitor: #5b4028;
+        --cor-autor: #cb8446;
+        --cor-editora: #ff6526;
         --transicao-basica: cubic-bezier(0.24, 1.01, 0.8, 0.71);
     }
+
 `;
 
 export default EstilosGlobais;

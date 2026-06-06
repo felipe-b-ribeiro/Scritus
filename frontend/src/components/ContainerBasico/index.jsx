@@ -1,12 +1,23 @@
 import SC_ContainerBasico from "./styles";
 
-const ContainerBasico = ({ children, text, width, direction, align, padding}) => {
-    return (
-        <SC_ContainerBasico width={width} direction={direction} align={align} padding={padding} >
-            {text ? <h1 id="textContainer">{text}</h1> : null}
-            {children}
-        </SC_ContainerBasico>
-    );
-}
+const ContainerBasico = ({
+  children,
+  text,
+  width,
+  tipoUsuario,
+  className,
+  ref,
+}) => {
+  return (
+    <SC_ContainerBasico width={width} className={className} ref={ref}>
+      {text ? (
+        <h1 id="textContainer" className={tipoUsuario?.toLowerCase()}>
+          {text}
+        </h1>
+      ) : null}
+      {children}
+    </SC_ContainerBasico>
+  );
+};
 
 export default ContainerBasico;

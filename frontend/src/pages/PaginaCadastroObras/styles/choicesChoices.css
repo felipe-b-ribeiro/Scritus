@@ -1,0 +1,43 @@
+.choices {
+  font-family: "Cinzel", serif;
+  border-radius: 15px;
+  border: 1px solid black;
+  margin-top: 10px;
+  color: var(--cor-principal);
+}
+
+.choices__inner,
+.choices__list {
+  border-radius: 15px;
+}
+
+.choices__list {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+}
+
+.choices__list::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+.choices__input {
+  font-family: "Raleway", serif;
+}
+
+label {
+  font-family: "Cinzel", serif;
+  color: var(--cor-principal);
+}
+
+.choices_input {
+  color: var(--cor-principal);
+}
+
+.choices_input_cloned {
+  margin-bottom: 0;
+}
+
+.choices__list--multiple .choices__item {
+  background-color: var(--cor-principal);
+  border: 1px solid black;
+}

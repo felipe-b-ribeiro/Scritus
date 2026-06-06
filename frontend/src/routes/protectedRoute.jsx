@@ -1,7 +1,10 @@
 import { Navigate } from "react-router-dom";
 import decodificarJWT from "../utils/decodificarJWT";
 
-const ProtectedRoute = ({ children, allowedRoles = [] }) => {
+const ProtectedRoute = ({
+  children,
+  allowedRoles = ["Autor", "Leitor", "Editora"],
+}) => {
   const token = localStorage.getItem("accessToken");
 
   let payload;
@@ -11,14 +14,13 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     payload = null;
   }
 
-  // Se não houver token ou estiver expirado
   if (!payload || (payload.exp && Date.now() >= payload.exp * 1000)) {
     localStorage.removeItem("accessToken");
     return <Navigate to="/login" replace />;
   }
 
   if (allowedRoles.length > 0 && !allowedRoles.includes(payload.tipoUsuario)) {
-    return <Navigate to="/nao-autorizado" replace />;
+    return <Navigate to="/home" replace />;
   }
 
   // Tudo certo

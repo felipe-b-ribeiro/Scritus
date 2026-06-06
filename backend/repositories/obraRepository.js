@@ -88,18 +88,18 @@ export const listarObrasPorAutorRepository = async (autorId) => {
 };
 
 export const deletarObraRepository = async (obraId) => {
-    const client = await db.connect();
+  const client = await db.connect();
 
-    try {
-        const query = "DELETE FROM obras WHERE id_obra = $1";
-        await client.query(query, [obraId]);
-        return true;
-    } catch (err) {
-        console.error("Erro no repository ao deletar obra:", err);
-        throw err;
-    } finally {
-        client.release();
-    }
+  try {
+    const query = "DELETE FROM obras WHERE id_obra = $1";
+    await client.query(query, [obraId]);
+    return true;
+  } catch (err) {
+    console.error("Erro no repository ao deletar obra:", err);
+    throw err;
+  } finally {
+    client.release();
+  }
 };
 
 export const puxarTodasObrasRepository = async () => {
@@ -167,12 +167,12 @@ export const puxarObraPorIdRepository = async (obraId) => {
     const resposta = await client.query(query, [obraId]);
     return resposta.rows;
   } catch (err) {
-    console.error('[PUXAR OBRA POR ID REPOSITORY ERROR]: ', err);
+    console.error("[PUXAR OBRA POR ID REPOSITORY ERROR]: ", err);
     throw err;
   } finally {
     client.release();
   }
-}
+};
 
 export const puxarObrasPorNomeTagRepository = async (nomeTag) => {
   const client = await db.connect();
@@ -200,17 +200,20 @@ export const puxarObrasPorNomeTagRepository = async (nomeTag) => {
     console.log(resposta.rows);
     return resposta.rows;
   } catch (err) {
-    console.log('[PUXAR OBRAS POR TAG REPOSITORY ERROR]:', err);
+    console.log("[PUXAR OBRAS POR TAG REPOSITORY ERROR]:", err);
     throw err;
   } finally {
     client.release();
   }
-}
+};
 
-export const listarObrasPorInteracaoEIdPerfilRepository = async (idPerfil, tipoInteracao) => {
+export const listarObrasPorInteracaoEIdPerfilRepository = async (
+  idPerfil,
+  tipoInteracao,
+) => {
   const client = await db.connect();
   try {
-     const query = `
+    const query = `
       SELECT
         o.id_obra,
         pa.nome_autor,
@@ -223,14 +226,14 @@ export const listarObrasPorInteracaoEIdPerfilRepository = async (idPerfil, tipoI
       FROM obras o JOIN interacoes i ON o.id_obra = i.id_obra
       JOIN perfil_autor pa ON o.id_autor = pa.id_autor
       WHERE i.id_perfil = $1
-      AND i.tipo = $2 ${tipoInteracao === 'clique' ? 'ORDER BY i.criado_em DESC;' : ';'}
+      AND i.tipo = $2 ${tipoInteracao === "clique" ? "ORDER BY i.criado_em DESC;" : ";"}
      `;
-     const resposta = await client.query(query, [idPerfil, tipoInteracao]);
-     return resposta.rows; 
+    const resposta = await client.query(query, [idPerfil, tipoInteracao]);
+    return resposta.rows;
   } catch (err) {
-    console.error('[PUXAR OBRAS POR INTERAÇÃO REPOSITORY ERROR]: ', err);
+    console.error("[PUXAR OBRAS POR INTERAÇÃO REPOSITORY ERROR]: ", err);
     throw err;
   } finally {
     client.release();
   }
-}
+};

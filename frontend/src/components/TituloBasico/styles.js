@@ -7,4 +7,4 @@ export const SC_TituloBasico = styled.h2`
     font-size: 1.3rem;
     font-family: 'Cinzel', serif;
     width: fit-content;
-`
+`;

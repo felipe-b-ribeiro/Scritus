@@ -1,12 +1,14 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const SC_Paragrafo_Simples = styled.p`
 
     color: black;
     font-family: 'Raleway', serif;
-    letter-spacing: 1px;
+    font-size: clamp(18px, 3vw, 20px);
     text-align: justify;
-    margin: 10px 0 10px 0;
+    margin-bottom: 14px;
+    word-break: break-word;
+    hyphens: auto;
 
     strong {
         color: var(--cor-principal);
@@ -15,4 +17,4 @@ export const SC_Paragrafo_Simples = styled.p`
     em {
         color: var(--cor-secundaria);
     }
-`
+`;

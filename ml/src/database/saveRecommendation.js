@@ -1,24 +1,21 @@
-import pool from './connection.js';
-import { logger } from '../utils/logger.js';
-import { saveRecommendations } from './database/saveRecommendations.js';
-
+import { logger } from "../utils/logger.js";
+import pool from "./connection.js";
 
 export async function saveRecommendations(
   idPerfil,
   recommendations,
-  algoritmoVersao = 'v1.0',
-  parametros = {}
+  algoritmoVersao = "v1.0",
+  parametros = {},
 ) {
   const client = await pool.connect();
 
   try {
-    await client.query('BEGIN');
+    await client.query("BEGIN");
 
     // Remove recomendações antigas do mesmo perfil
-    await client.query(
-      `DELETE FROM recomendacoes_feed WHERE id_perfil = $1`,
-      [idPerfil]
-    );
+    await client.query(`DELETE FROM recomendacoes_feed WHERE id_perfil = $1`, [
+      idPerfil,
+    ]);
 
     // Insere novas recomendações
     const insertQuery = `
@@ -33,29 +30,33 @@ export async function saveRecommendations(
         rec.id_obra,
         rec.peso,
         algoritmoVersao,
-        JSON.stringify(parametros)
+        JSON.stringify(parametros),
       ]);
     }
 
-    await client.query('COMMIT');
-    logger.info(`${recommendations.length} recomendações salvas para o perfil ${idPerfil}`);
+    await client.query("COMMIT");
+    logger.info(
+      `${recommendations.length} recomendações salvas para o perfil ${idPerfil}`,
+    );
   } catch (error) {
-    await client.query('ROLLBACK');
-    logger.error('Erro ao salvar recomendações:', error);
+    await client.query("ROLLBACK");
+    logger.error("Erro ao salvar recomendações:", error);
     throw error;
   } finally {
     client.release();
   }
-  const recommendations = await recommendForProfile(profileId, numRecommendations);
+  const generatedRecommendations = await recommendForProfile(
+    profileId,
+    numRecommendations,
+  );
 
-await saveRecommendations(profileId, recommendations, 'v1.0', {
-  metodo: 'colaborativo',
-  numRecs: numRecommendations
-});
-const allRecs = await recommendForAllProfiles();
+  await saveRecommendations(profileId, generatedRecommendations, "v1.0", {
+    metodo: "colaborativo",
+    numRecs: numRecommendations,
+  });
+  const allRecs = await recommendForAllProfiles();
 
-for (const { id_perfil, recommendations } of allRecs) {
-  await saveRecommendations(id_perfil, recommendations, 'v1.0');
-}
-
+  for (const { id_perfil, recommendations } of allRecs) {
+    await saveRecommendations(id_perfil, recommendations, "v1.0");
+  }
 }
