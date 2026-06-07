@@ -30,6 +30,7 @@ const FormObras = () => {
         <input
           type="file"
           id="capa"
+          name="capa"
           accept="image/png, image/jpg, image/jpeg, image/webp"
           className="hidden"
           onChange={handleImagem}
@@ -55,7 +56,7 @@ const FormObras = () => {
         <option value="Privado">Privado</option>
         <option value="Público">Público</option>
       </select>
-      <label className="text-center text-balance" htmlFor="classInd">
+      <label htmlFor="classInd" className="text-center text-balance">
         Qual a classificação indicativa da sua obra?
       </label>
       <select name="classInd" id="classInd">

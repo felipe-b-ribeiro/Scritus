@@ -59,7 +59,8 @@ const useCadastroObras = () => {
   }, [puxarDados]);
 
   useEffect(() => {
-    if (!loading && tags.length > 0 && selectRef.current) {
+  if (!loading && tags.length > 0 && selectRef.current) {
+    if (!choicesRef.current) {
       choicesRef.current = new Choices(selectRef.current, {
         removeItemButton: true,
         maxItemCount: 5,
@@ -69,8 +70,24 @@ const useCadastroObras = () => {
         maxItemText: (maxItemCount) =>
           `Você só pode selecionar até ${maxItemCount} tags.`,
       });
+
+      setTimeout(() => {
+      const searchInput = document.querySelector('.choices__input--cloned');
+      if (searchInput && !searchInput.hasAttribute('name')) {
+        searchInput.setAttribute('name', 'buscaTags');
+        searchInput.setAttribute('id', 'buscaTags');
+      }
+    }, 100);
     }
-  }, [loading, tags]);
+  }
+
+  return () => {
+    if (choicesRef.current) {
+      choicesRef.current.destroy();
+      choicesRef.current = null;
+    }
+  };
+}, [loading, tags]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

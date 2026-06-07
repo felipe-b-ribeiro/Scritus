@@ -57,7 +57,7 @@ const HomeContent = ({ obras }) => {
         Array.from({ length: Math.ceil(obras.length / 5) }).map((_, i) => {
           const grupo = obras.slice(i * 5, i * 5 + 5);
           return (
-            <ContainerCarrosel key={Math.floor(Math.random() * i)}>
+            <ContainerCarrosel key={Math.floor(Math.random() * 10000)}>
               {grupo.map((obra) => (
                 <div
                   key={obra.id_obra}

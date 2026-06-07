@@ -6,12 +6,13 @@ const InputTextarea = ({
   children,
   value,
   tipoUsuario,
+  name,
   ...props
 }) => {
   return (
     <SC_TextareaWrapper className={tipoUsuario?.toLowerCase()}>
-      <textarea id={id} value={value == null ? "" : value} {...props} />
-      <label htmlFor={id}>{text}</label>
+      <textarea id={name} value={value == null ? "" : value} {...props} />
+      <label htmlFor={name}>{text}</label>
       {children}
     </SC_TextareaWrapper>
   );

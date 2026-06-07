@@ -27,7 +27,7 @@ const CurtidasContent = ({ obras }) => {
             <ContainerCarrosel key={Math.floor(Math.random * i)}>
               {grupo.map((obra) => (
                 <div
-                key={Mat.floor(Math.random * 10000)}
+                key={Math.floor(Math.random * 10000)}
                 className="flex flex-column items-center">
                   <LivroHome
                     key={obra.id_obra}

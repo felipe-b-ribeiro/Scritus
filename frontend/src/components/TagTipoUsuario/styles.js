@@ -6,7 +6,7 @@ const cores = {
   editora: "var(--cor-editora)",
 };
 
-const cor = (props) => cores[props.tipo.toLowerCase()];
+const cor = (props) => cores[props.$tipo.toLowerCase()];
 
 export const SC_Tag = styled.div`
     padding: 5px 10px;

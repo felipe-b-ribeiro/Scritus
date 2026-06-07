@@ -45,6 +45,7 @@ function RenderizarInputs({
     return (
       <InputBasico
         key={campo}
+        id={campo}
         name={campo}
         value={
           meta.cnpj
