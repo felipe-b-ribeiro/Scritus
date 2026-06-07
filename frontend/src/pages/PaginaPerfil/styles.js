@@ -30,13 +30,13 @@ const cores = {
   editora: "#FF6526",
 };
 
-const cor = (props) => cores[props.tipo.toLowerCase()];
+const cor = (props) => cores[props.$tipo.toLowerCase()];
 
 export const SC_Tag = styled.div`
     padding: 5px 10px;
-    margin-left: ${({ marginLeft }) => marginLeft || "50px"};
-    margin-top: ${({ marginTop }) => marginTop || "10px"};
-    margin-bottom: ${({ marginBottom }) => marginBottom || "5px"};
+    margin-left: 50px;
+    margin-top: 10px;
+    margin-bottom: 5px;
     background-color: ${cor};
     border-radius: 15px;
     color: white;

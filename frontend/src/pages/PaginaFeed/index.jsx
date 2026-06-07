@@ -18,7 +18,7 @@ function PaginaFeed() {
     handleInteracao,
   } = usePaginaFeed();
 
-  if (loading) return <PaginaSplash />;
+  // if (loading) return <PaginaSplash />;
 
   return (
     <SC_MainContainerFeed>

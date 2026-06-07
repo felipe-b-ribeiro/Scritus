@@ -49,7 +49,7 @@ export const SC_TagGrande = styled.div`
   font-size: 2.7em;
 
   & strong {
-    color: ${(props) => props.cor};
+    color: ${(props) => props.$cor};
     font-weight: normal;
   }
 `;
@@ -59,7 +59,7 @@ export const SC_Info = styled.div`
   border-radius: 20px;
   color: black;
   width: fit-content;
-  border: 1px solid ${(props) => props.cor};
+  border: 1px solid ${(props) => props.$cor};
   font-family: 'Raleway', serif;
   margin-top: -30px;
 

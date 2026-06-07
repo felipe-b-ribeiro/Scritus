@@ -57,7 +57,7 @@ const useHomeHook = () => {
       }
     };
     carregarHome();
-  }, [foto, puxarDados]);
+  }, [foto]);
 
   useEffect(() => {
     if (overlay.state === "entering") {

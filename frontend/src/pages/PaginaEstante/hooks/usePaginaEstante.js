@@ -17,7 +17,6 @@ const usePaginaEstante = () => {
         const payload = decodificarJWT(token);
 
         const usuario = await puxarDados(payload.email, payload.tipoUsuario);
-        console.log(usuario);
 
         const resp = await fetch(
           ` /api/v1/obra/autor/${usuario.usuario.id_autor}`,
@@ -34,7 +33,7 @@ const usePaginaEstante = () => {
     };
 
     carregarObras();
-  }, [puxarDados]);
+  }, []);
 
   const handleCancelModal = () => {
     setOverlayState("leaving");

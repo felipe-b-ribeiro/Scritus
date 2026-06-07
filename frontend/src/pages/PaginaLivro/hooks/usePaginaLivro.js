@@ -42,7 +42,6 @@ const usePaginaLivro = () => {
           body: JSON.stringify(body),
         });
         const data2 = await interacoesBanco.json();
-        console.log(data2);
         setInteracoes({
           curtida: data2.interacoes.some((i) => i.tipo === "curtida"),
           salvo: data2.interacoes.some((i) => i.tipo === "salvo"),
@@ -73,7 +72,6 @@ const usePaginaLivro = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(interacaoObj),
       });
-      console.log("Interação enviada:", interacaoObj);
     } catch (err) {
       console.error("Erro ao enviar interação:", err);
     }

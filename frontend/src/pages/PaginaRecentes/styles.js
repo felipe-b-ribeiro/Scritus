@@ -5,7 +5,7 @@ export const SC_Info = styled.div`
   border-radius: 20px;
   color: black;
   width: fit-content;
-  border: 1px solid ${(props) => props.cor};
+  border: 1px solid ${(props) => props.$cor};
   font-family: 'Raleway', serif;
   margin-top: -30px;
 

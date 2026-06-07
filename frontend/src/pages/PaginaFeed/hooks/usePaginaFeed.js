@@ -21,14 +21,15 @@ const usePaginaFeed = () => {
           method: "DELETE",
         },
       );
-      if (!deletou) return console.log("Erro ao deletar recomendações antigas");
+      console.log(deletou);
+      if (!deletou) throw new Error("Erro ao deletar recomendações antigas");
       const listaBruta = await fetch(
         `/api/v1/obra/recomendacao?idPerfil=${id_perfil}&quantidade=6`,
       );
       const listaIds = await listaBruta.json();
       const ids = listaIds.listaIds.map((item) => item.id_obra);
 
-      const obrasBrutas = await fetch(` /api/v1/obra/puxarporid`, {
+      const obrasBrutas = await fetch(`/api/v1/obra/puxarporid`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id_obra: ids }),
@@ -110,7 +111,7 @@ const usePaginaFeed = () => {
 
   const criarInteracao = async (interacaoObj) => {
     try {
-      await fetch(" /api/v1/interacao", {
+      await fetch("/api/v1/interacao", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(interacaoObj),
@@ -131,7 +132,7 @@ const usePaginaFeed = () => {
 
   const excluirInteracao = async (interacaoObj) => {
     try {
-      await fetch(" /api/v1/interacao", {
+      await fetch("/api/v1/interacao", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(interacaoObj),

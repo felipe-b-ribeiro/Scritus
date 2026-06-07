@@ -71,13 +71,11 @@ const useCadastroObras = () => {
           `Você só pode selecionar até ${maxItemCount} tags.`,
       });
 
-      setTimeout(() => {
       const searchInput = document.querySelector('.choices__input--cloned');
       if (searchInput && !searchInput.hasAttribute('name')) {
         searchInput.setAttribute('name', 'buscaTags');
         searchInput.setAttribute('id', 'buscaTags');
       }
-    }, 100);
     }
   }
 
@@ -87,7 +85,7 @@ const useCadastroObras = () => {
       choicesRef.current = null;
     }
   };
-}, [loading, tags]);
+}, [loading]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

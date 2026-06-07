@@ -36,7 +36,6 @@ function PaginaTag() {
         if (resposta.status === 404) goTo("/404");
         if (!resposta.ok) throw new Error("Falha ao buscar obras.");
         const data = await resposta.json();
-        console.log("Dados vindo do back", data);
         setObras(data);
       } catch (err) {
         console.error("Erro ao carregar página: ", err);
@@ -45,7 +44,7 @@ function PaginaTag() {
       }
     };
     carregarPagina();
-  }, [goTo, nomeTag]);
+  }, [nomeTag]);
 
   const imgClassificacao = (idade) => {
     let imagem;
@@ -81,10 +80,10 @@ function PaginaTag() {
       <Header left={<BackButton />} center={<Logo />} />
       <Linha />
       <ContainerBasico width="90vw">
-        <SC_TagGrande cor={cor}>
+        <SC_TagGrande $cor={cor}>
           Livros do gênero <strong>"{nomeTag}"</strong>
         </SC_TagGrande>
-        <SC_Info cor={cor}>
+        <SC_Info $cor={cor}>
           <strong>{obras.length}</strong> livros associados com essa tag
         </SC_Info>
         {obras.length === 0 ? (
@@ -101,7 +100,7 @@ function PaginaTag() {
           Array.from({ length: Math.ceil(obras.length / 5) }).map((_, i) => {
             const grupo = obras.slice(i * 5, i * 5 + 5);
             return (
-              <ContainerCarrosel key={Math.floor(Math.random * i)}>
+              <ContainerCarrosel key={Math.floor(Math.random() * 10000)}>
                 {grupo.map((obra) => (
                   <div
                     key={obra.id_obra}

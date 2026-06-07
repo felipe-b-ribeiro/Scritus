@@ -27,7 +27,6 @@ function PaginaSalvos() {
           ` /api/v1/obra/salvos?idPerfil=${id_perfil}&tipoInteracao=salvo`,
         );
         const data = await resposta.json();
-        console.log("Dados vindo do back", data);
         setObras(data);
       } catch (err) {
         console.error("Erro ao carregar página: ", err);
@@ -46,7 +45,7 @@ function PaginaSalvos() {
       <Linha />
       <ContainerBasico width="90vw">
         <TagGrande variant="saveds" />
-        <SC_Info cor="blue">
+        <SC_Info $cor="blue">
           <strong>{obras.length}</strong>
           {obras.length === 1 ? " livro salvo" : " livros salvos"}
         </SC_Info>

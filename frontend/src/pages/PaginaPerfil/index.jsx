@@ -175,7 +175,7 @@ function PaginaPerfil() {
         <div className="flex" style={{ alignItems: " center" }}>
           <SC_FotoPerfil src={` ${perfil.foto_perfil_url}`} />
           <div>
-            <SC_Tag tipo={perfil.tipo_usuario}>{perfil.tipo_usuario}</SC_Tag>
+            <SC_Tag $tipo={perfil.tipo_usuario}>{perfil.tipo_usuario}</SC_Tag>
             <SC_NomeUsuario>{perfil.nome_usuario}</SC_NomeUsuario>
             {perfil.tipo_usuario === "Autor" && perfil.pseudonimo ? (
               <SC_Pseudonimo>{perfil.pseudonimo}</SC_Pseudonimo>
@@ -226,10 +226,10 @@ function PaginaPerfil() {
             {Array.from({ length: Math.ceil(obras.length / 3) }).map((_, i) => {
               const grupo = obras.slice(i * 3, i * 3 + 3);
               return obras.length === 0 ? (
-                <p key={Math.floor(Math.random * i)}>Esse usuário não possui obras cadastradas</p>
+                <p key={Math.floor(Math.random() * 10000)}>Esse usuário não possui obras cadastradas</p>
               ) : (
                 <div
-                  key={Math.floor(Math.random * i)}
+                  key={Math.floor(Math.random() * 10000)}
                   className="flex"
                   style={{
                     marginBottom: "20px",

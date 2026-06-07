@@ -45,7 +45,7 @@ function PaginaRecentes() {
       <Linha />
       <ContainerBasico width="90vw" className="mt-50">
         <TagGrande variant="recents" />
-        <SC_Info cor="purple">
+        <SC_Info $cor="purple">
           <strong>{obras.length}</strong>
           {obras.length === 1
             ? " livro acessado recentemente"
